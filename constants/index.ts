@@ -1,12 +1,15 @@
+// 500 MB
 export const MAX_VIDEO_SIZE = 500 * 1024 * 1024;
+// 10MB
 export const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024;
 
 export const BUNNY = {
     STREAM_BASE_URL: "https://video.bunnycdn.com/library",
-    STORAGE_BASE_URL: "https://sg.storage.bunnycdn.com/snapcast",
-    CDN_URL: "https://snapcast.b-cdn.net",
+    STORAGE_BASE_URL: "https://syd.storage.bunnycdn.com/digi-disc",
+    CDN_URL: "https://digi-disc.b-cdn.net",
     EMBED_URL: "https://iframe.mediadelivery.net/embed",
-    TRANSCRIPT_URL: "https://vz-47a08e64-84d.b-cdn.net",
+    // So videos are transcribed
+    TRANSCRIPT_URL: "https://vz-98453fdd-a25.b-cdn.net",
 };
 
 export const emojis = [ "😂", "😍", "👍" ];
