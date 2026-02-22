@@ -1,28 +1,56 @@
 'use client'
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import FormField from "@/components/FormField";
 import FileInput from "@/components/FileInput";
 import { useFileInput } from "@/lib/hooks/useFileInput";
 import { MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from "@/constants";
+import { getThumbnailUploadUrl, getVideoUploadUrl, saveVideoDetails } from "@/lib/actions/video";
+import { useRouter } from "next/navigation";
+
+const uploadFileToBunny = (
+    file: File,
+    uploadUrl: string,
+    accessKey: string
+): Promise<void> =>
+    fetch( uploadUrl, {
+        method: "PUT",
+        headers: {
+            "Content-Type": file.type,
+            AccessKey: accessKey,
+        },
+        body: file,
+    } ).then( ( response ) => {
+        if ( !response.ok )
+            throw new Error( `Upload failed with status ${ response.status }` );
+    } );
+
 
 const Page = () => {
+    const router = useRouter();
+    const [ isSubmitting, setIsSubmitting ] = useState( false );
     const [ error, setError ] = useState( "" );
+    const [ videoDuration, setVideoDuration ] = useState( 0 );
+
     const [ formData, setFormData ] = useState( {
         title: "",
         description: "",
         visibility: "public"
     } );
-    const [ isSubmitting, setIsSubmitting ] = useState( false );
 
+    const video = useFileInput( MAX_VIDEO_SIZE );
+    const thumbnail = useFileInput( MAX_THUMBNAIL_SIZE );
+
+    useEffect( () => {
+        if ( video.duration !== null ) {
+            setVideoDuration( video.duration );
+        }
+    }, [ video.duration ] )
 
     const handleInputChange = ( e: ChangeEvent<HTMLInputElement> ) => {
         // Name is name of input we are modifying, value will come from onChange, this allows a dynamic formField update.
         const { name, value } = e.target;
         setFormData( ( prevState ) => ({ ...prevState, [name]: value }) );
     }
-
-    const video = useFileInput( MAX_VIDEO_SIZE );
-    const thumbnail = useFileInput( MAX_THUMBNAIL_SIZE );
 
     const handleSubmit = async ( e: FormEvent ) => {
         // Dont want page to reload.
@@ -37,11 +65,43 @@ const Page = () => {
                 setError( "Please fill in all the details" )
             }
 
-            // TBD
+            // Get upload url
+            const {
+                videoId,
+                uploadUrl: videoUploadUrl,
+                accessKey: videoAccessKey
+            } = await getVideoUploadUrl();
+            if ( !videoUploadUrl || !videoUploadUrl ) {
+                console.error( "Failed to get video upload credentials" );
+                throw new Error( "Failed to get video upload credentials" );
+            }
+
             // Upload video to video streaming and storage platform
+            await uploadFileToBunny( video.file, videoUploadUrl, videoAccessKey );
+
+
             // Upload the thumbnail to DB
-            // After image is hosted, attach thumbnail to video
+            const {
+                cdnUrl: thumbnailCdnUrl,
+                uploadUrl: thumbnailUploadUrl,
+                accessKey: thumbnailAccessKey
+            } = await getThumbnailUploadUrl( videoId );
+            if ( !thumbnailUploadUrl || !thumbnailAccessKey || !thumbnailCdnUrl ) {
+                console.error( "Failed to get thumbnail upload credentials" );
+                throw new Error( "Failed to get video thumbnail upload credentials" );
+            }
+
+            await uploadFileToBunny( thumbnail.file, thumbnailUploadUrl, thumbnailAccessKey );
+
             // Create metadata and store in database
+            await saveVideoDetails( {
+                videoId,
+                thumbnailUrl: thumbnailCdnUrl,
+                ...formData,
+                duration: videoDuration
+            } );
+
+            router.push( `/video/${ videoId }` )
 
         } catch ( error ) {
             console.log( "Error submitting form: ", error );
@@ -79,12 +139,11 @@ const Page = () => {
                 <FileInput
                     id="video"
                     label="Video"
-                    // All video types are accepted for upload
                     accept="video/*"
                     file={ video.file }
                     previewUrl={ video.previewUrl }
                     inputRef={ video.inputRef }
-                    onChange={ video.handeFileChange }
+                    onChange={ video.handleFileChange }
                     onReset={ video.resetFile }
                     type="video"
                 />
@@ -92,12 +151,11 @@ const Page = () => {
                 <FileInput
                     id="thumbnail"
                     label="Thumbnail"
-                    // All video types are accepted for upload
                     accept="image/*"
                     file={ thumbnail.file }
                     previewUrl={ thumbnail.previewUrl }
                     inputRef={ thumbnail.inputRef }
-                    onChange={ thumbnail.handeFileChange }
+                    onChange={ thumbnail.handleFileChange }
                     onReset={ thumbnail.resetFile }
                     type="image"
                 />
