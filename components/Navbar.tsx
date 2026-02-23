@@ -5,7 +5,8 @@
 import React from 'react'
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const user = {};
 
@@ -26,7 +27,18 @@ const Navbar = () => {
                             <Image src="/assets/images/dummy.jpg" alt="user" width={ 32 } height={ 32 }
                                    className="rounded-full aspect-square"/>
                         </button>
-                        <button className="cursor-pointer">
+                        <button
+                            onClick={ async () => {
+                                return await authClient.signOut( {
+                                    fetchOptions: {
+                                        onSuccess: () => {
+                                            redirect( "/sign-in" );
+                                        },
+                                    },
+                                } );
+                            } }
+                            className="cursor-pointer"
+                        >
                             <Image src="/assets/icons/logout.svg" alt="logout" width={ 32 } height={ 32 }/>
                         </button>
                     </figure>

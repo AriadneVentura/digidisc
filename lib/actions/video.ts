@@ -1,16 +1,17 @@
 // Has to be secure.
 "use server";
 
-import { apiFetch, getEnv, withErrorHandling } from "@/lib/utils";
+import { apiFetch, doesTitleMatch, getEnv, getOrderByClause, withErrorHandling } from "@/lib/utils";
 import { headers } from "next/dist/server/request/headers";
 import { auth } from "@/lib/auth";
 import { BUNNY } from "@/constants";
 import { db } from "@/src";
-import { videos } from "@/src/db/schema";
+import { user, videos } from "@/src/db/schema";
 import { revalidatePath } from "next/cache";
 import { fixedWindow } from "arcjet";
 import { request } from "@arcjet/next";
 import aj from "@/lib/arcjet";
+import { and, eq, or, sql } from "drizzle-orm";
 
 // Call constants to form API endpoints.
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
@@ -23,7 +24,6 @@ const ACCESS_KEYS = {
 }
 
 // Helpers
-// Get the user's id
 const getSessionUserId = async (): Promise<string> => {
     const session = await auth.api.getSession( { headers: await headers() } );
     if ( !session ) throw new Error( "Unauthenticated" );
@@ -33,6 +33,16 @@ const getSessionUserId = async (): Promise<string> => {
 
 const revalidatePaths = ( paths: string[] ) => {
     paths.forEach( ( path ) => revalidatePath( path ) )
+}
+
+const buildVideoWithUserQuery = () => {
+    return db
+        .select( {
+            video: videos,
+            user: { id: user.id, name: user.name, image: user.image }
+        } )
+        .from( videos )
+        .leftJoin( user, eq( videos.userId, user.id ) )
 }
 
 // Validator function to rate limit server actions.
@@ -81,7 +91,7 @@ export const getVideoUploadUrl = withErrorHandling( async () => {
 export const getThumbnailUploadUrl = withErrorHandling( async ( videoId: string ) => {
     const fileName = `${ Date.now() }-${ videoId }-thumbnail`;
     const uploadUrl = `${ THUMBNAIL_STORAGE_BASE_URL }/thumbnails/${ fileName }`;
-    const cdnUrl = `${ THUMBNAIL_STORAGE_BASE_URL }/thumbnails/${ fileName }`;
+    const cdnUrl = `${ THUMBNAIL_CDN_URL }/thumbnails/${ fileName }`;
 
     return {
         uploadUrl,
@@ -120,3 +130,56 @@ export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDe
     revalidatePaths( [ '/' ] )
     return { videoId: videoDetails.videoId }
 } )
+
+export const getAllVideos = withErrorHandling( async (
+        searchQuery: string = '',
+        sortFilter?: string,
+        pageNumber: number = 1,
+        pageSize: number = 8,
+    ) => {
+        const session = await auth.api.getSession( { headers: await headers() } )
+        const currentUserId = session?.user.id;
+
+        const canSeeTheVideos = or(
+            eq( videos.visibility, 'public' ),
+            eq( videos.userId, currentUserId! ),
+        );
+
+        const whereCondition = searchQuery.trim()
+            ? and(
+                canSeeTheVideos,
+                doesTitleMatch( videos, searchQuery ),
+            )
+            : canSeeTheVideos
+
+        // Count total for pagination
+        const [ { totalCount } ] = await db
+            .select( { totalCount: sql<number>`count(*)` } )
+            .from( videos )
+            .where( whereCondition );
+        const totalVideos = Number( totalCount || 0 );
+        const totalPages = Math.ceil( totalVideos / pageSize );
+
+        // Fetch paginated, sorted results
+        const videoRecords = await buildVideoWithUserQuery()
+            .where( whereCondition )
+            .orderBy(
+                sortFilter
+                    ? getOrderByClause( sortFilter )
+                    : sql`${ videos.createdAt }
+                        DESC`
+            )
+            .limit( pageSize )
+            .offset( (pageNumber - 1) * pageSize );
+
+        return {
+            videos: videoRecords,
+            pagination: {
+                currentPage: pageNumber,
+                totalPages,
+                totalVideos,
+                pageSize,
+            },
+        };
+    }
+);
