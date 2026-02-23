@@ -8,6 +8,9 @@ import { BUNNY } from "@/constants";
 import { db } from "@/src";
 import { videos } from "@/src/db/schema";
 import { revalidatePath } from "next/cache";
+import { fixedWindow } from "arcjet";
+import { request } from "@arcjet/next";
+import aj from "@/lib/arcjet";
 
 // Call constants to form API endpoints.
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
@@ -30,6 +33,28 @@ const getSessionUserId = async (): Promise<string> => {
 
 const revalidatePaths = ( paths: string[] ) => {
     paths.forEach( ( path ) => revalidatePath( path ) )
+}
+
+// Validator function to rate limit server actions.
+const validateWithArcjet = async ( fingerprint: string ) => {
+    // A fingerprint allows us to connect us to who is the actor of the request
+    const rateLimit = aj.withRule(
+        fixedWindow( {
+            mode: "LIVE",
+            // Time window
+            window: "1m",
+            // Max requests per time window
+            max: 1,
+            characteristics: [ "fingerprint" ]
+        } )
+    )
+
+    const req = await request();
+
+    const decision = await rateLimit.protect( req, { fingerprint } );
+    if ( decision.isDenied() ) {
+        throw new Error( "Rate limit exceeded" )
+    }
 }
 
 // Server actions
@@ -67,6 +92,8 @@ export const getThumbnailUploadUrl = withErrorHandling( async ( videoId: string 
 
 export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDetails ) => {
     const userId = await getSessionUserId();
+    // Rate limit
+    await validateWithArcjet( userId );
 
     // Use video details to update the descriptions and title of video.
     await apiFetch(

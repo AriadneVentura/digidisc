@@ -2,6 +2,9 @@ import { NextRequest } from "next/dist/server/web/spec-extension/request";
 import { NextResponse } from "next/dist/server/web/spec-extension/response";
 import { auth } from "@/lib/auth";
 import { headers } from "next/dist/server/request/headers";
+import { detectBot, shield } from "arcjet";
+import aj from "@/lib/arcjet";
+import { createMiddleware } from "@arcjet/next";
 
 // Route protection for Next.js that runs on every request.
 export async function middleware( request: NextRequest, response: NextResponse ) {
@@ -19,6 +22,14 @@ export async function middleware( request: NextRequest, response: NextResponse )
     // Continue normally if logged in.
     return NextResponse.next();
 }
+
+// Shield protects against the most common attacks from the OWASP top 10, before any page is called.
+const validate = aj
+    .withRule( shield( { mode: "LIVE" } ) )
+    .withRule( detectBot( { mode: "LIVE", allow: [ "CATEGORY:SEARCH_ENGINE", "G00G1E_CRAWLER" ] } ) );
+
+// This automatically turns on shield protection heheha.
+export default createMiddleware( validate );
 
 // This ensures that the middleware is not applied for the below.
 export const config = {
