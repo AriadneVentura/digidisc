@@ -13,6 +13,8 @@ const user = {};
 const Navbar = () => {
     // NextNavigation hook
     const router = useRouter();
+    const { data: session } = authClient.useSession();
+    const user = session?.user;
 
     return (
         <header className="navbar">
@@ -23,8 +25,8 @@ const Navbar = () => {
                 </Link>
                 { user && (
                     <figure>
-                        <button onClick={ () => router.push( `/profile/123456` ) }>
-                            <Image src="/assets/images/dummy.jpg" alt="user" width={ 32 } height={ 32 }
+                        <button onClick={ () => router.push( `/profile/${ user?.id }` ) }>
+                            <Image src={ user.image || "" } alt="user" width={ 32 } height={ 32 }
                                    className="rounded-full aspect-square"/>
                         </button>
                         <button

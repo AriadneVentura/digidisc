@@ -1,15 +1,15 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ilike, sql } from "drizzle-orm";
-// import { videos } from "@/drizzle/schema";
 import { DEFAULT_RECORDING_CONFIG, DEFAULT_VIDEO_CONFIG } from "@/constants";
 import { videos } from "@/src/db/schema";
 
-// For tailwind to add dynamic styles
+// For tailwind to add dynamic styles - combines class names together and removes duplicates.
 export function cn( ...inputs: ClassValue[] ) {
     return twMerge( clsx( inputs ) );
 }
 
+// Updates URL search parameters and returns the new full URL.
 export const updateURLParams = (
     currentParams: URLSearchParams,
     updates: Record<string, string | null | undefined>,
@@ -36,7 +36,8 @@ export const getEnv = ( key: string ): string => {
     return value;
 };
 
-// Allows to more easily make calls to bunny.
+
+// Makes an API request to Bunny with the correct headers and returns the result.
 // API fetch helper with required Bunny CDN options
 export const apiFetch = async <T = Record<string, unknown>>(
     url: string,
@@ -88,7 +89,8 @@ export const apiFetch = async <T = Record<string, unknown>>(
     return await response.json();
 };
 
-// API calls will be wrapped with this error handling functions so that there is no code duplication.
+// API calls will be wrapped with this error handling functions so that there is no code duplication,
+// and the call returns an error rather than crashing.
 export const withErrorHandling = <T, A extends unknown[]>(
     fn: ( ...args: A ) => Promise<T>
 ) => {
@@ -103,7 +105,7 @@ export const withErrorHandling = <T, A extends unknown[]>(
     };
 };
 
-
+// Returns the correct database sort order based on the selected filter.
 export const getOrderByClause = ( filter?: string ) => {
     switch ( filter ) {
         case "Most Viewed":
@@ -122,6 +124,7 @@ export const getOrderByClause = ( filter?: string ) => {
     }
 };
 
+// Creates a list of page numbers to show in pagination.
 export const generatePagination = ( currentPage: number, totalPages: number ) => {
     if ( totalPages <= 7 ) {
         return Array.from( { length: totalPages }, ( _, i ) => i + 1 );
@@ -151,6 +154,7 @@ export const generatePagination = ( currentPage: number, totalPages: number ) =>
     ];
 };
 
+// Gets the screen stream and optional microphone stream for recording.
 export const getMediaStreams = async (
     withMic: boolean
 ): Promise<MediaStreams> => {
@@ -172,6 +176,7 @@ export const getMediaStreams = async (
     return { displayStream, micStream, hasDisplayAudio };
 };
 
+// Mixes screen audio and microphone audio into one stream.
 export const createAudioMixer = (
     ctx: AudioContext,
     displayStream: MediaStream,
@@ -194,6 +199,7 @@ export const createAudioMixer = (
     return destination;
 };
 
+// Creates a MediaRecorder with default settings if possible.
 export const setupMediaRecorder = ( stream: MediaStream ) => {
     try {
         return new MediaRecorder( stream, DEFAULT_RECORDING_CONFIG );
@@ -202,6 +208,7 @@ export const setupMediaRecorder = ( stream: MediaStream ) => {
     }
 };
 
+// Loads a video file and returns its length in seconds.
 export const getVideoDuration = ( url: string ): Promise<number | null> =>
     new Promise( ( resolve ) => {
         const video = document.createElement( "video" );
@@ -221,6 +228,7 @@ export const getVideoDuration = ( url: string ): Promise<number | null> =>
         video.src = url;
     } );
 
+// Creates and sets up a recorder with the given event handlers.
 export const setupRecording = (
     stream: MediaStream,
     handlers: RecordingHandlers
@@ -231,6 +239,7 @@ export const setupRecording = (
     return recorder;
 };
 
+// Stops the recorder and turns off all media tracks.
 export const cleanupRecording = (
     recorder: MediaRecorder | null,
     stream: MediaStream | null,
@@ -246,6 +255,7 @@ export const cleanupRecording = (
     );
 };
 
+// Combines recorded chunks into a single video file and creates a URL for it.
 export const createRecordingBlob = (
     chunks: Blob[]
 ): { blob: Blob; url: string } => {
@@ -254,9 +264,11 @@ export const createRecordingBlob = (
     return { blob, url };
 };
 
+// Calculates how many seconds have passed since recording started.
 export const calculateRecordingDuration = ( startTime: number | null ): number =>
     startTime ? Math.round( (Date.now() - startTime) / 1000 ) : 0;
 
+// Converts a transcript string into structured time and text entries.
 export function parseTranscript( transcript: string ): TranscriptEntry[] {
     const lines = transcript.replace( /^WEBVTT\s*/, "" ).split( "\n" );
     const result: TranscriptEntry[] = [];
@@ -293,6 +305,7 @@ export function parseTranscript( transcript: string ): TranscriptEntry[] {
     return result;
 }
 
+// Returns how many days ago a date was in simple text.
 export function daysAgo( inputDate: Date ): string {
     const input = new Date( inputDate );
     const now = new Date();
@@ -309,9 +322,11 @@ export function daysAgo( inputDate: Date ): string {
     }
 }
 
+// Creates an iframe link for embedding a video.
 export const createIframeLink = ( videoId: string ) =>
-    `https://iframe.mediadelivery.net/embed/421422/${ videoId }?autoplay=true&preload=true`;
+    `https://iframe.mediadelivery.net/embed/${ getEnv( "BUNNY_LIBRARY_ID" ) }/${ videoId }?autoplay=true&preload=true`;
 
+// Checks if a video title matches the search text.
 export const doesTitleMatch = ( videos: any, searchQuery: string ) =>
     ilike(
         sql`REPLACE

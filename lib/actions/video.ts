@@ -166,6 +166,8 @@ export const getAllVideos = withErrorHandling( async (
             .orderBy(
                 sortFilter
                     ? getOrderByClause( sortFilter )
+                    // my ide is formatting this as weird and dont look at me cause ceebs finding the specific rule
+                    // that fixes it <3 if you find it lmk.
                     : sql`${ videos.createdAt }
                         DESC`
             )
@@ -183,3 +185,11 @@ export const getAllVideos = withErrorHandling( async (
         };
     }
 );
+
+export const getVideoById = withErrorHandling( async ( videoId: string ) => {
+    const [ videoRecord ] = await buildVideoWithUserQuery()
+        // Get the specific video
+        .where( eq( videos.id, videoId ) )
+
+    return videoRecord
+} )

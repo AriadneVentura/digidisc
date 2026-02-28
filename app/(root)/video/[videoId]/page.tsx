@@ -1,9 +1,29 @@
 import React from 'react'
+import { getVideoById } from "@/lib/actions/video";
+import { redirect } from "next/navigation";
+import VideoPlayer from "@/components/VideoPlayer";
+import VideoDetailHeader from "@/components/VideoDetailHeader";
 
-const Page = () => {
+// search params = url?page=2&filter=asc
+// params = url/:id (so we want params)
+
+const Page = async ( { params }: Params ) => {
+    // videoId bc the page is called [videoId] in the tree
+    const { videoId } = await params;
+
+    const { user, video } = await getVideoById( videoId );
+    if ( !video ) redirect( "/404" );
+
     return (
         <main className="wrapper page">
-            VIDEO DETAILS PAGE
+            <VideoDetailHeader { ...video } userImg={ user?.image } username={ user?.name } ownerId={ video.userId }/>
+
+            <section className="video-details">
+                <div className="content">
+                    {/*Note video.id is the id stored in the database, but we want the video id stored in bunny*/ }
+                    <VideoPlayer videoId={ video.videoId }/>
+                </div>
+            </section>
         </main>
     )
 }
