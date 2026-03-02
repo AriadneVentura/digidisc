@@ -29,6 +29,10 @@ const RecordScreen = () => {
         await startRecording();
     }
 
+    const handleStop = () => {
+        stopRecording();
+    }
+
     const recordAgain = async () => {
         resetRecording();
         await startRecording();
@@ -53,6 +57,7 @@ const RecordScreen = () => {
                 name: "screen-recording.webm",
                 type: recordedBlob.type,
                 size: recordedBlob.size,
+                // TODO this ist working properly for record...
                 duration: recordingDuration || 0,
             } )
         )
@@ -88,7 +93,12 @@ const RecordScreen = () => {
                             ) : recordedVideoUrl ? (
                                 <video ref={ videoRef } src={ recordedVideoUrl } controls/>
                             ) : (
-                                <p>Click record to start capturing your screen ♡</p>
+                                <div>
+                                    <p className="mb-10">Click record to start capturing your screen ♡</p>
+                                    <p className="font-bold text-center text-xs">WARNING!</p>
+                                    <p className="font-light text-xs">Discord audio won't be captured unless it's hosted
+                                        in your browser</p>
+                                </div>
                             ) }
                         </section>
 
@@ -100,7 +110,7 @@ const RecordScreen = () => {
                                 </button>
                             ) }
                             { isRecording && (
-                                <button onClick={ handleStart } className="record-stop">
+                                <button onClick={ handleStop } className="record-stop">
                                     <Image src={ ICONS.record } alt="record" width={ 16 } height={ 16 }/>
                                     Stop Recording
                                 </button>

@@ -270,15 +270,15 @@ export const createRecordingBlob = (
     return { blob, url };
 };
 
-// Calculates how many seconds have passed since recording started. E.G:
+// Calculates how many seconds have passed since recording started.
+export const calculateRecordingDuration = ( startTime: number | null ): number =>
+    startTime ? Math.round( (Date.now() - startTime) / 1000 ) : 0;
+
+// Converts a transcript string into structured time and text entries. E.G
 // [
 //     { time: "00:00:01", text: "Hello everyone" },
 //     { time: "00:00:05", text: "Welcome to the video" }
 // ]
-export const calculateRecordingDuration = ( startTime: number | null ): number =>
-    startTime ? Math.round( (Date.now() - startTime) / 1000 ) : 0;
-
-// Converts a transcript string into structured time and text entries.
 export function parseTranscript( transcript: string ): TranscriptEntry[] {
     // cleanup headers
     const lines = transcript.replace( /^WEBVTT\s*/, "" ).split( "\n" );
