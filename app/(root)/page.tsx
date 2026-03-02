@@ -8,7 +8,6 @@ const Page = async ( { searchParams }: SearchParams ) => {
     const { query, filter, page } = await searchParams;
     const { videos, pagination } = await getAllVideos( query, filter, Number( page ) || 1 );
 
-    console.log( videos );
     return (
         // This applies a max-width to the entire window & column to allow top to bottom layout.
         <main className="wrapper page">

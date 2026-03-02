@@ -6,6 +6,7 @@ import { useFileInput } from "@/lib/hooks/useFileInput";
 import { MAX_DURATION, MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from "@/constants";
 import { getThumbnailUploadUrl, getVideoUploadUrl, saveVideoDetails } from "@/lib/actions/video";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const uploadFileToBunny = (
     file: File,
@@ -215,6 +216,15 @@ const Page = () => {
                         { value: "private", label: "Private" }
                     ] }
                 />
+
+                <div
+                    role="alert"
+                    className="flex rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900"
+                >
+                    <Image src="/assets/icons/info.svg" width={ 20 } height={ 20 } alt="hi"/>
+                    <span
+                        className="ml-3">If you upload anything mean i will remove it :)</span>
+                </div>
 
                 <button type="submit" disabled={ isSubmitting || !video.file || !thumbnail.file || !!video.error ||
                     !!thumbnail.error } className="submit-button">

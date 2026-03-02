@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import EmptyState from "@/components/EmptyState";
 
 const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
-    // NextJS exposes the ID through async params;
+    // Next.js exposes the ID through async params;
     const { id } = await params;
     const { query, filter } = await searchParams;
 
@@ -14,8 +14,9 @@ const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
 
     if ( !user ) redirect( "/404" );
 
-
-    // TODO pagination, delete video, visibility
+    // TODO search & pagination
+    // TODO deploy & readme
+    // TODO stretch: view counting, likes
     return (
         <div className="wrapper page">
             <Header subHeader={ user?.email } title={ `⋆. 𐙚˚࿔ ${ user?.name } ☆˚⋆` } userImg={ user?.image ?? "" }/>

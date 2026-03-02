@@ -23,6 +23,7 @@ const Navbar = () => {
                     <Image src="/assets/icons/cd.svg" alt="Logo" width={ 32 } height={ 32 }/>
                     <h1>DigiDisc</h1>
                 </Link>
+                <p className="font-light text-xs">digital space for clips :)</p>
                 { user && (
                     <figure>
                         <button onClick={ () => router.push( `/profile/${ user?.id }` ) }>
