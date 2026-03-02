@@ -65,7 +65,7 @@ const RecordScreen = () => {
         <div className="record">
             <button className="primary-btn" onClick={ () => setIsOpen( true ) }>
                 <Image src={ ICONS.record } width={ 16 } height={ 16 } alt="record"/>
-                <span>Record a video</span>
+                <span>Record a vid</span>
             </button>
 
             { isOpen && (
@@ -88,7 +88,7 @@ const RecordScreen = () => {
                             ) : recordedVideoUrl ? (
                                 <video ref={ videoRef } src={ recordedVideoUrl } controls/>
                             ) : (
-                                <p>Click record to start capturing your screen</p>
+                                <p>Click record to start capturing your screen ♡</p>
                             ) }
                         </section>
 

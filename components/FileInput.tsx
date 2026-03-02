@@ -32,7 +32,7 @@ const FileInput = ( {
                     width={ 24 }
                     height={ 24 }
                 />
-                <p>click to upload your { id }</p>
+                <p>click to upload your { id }!</p>
             </figure>
         ) : (
             <div>

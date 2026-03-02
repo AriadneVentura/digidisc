@@ -47,7 +47,7 @@ const VideoCard = ( {
             </button>
             { duration && (
                 <div className="duration">
-                    { Math.ceil( duration / 60 ) } minutes
+                    { Math.ceil( duration ) } second(s)
                 </div>
             ) }
         </Link>

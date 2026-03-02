@@ -28,7 +28,7 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
                 <aside>
                     <Link href="/upload">
                         <Image src="/assets/icons/upload.svg" width={ 16 } alt="upload" height={ 16 }/>
-                        <span>Upload a video</span>
+                        <span>Upload a clip</span>
                     </Link>
                     <RecordScreen/>
                 </aside>
