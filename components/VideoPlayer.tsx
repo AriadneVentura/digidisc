@@ -8,7 +8,7 @@ const VideoPlayer = ( { videoId }: VideoPlayerProps ) => {
                 src={ createIframeLink( videoId ) }
                 loading="lazy"
                 title="Video player"
-                style={ { border: 0, zIndex: 50 } }
+                style={ { border: 0 } }
                 allowFullScreen
                 // allow for mobile users:
                 // accelerometer & gyroscope: screen rotation causes video to detect horizontal video layout

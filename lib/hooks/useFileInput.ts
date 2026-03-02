@@ -3,12 +3,14 @@ import { ChangeEvent, useRef, useState } from "react";
 /**
  *  Custom hook that keeps track of what the file is doing.
  * @param maxSize The maxsize accepted for the file upload.
+ * @param maxDuration The max duration for the clip.
  */
-export const useFileInput = ( maxSize: number ) => {
+export const useFileInput = ( maxSize: number, maxDuration?: number ) => {
     const [ file, setFile ] = useState<File | null>( null );
     const [ previewUrl, setPreviewUrl ] = useState( "" );
     const [ duration, setDuration ] = useState( 0 );
     const inputRef = useRef<HTMLInputElement>( null );
+    const [ error, setError ] = useState<string | null>( null );
 
     // Deals with file upload logic, called when file is uploaded (duh)
     const handleFileChange = ( e: ChangeEvent<HTMLInputElement> ) => {
@@ -16,7 +18,17 @@ export const useFileInput = ( maxSize: number ) => {
         if ( e.target.files?.[0] ) {
 
             const selectedFile = e.target.files[0];
-            if ( selectedFile.size > maxSize ) return;
+            if ( selectedFile.size > maxSize ) {
+                setError( `File is too large :( max size is 500 MB.` );
+
+                // Reset the input so user can re-select
+                if ( inputRef.current ) {
+                    inputRef.current.value = "";
+                }
+
+                return;
+            }
+            setError( null );
 
             // This means that we want to call the browser to let it know we don't want to keep the reference to the file
             // any longer cause we have access to the actual file.
@@ -36,12 +48,25 @@ export const useFileInput = ( maxSize: number ) => {
 
                 // Listener
                 video.onloadedmetadata = () => {
+                    // We've saved the video to the state so dont the src anymore.
+                    URL.revokeObjectURL( video.src );
+                    const videoLength = Math.round( video.duration );
                     // isFinite checks if video has an end.
-                    if ( isFinite( video.duration ) && video.duration > 0 ) {
-                        setDuration( Math.round( video.duration ) );
-                    } else {
-                        setDuration( 0 );
+                    if ( !isFinite( videoLength ) || videoLength <= 0 ) {
+                        setError( "Invalid video" );
+                        resetFile();
+                        return;
                     }
+
+                    // max 60s atm
+                    if ( maxDuration && videoLength > maxDuration ) {
+                        setError( `Video must be under ${ maxDuration } seconds :(` );
+                        resetFile();
+                        return;
+                    }
+
+                    setError( null );
+                    setDuration( videoLength );
 
                     // We've saved the video to the state so dont the src anymore.
                     URL.revokeObjectURL( video.src );
@@ -69,5 +94,5 @@ export const useFileInput = ( maxSize: number ) => {
         }
     }
 
-    return { file, previewUrl, duration, inputRef, handleFileChange, resetFile };
+    return { file, previewUrl, duration, inputRef, handleFileChange, resetFile, error };
 }

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { daysAgo } from "@/lib/utils";
+import { ICONS } from "@/constants";
+import { deleteVideoById } from "@/lib/actions/video";
 
 const VideoDetailHeader = ( {
                                 title,
@@ -11,15 +13,26 @@ const VideoDetailHeader = ( {
                                 username,
                                 videoId,
                                 ownerId,
+                                id,
                                 visibility,
                                 thumbnailUrl
                             }: VideoDetailHeaderProps ) => {
     const router = useRouter();
     const [ copied, setCopied ] = useState( false );
+    const [ isOpen, setIsOpen ] = useState( false );
 
-    const handleCopyLink = () => {
-        navigator.clipboard.writeText( `${ window.location.origin }/video/${ videoId }` );
+
+    const handleCopyLink = async () => {
+        await navigator.clipboard.writeText( `${ window.location.origin }/video/${ videoId }` );
         setCopied( true );
+    }
+
+    const handleDeleteVideo = async () => {
+        await deleteVideoById( id );
+        setIsOpen( false );
+        // rewrite in case overlap
+        await navigator.clipboard.writeText( "" );
+        router.push( "/" );
     }
 
     useEffect( () => {
@@ -51,7 +64,31 @@ const VideoDetailHeader = ( {
                     <Image src={ copied ? "/assets/images/check.png" : "/assets/icons/link.svg" } alt="copy link"
                            width={ 24 } height={ 24 }/>
                 </button>
+
+                <button className="primary-btn" onClick={ () => setIsOpen( true ) }>
+                    <span>Delete Clip</span>
+                </button>
+
             </aside>
+
+            { isOpen && (
+                <div className="record">
+                    <section className="dialog">
+                        <div className="overlay-record" onClick={ () => setIsOpen( false ) }/>
+                        <div className="dialog-content">
+                            <figure>
+                                <h3>You super sure?</h3>
+                                <button onClick={ () => setIsOpen( false ) }>
+                                    <Image src={ ICONS.close } alt="close" height={ 20 } width={ 20 }/>
+                                </button>
+                            </figure>
+                            <button onClick={ handleDeleteVideo } className="primary-btn">
+                                Yes almighty power, im sure, delete this
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            ) }
         </header>
     )
 }

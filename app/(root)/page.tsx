@@ -12,7 +12,7 @@ const Page = async ( { searchParams }: SearchParams ) => {
     return (
         // This applies a max-width to the entire window & column to allow top to bottom layout.
         <main className="wrapper page">
-            <Header title={ "All MP4s" } subHeader="Public Library"/>
+            <Header title={ "All clips ˚♪ ♡ 𝄞˚" } subHeader="Public Library"/>
 
             { videos?.length > 0 ? (
                 <section className="video-grid">

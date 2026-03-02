@@ -194,6 +194,30 @@ export const getVideoById = withErrorHandling( async ( videoId: string ) => {
     return videoRecord
 } )
 
+
+export const deleteVideoById = withErrorHandling( async ( videoId: string ) => {
+        const userId = await getSessionUserId();
+
+        if ( !userId ) {
+            throw new Error( "Unauthorised nerd" );
+        }
+
+        const result = await db
+            .delete( videos )
+            .where(
+                and(
+                    eq( videos.id, videoId ),
+                    eq( videos.userId, userId )
+                )
+            )
+            .returning( { id: videos.id } );
+
+        if ( result.length === 0 ) {
+            throw new Error( "Video not found or not authorised to delete" );
+        }
+    }
+);
+
 // Just get the videos by the logged in videos.
 export const getAllVideosByUser = withErrorHandling(
     async (

@@ -18,7 +18,7 @@ const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
     // TODO pagination, delete video, visibility
     return (
         <div className="wrapper page">
-            <Header subHeader={ user?.email } title={ user?.name } userImg={ user?.image ?? "" }/>
+            <Header subHeader={ user?.email } title={ `⋆. 𐙚˚࿔ ${ user?.name } ☆˚⋆` } userImg={ user?.image ?? "" }/>
 
             { videos?.length > 0 ? (
                 <section className="video-grid">

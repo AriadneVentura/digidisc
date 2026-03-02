@@ -3,7 +3,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import FormField from "@/components/FormField";
 import FileInput from "@/components/FileInput";
 import { useFileInput } from "@/lib/hooks/useFileInput";
-import { MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from "@/constants";
+import { MAX_DURATION, MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from "@/constants";
 import { getThumbnailUploadUrl, getVideoUploadUrl, saveVideoDetails } from "@/lib/actions/video";
 import { useRouter } from "next/navigation";
 
@@ -37,7 +37,7 @@ const Page = () => {
         visibility: "public"
     } );
 
-    const video = useFileInput( MAX_VIDEO_SIZE );
+    const video = useFileInput( MAX_VIDEO_SIZE, MAX_DURATION );
     const thumbnail = useFileInput( MAX_THUMBNAIL_SIZE );
 
     useEffect( () => {
@@ -155,9 +155,11 @@ const Page = () => {
 
     return (
         <div className="wrapper-md upload-page">
-            <h1>Upload a video</h1>
+            <h1>Upload a clip ⋆｡‧˚ʚ🎥ɞ˚‧｡⋆</h1>
 
             { error && <div className="error-field">{ error }</div> }
+            { video.error && <div className="error-field">{ video.error }</div> }
+            { thumbnail.error && <div className="error-field">{ thumbnail.error }</div> }
 
             <form className="rounded-20 shadow-10 gap-6 w-full flex flex-col px-5 py-7.5"
                   onSubmit={ handleSubmit }>
@@ -214,8 +216,9 @@ const Page = () => {
                     ] }
                 />
 
-                <button type="submit" disabled={ isSubmitting } className="submit-button">
-                    { isSubmitting ? "Uploading..." : "Upload video" }
+                <button type="submit" disabled={ isSubmitting || !video.file || !thumbnail.file || !!video.error ||
+                    !!thumbnail.error } className="submit-button">
+                    { isSubmitting ? "Uploading..." : "Upload clip ♡" }
                 </button>
 
             </form>

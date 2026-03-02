@@ -105,6 +105,10 @@
         @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
     }
 
+    .primary-btn {
+        @apply py-2.5 px-5 flex items-center gap-2.5 text-sm font-semibold text-white bg-pink-100 rounded-4xl;
+    }
+
     /* sign in page */
     .sign-in {
         @apply w-full min-h-screen flex flex-col-reverse lg:flex-row justify-evenly overflow-hidden max-lg:gap-10;
@@ -343,10 +347,6 @@
 
     /* record screen */
     .record {
-        .primary-btn {
-            @apply py-2.5 px-5 flex items-center gap-2.5 text-sm font-semibold text-white bg-pink-100 rounded-4xl;
-        }
-
         .dialog {
             @apply fixed inset-0 flex items-center justify-center z-50;
 
