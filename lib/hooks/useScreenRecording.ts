@@ -1,12 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-    calculateRecordingDuration,
-    cleanupRecording,
-    createAudioMixer,
-    createRecordingBlob,
-    getMediaStreams,
-    setupRecording,
-} from "@/lib/utils";
+import { cleanupRecording, createAudioMixer, createRecordingBlob, getMediaStreams, setupRecording, } from "@/lib/utils";
 
 export const useScreenRecording = () => {
     const [ state, setState ] = useState<BunnyRecordingState>( {
@@ -46,7 +39,12 @@ export const useScreenRecording = () => {
 
     const handleRecordingStop = () => {
         const { blob, url } = createRecordingBlob( chunksRef.current );
-        const duration = calculateRecordingDuration( startTimeRef.current );
+
+        const duration = startTimeRef.current
+            ? Math.round( (Date.now() - startTimeRef.current) / 1000 )
+            : 0;
+
+        startTimeRef.current = null;
 
         setState( ( prev ) => ({
             ...prev,
@@ -104,7 +102,6 @@ export const useScreenRecording = () => {
 
             // Clear old video data.
             chunksRef.current = [];
-            startTimeRef.current = Date.now();
             // Starts the recording, and saves the data in 1s chunks.
             mediaRecorderRef.current.start( 1000 );
             setState( ( prev ) => ({ ...prev, isRecording: true }) );
