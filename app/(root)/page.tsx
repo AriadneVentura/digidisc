@@ -30,7 +30,6 @@ const Page = async ( { searchParams }: SearchParams ) => {
             ) : <EmptyState icon="/assets/icons/video.svg" title="Empty Disc"
                             description="Adjust your search Diva"/>
             }
-            {/*</section>*/ }
         </main>
     )
 }

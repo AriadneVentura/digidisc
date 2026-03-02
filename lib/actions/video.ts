@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 import { fixedWindow } from "arcjet";
 import { request } from "@arcjet/next";
 import aj from "@/lib/arcjet";
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 
 // Call constants to form API endpoints.
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
@@ -193,3 +193,45 @@ export const getVideoById = withErrorHandling( async ( videoId: string ) => {
 
     return videoRecord
 } )
+
+// Just get the videos by the logged in videos.
+export const getAllVideosByUser = withErrorHandling(
+    async (
+        userIdParameter: string,
+        searchQuery: string = "",
+        sortFilter?: string
+    ) => {
+        const currentUserId = (
+            await auth.api.getSession( { headers: await headers() } )
+        )?.user.id;
+        const isOwner = userIdParameter === currentUserId;
+
+        const [ userInfo ] = await db
+            .select( {
+                id: user.id,
+                name: user.name,
+                image: user.image,
+                email: user.email,
+            } )
+            .from( user )
+            .where( eq( user.id, userIdParameter ) );
+        if ( !userInfo ) throw new Error( "User not found" );
+
+        const conditions = [
+            // Only return the videos that match the user
+            eq( videos.userId, userIdParameter ),
+            // Or if they are not the owner if its public
+            !isOwner && eq( videos.visibility, "public" ),
+            // ilike is case insensitive comparison
+            searchQuery.trim() && ilike( videos.title, `%${ searchQuery }%` ),
+        ].filter( Boolean ) as any[];
+
+        const userVideos = await buildVideoWithUserQuery()
+            .where( and( ...conditions ) )
+            .orderBy(
+                sortFilter ? getOrderByClause( sortFilter ) : desc( videos.createdAt )
+            );
+
+        return { user: userInfo, videos: userVideos, count: userVideos.length };
+    }
+);
