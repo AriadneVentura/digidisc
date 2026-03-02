@@ -11,7 +11,6 @@ const VideoDetailHeader = ( {
                                 username,
                                 videoId,
                                 ownerId,
-                                id,
                                 visibility,
                                 thumbnailUrl
                             }: VideoDetailHeaderProps ) => {
@@ -19,7 +18,7 @@ const VideoDetailHeader = ( {
     const [ copied, setCopied ] = useState( false );
 
     const handleCopyLink = () => {
-        navigator.clipboard.writeText( `${ window.location.origin }/video/${ id }` );
+        navigator.clipboard.writeText( `${ window.location.origin }/video/${ videoId }` );
         setCopied( true );
     }
 

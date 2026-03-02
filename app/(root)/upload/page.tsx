@@ -46,6 +46,47 @@ const Page = () => {
         }
     }, [ video.duration ] )
 
+    useEffect( () => {
+        // useEffects cannot be async, so this is how you get around that.
+        const checkForRecordedVideo = async () => {
+            try {
+                const stored = sessionStorage.getItem( "recordedVideo" );
+                if ( !stored ) return;
+
+                const { url, name, type, duration } = JSON.parse( stored );
+                // Turn the json into video data.
+                const blob = await fetch( url ).then( ( res ) => res.blob() );
+                // Creates a browser file to be uploaded.
+                const file = new File( [ blob ], name, { type, lastModified: Date.now() } )
+
+                if ( video.inputRef.current ) {
+                    // Create a new instance of data transfer and add file into it (this is done browser side
+                    // normally for drag and drop cases but since im injecting it this is how its needed)
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add( file );
+                    video.inputRef.current.files = dataTransfer.files;
+
+                    // Simulate a user triggering file input change.
+                    const event = new Event( "change", { bubbles: true } );
+                    video.inputRef.current.dispatchEvent( event );
+
+                    // Call fileHandler manually and pretend a user selected the file.
+                    video.handleFileChange( {
+                        target: { files: dataTransfer.files }
+                    } as ChangeEvent<HTMLInputElement> )
+
+                    if ( duration ) setVideoDuration( video.duration );
+                    sessionStorage.removeItem( "recordedVideo" );
+                    URL.revokeObjectURL( url );
+                }
+            } catch ( e ) {
+                console.error( e, "Error loading recorded video" )
+            }
+        }
+
+        checkForRecordedVideo();
+    }, [ video ] );
+
     const handleInputChange = ( e: ChangeEvent<HTMLInputElement> ) => {
         // Name is name of input we are modifying, value will come from onChange, this allows a dynamic formField update.
         const { name, value } = e.target;
@@ -101,7 +142,8 @@ const Page = () => {
                 duration: videoDuration
             } );
 
-            router.push( `/video/${ videoId }` )
+            // Go to homepage after upload.
+            router.push( "/" )
 
         } catch ( error ) {
             console.log( "Error submitting form: ", error );

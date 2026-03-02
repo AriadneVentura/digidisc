@@ -45,7 +45,8 @@ export const DEFAULT_VIDEO_CONFIG = {
 };
 
 export const DEFAULT_RECORDING_CONFIG = {
-    mimeType: "video/webm;codecs=vp9,opus",
+    // Firefox atm doesnt support vp9 </3
+    mimeType: "video/webm;codecs=vp8,opus",
     audioBitsPerSecond: 128000,
     videoBitsPerSecond: 2500000,
 };

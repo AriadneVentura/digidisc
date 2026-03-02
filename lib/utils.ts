@@ -158,6 +158,7 @@ export const generatePagination = ( currentPage: number, totalPages: number ) =>
 export const getMediaStreams = async (
     withMic: boolean
 ): Promise<MediaStreams> => {
+    // Use the navigator JS object to access the media devices.
     const displayStream = await navigator.mediaDevices.getDisplayMedia( {
         video: DEFAULT_VIDEO_CONFIG,
         audio: true,
@@ -185,14 +186,18 @@ export const createAudioMixer = (
 ) => {
     if ( !hasDisplayAudio && !micStream ) return null;
 
+    // Create a new audio output stream
     const destination = ctx.createMediaStreamDestination();
     const mix = ( stream: MediaStream, gainValue: number ) => {
         const source = ctx.createMediaStreamSource( stream );
+        // Gain is volume control
         const gain = ctx.createGain();
         gain.gain.value = gainValue;
+        // connect all together
         source.connect( gain ).connect( destination );
     };
 
+    // Screen audio should be slightly quiter than microphone.
     if ( hasDisplayAudio ) mix( displayStream, 0.7 );
     if ( micStream ) mix( micStream, 1.5 );
 
@@ -259,17 +264,23 @@ export const cleanupRecording = (
 export const createRecordingBlob = (
     chunks: Blob[]
 ): { blob: Blob; url: string } => {
+    // Combine all the little video pieces into one video file.
     const blob = new Blob( chunks, { type: "video/webm" } );
     const url = URL.createObjectURL( blob );
     return { blob, url };
 };
 
-// Calculates how many seconds have passed since recording started.
+// Calculates how many seconds have passed since recording started. E.G:
+// [
+//     { time: "00:00:01", text: "Hello everyone" },
+//     { time: "00:00:05", text: "Welcome to the video" }
+// ]
 export const calculateRecordingDuration = ( startTime: number | null ): number =>
     startTime ? Math.round( (Date.now() - startTime) / 1000 ) : 0;
 
 // Converts a transcript string into structured time and text entries.
 export function parseTranscript( transcript: string ): TranscriptEntry[] {
+    // cleanup headers
     const lines = transcript.replace( /^WEBVTT\s*/, "" ).split( "\n" );
     const result: TranscriptEntry[] = [];
     let tempText: string[] = [];
@@ -277,6 +288,7 @@ export function parseTranscript( transcript: string ): TranscriptEntry[] {
 
     for ( const line of lines ) {
         const trimmedLine = line.trim();
+        // If it matches a time pattern its a new subtitle block
         const timeMatch = trimmedLine.match(
             /(\d{2}:\d{2}:\d{2})\.\d{3}\s-->\s(\d{2}:\d{2}:\d{2})\.\d{3}/
         );
