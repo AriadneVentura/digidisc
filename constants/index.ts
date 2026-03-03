@@ -39,7 +39,7 @@ export const initialVideoState = {
     processingProgress: 0,
 };
 
-export const infos = [ "transcript", "metadata" ];
+// export const infos = [ "transcript", "metadata" ];
 
 export const DEFAULT_VIDEO_CONFIG = {
     width: { ideal: 1920 },

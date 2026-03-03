@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { daysAgo } from "@/lib/utils";
-import { ICONS } from "@/constants";
-import { deleteVideoById } from "@/lib/actions/video";
+import { ICONS, visibilities } from "@/constants";
+import { deleteVideoById, updateVideoVisibility } from "@/lib/actions/video";
+import { authClient } from "@/lib/auth-client";
+import DropdownList from "@/components/DropdownList";
 
 const VideoDetailHeader = ( {
                                 title,
@@ -19,7 +21,15 @@ const VideoDetailHeader = ( {
                             }: VideoDetailHeaderProps ) => {
     const router = useRouter();
     const [ copied, setCopied ] = useState( false );
+    const [ isDeleting, setIsDeleting ] = useState( false );
     const [ isOpen, setIsOpen ] = useState( false );
+    const [ visibilityState, setVisibilityState ] = useState<Visibility>(
+        visibility as Visibility
+    );
+    const [ isUpdating, setIsUpdating ] = useState( false );
+    const { data: session } = authClient.useSession();
+    const userId = session?.user.id;
+    const isOwner = userId === ownerId;
 
 
     const handleCopyLink = async () => {
@@ -28,11 +38,18 @@ const VideoDetailHeader = ( {
     }
 
     const handleDeleteVideo = async () => {
-        await deleteVideoById( id );
-        setIsOpen( false );
-        // rewrite in case overlap
-        await navigator.clipboard.writeText( "" );
-        router.push( "/" );
+        try {
+            setIsDeleting( true );
+            await deleteVideoById( id, thumbnailUrl );
+            // rewrite in case overlap
+            await navigator.clipboard.writeText( "" );
+            router.push( "/" );
+            setIsOpen( false );
+        } catch ( error ) {
+            console.error( "Error deleting video:", error );
+        } finally {
+            setIsDeleting( false );
+        }
     }
 
     useEffect( () => {
@@ -42,6 +59,53 @@ const VideoDetailHeader = ( {
 
         return () => clearTimeout( changeChecked );
     }, [ copied ] )
+
+    const handleVisibilityChange = async ( option: string ) => {
+        if ( option !== visibilityState ) {
+            setIsUpdating( true );
+            try {
+                await updateVideoVisibility( videoId, option as Visibility );
+                setVisibilityState( option as Visibility );
+            } catch ( error ) {
+                console.error( "Error updating visibility:", error );
+            } finally {
+                setIsUpdating( false );
+            }
+        }
+    };
+
+    const TriggerVisibility = (
+        <div className="visibility-trigger">
+            <div>
+                { visibility === "public" ? (
+                        <Image
+                            src="/assets/icons/unlock.svg"
+                            alt="Views"
+                            width={ 16 }
+                            height={ 16 }
+                            className="mr-2"
+                        />
+                    ) :
+                    (
+                        <Image
+                            src="/assets/icons/lock.svg"
+                            alt="Views"
+                            width={ 16 }
+                            height={ 16 }
+                            className="mr-2"
+                        />
+                    )
+                }
+                <p>{ visibilityState }</p>
+            </div>
+            <Image
+                src="/assets/icons/arrow-down.svg"
+                alt="Arrow Down"
+                width={ 16 }
+                height={ 16 }
+            />
+        </div>
+    );
 
     return (
         <header className="detail-header">
@@ -61,14 +125,34 @@ const VideoDetailHeader = ( {
 
             <aside className="cta">
                 <button onClick={ handleCopyLink }>
-                    <Image src={ copied ? "/assets/images/check.png" : "/assets/icons/link.svg" } alt="copy link"
+                    <Image src={ copied ? "/assets/images/check.png" : "/assets/icons/chain.svg" } alt="copy link"
                            width={ 24 } height={ 24 }/>
                 </button>
 
-                <button className="primary-btn" onClick={ () => setIsOpen( true ) }>
-                    <span>Delete Clip</span>
-                </button>
-
+                { isOwner && (
+                    <div className="user-btn">
+                        <button
+                            className="delete-btn"
+                            onClick={ () => setIsOpen( true ) }
+                            disabled={ isDeleting }
+                        >
+                            Delete Clip
+                        </button>
+                        <div className="bar"/>
+                        { isUpdating ? (
+                            <div className="update-stats">
+                                <p>Updating...</p>
+                            </div>
+                        ) : (
+                            <DropdownList
+                                options={ visibilities }
+                                selectedOption={ visibilityState }
+                                onOptionSelect={ handleVisibilityChange }
+                                triggerElement={ TriggerVisibility }
+                            />
+                        ) }
+                    </div>
+                ) }
             </aside>
 
             { isOpen && (
@@ -83,7 +167,7 @@ const VideoDetailHeader = ( {
                                 </button>
                             </figure>
                             <button onClick={ handleDeleteVideo } className="primary-btn">
-                                Yes almighty power, im sure, delete this
+                                { !isDeleting ? "Mhmm" : "Deleting..." }
                             </button>
                         </div>
                     </section>

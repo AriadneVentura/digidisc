@@ -25,19 +25,18 @@ const Page = () => {
                             ) ) }
                         </figure>
                         <p>
-                            DigiDisc makes screen recording effortless. From quick walkthroughs to full presentations,
-                            capture your world digitally and broadcast it in seconds.
+                            DigiDisc is a super duper awesome clip sharing site for gamers and nerds
                         </p>
 
                         <article>
-                            <Image src="/assets/images/jessica.png" height={ 64 } width={ 64 } alt="jessica"
+                            <Image src="/assets/images/dummy.jpg" height={ 64 } width={ 64 } alt="jessica"
                                    className="rounded-full"/>
 
                             <div>
                                 <h2>
-                                    Jessica Summers
+                                    Ariadne
                                 </h2>
-                                <p>Product Designer, ProjectNova</p>
+                                <p>Product Designer & Programmer</p>
                             </div>
                         </article>
                     </section>
@@ -54,7 +53,7 @@ const Page = () => {
                         <Image src="/assets/icons/cd.svg" height={ 40 } width={ 40 } alt="logo"/>
                         <h1>DigiDisc</h1>
                     </Link>
-                    <p>Create and share your very first <span>DigiDisc video</span> in no time.</p>
+                    <p>Create and share your very first <span>DigiDisc Clip</span> now!</p>
                     <button onClick={ handleSignIn }>
                         <Image src="/assets/icons/google.svg" height={ 22 } width={ 22 } alt="google"/>
                         <span>Sign in with Google</span>

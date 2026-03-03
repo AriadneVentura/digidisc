@@ -195,13 +195,26 @@ export const getVideoById = withErrorHandling( async ( videoId: string ) => {
 } )
 
 
-export const deleteVideoById = withErrorHandling( async ( videoId: string ) => {
+export const deleteVideoById = withErrorHandling( async ( videoId: string, thumbnailUrl: string ) => {
         const userId = await getSessionUserId();
 
         if ( !userId ) {
             throw new Error( "Unauthorised nerd" );
         }
 
+        // Delete data from bunny
+        await apiFetch(
+            `${ VIDEO_STREAM_BASE_URL }/${ BUNNY_LIBRARY_ID }/videos/${ videoId }`,
+            { method: "DELETE", bunnyType: "stream" }
+        );
+
+        const thumbnailPath = thumbnailUrl.split( "thumbnails/" )[1];
+        await apiFetch(
+            `${ THUMBNAIL_STORAGE_BASE_URL }/thumbnails/${ thumbnailPath }`,
+            { method: "DELETE", bunnyType: "storage", expectJson: false }
+        );
+
+        // delete from neon db
         const result = await db
             .delete( videos )
             .where(
@@ -215,8 +228,59 @@ export const deleteVideoById = withErrorHandling( async ( videoId: string ) => {
         if ( result.length === 0 ) {
             throw new Error( "Video not found or not authorised to delete" );
         }
+
+        // Redirect
+        revalidatePaths( [ "/", `/video/${ videoId }` ] );
     }
 );
+
+// Change the video visibility
+export const updateVideoVisibility = withErrorHandling( async (
+        videoId: string,
+        visibility: Visibility
+    ) => {
+        await validateWithArcjet( videoId );
+        await db
+            .update( videos )
+            .set( { visibility, updatedAt: new Date() } )
+            .where( eq( videos.videoId, videoId ) );
+
+        // This lets Next.js know that the data for the route has changed and it needs an update.
+        revalidatePaths( [ "/", `/video/${ videoId }` ] );
+        return {};
+    }
+);
+
+export const incrementViewCount = withErrorHandling(
+    async ( videoId: string ) => {
+        await db
+            .update( videos )
+            .set( {
+                views: sql`${ videos.views }
+                + 1`, updatedAt: new Date()
+            } )
+            .where( eq( videos.videoId, videoId ) );
+
+        revalidatePaths( [ `/video/${ videoId }` ] );
+        return {};
+    }
+);
+
+// // TODO
+// export const incrementLikeCount = withErrorHandling(
+//     async ( videoId: string ) => {
+//         await db
+//             .update( videos )
+//             .set( {
+//                 likes: sql`${ videos.likes }
+//                 + 1`, updatedAt: new Date()
+//             } )
+//             .where( eq( videos.videoId, videoId ) );
+//
+//         revalidatePaths( [ `/video/${ videoId }` ] );
+//         return {};
+//     }
+// );
 
 // Just get the videos by the logged in videos.
 export const getAllVideosByUser = withErrorHandling(
