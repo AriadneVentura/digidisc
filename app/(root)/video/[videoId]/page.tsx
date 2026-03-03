@@ -1,5 +1,5 @@
 import React from 'react'
-import { getVideoById, incrementViewCount } from "@/lib/actions/video";
+import { getVideoById, hasUserLikedClip, incrementViewCount } from "@/lib/actions/video";
 import { redirect } from "next/navigation";
 import VideoPlayer from "@/components/VideoPlayer";
 import VideoDetailHeader from "@/components/VideoDetailHeader";
@@ -16,8 +16,9 @@ const Page = async ( { params }: Params ) => {
 
     if ( !video ) redirect( "/404" );
 
-    // TODO learn what videoId and video.id is
-    await incrementViewCount( video.videoId );
+    await incrementViewCount( video.id );
+
+    const [ data ] = await hasUserLikedClip( video.id );
 
     return (
         <main className="wrapper page">
@@ -31,11 +32,11 @@ const Page = async ( { params }: Params ) => {
 
                 <VideoInfo
                     videoId={ video.videoId }
-                    createdAt={ video.createdAt }
+                    id={ video.id }
                     description={ video.description }
                     views={ video.views }
-                    title={ video.title }
-                    videoUrl={ video.videoUrl }
+                    initialLikes={ video.likes }
+                    hasUserLiked={ data.hasLiked }
                 />
             </section>
         </main>

@@ -6,7 +6,7 @@ import { headers } from "next/dist/server/request/headers";
 import { auth } from "@/lib/auth";
 import { BUNNY } from "@/constants";
 import { db } from "@/src";
-import { user, videos } from "@/src/db/schema";
+import { user, videoLikes, videos } from "@/src/db/schema";
 import { revalidatePath } from "next/cache";
 import { fixedWindow } from "arcjet";
 import { request } from "@arcjet/next";
@@ -261,26 +261,91 @@ export const incrementViewCount = withErrorHandling(
             } )
             .where( eq( videos.videoId, videoId ) );
 
-        revalidatePaths( [ `/video/${ videoId }` ] );
+        revalidatePaths( [ "/", `/video/${ videoId }` ] );
         return {};
     }
 );
 
-// // TODO
-// export const incrementLikeCount = withErrorHandling(
-//     async ( videoId: string ) => {
-//         await db
-//             .update( videos )
-//             .set( {
-//                 likes: sql`${ videos.likes }
-//                 + 1`, updatedAt: new Date()
-//             } )
-//             .where( eq( videos.videoId, videoId ) );
-//
-//         revalidatePaths( [ `/video/${ videoId }` ] );
-//         return {};
-//     }
-// );
+export const hasUserLikedClip = async ( videoId: string ) => {
+    console.log( "yi" );
+    const userId = await getSessionUserId();
+    if ( !userId ) throw new Error( "Unauthorized" );
+
+    return (
+        await db.select( {
+            hasLiked: sql<boolean>`
+                EXISTS (
+                    SELECT 1
+                    FROM video_likes
+                    WHERE video_likes.video_id =
+                ${ videoId }
+                AND
+                video_likes
+                .
+                user_id
+                =
+                ${ userId }
+                )
+            `,
+        } )
+            .from( videos )
+            .where( eq( videos.id, videoId ) )
+            .limit( 1 )
+    )
+};
+
+export const toggleLike = async ( videoId: string ) => {
+    console.log( "y2" );
+    const userId = await getSessionUserId();
+    if ( !userId ) throw new Error( "Unauthorized" );
+
+    const existing = await db
+        .select()
+        .from( videoLikes )
+        .where(
+            and(
+                eq( videoLikes.videoId, videoId ),
+                eq( videoLikes.userId, userId )
+            )
+        )
+        .limit( 1 );
+
+    if ( existing.length > 0 ) {
+        await db
+            .delete( videoLikes )
+            .where(
+                and(
+                    eq( videoLikes.videoId, videoId ),
+                    eq( videoLikes.userId, userId )
+                )
+            );
+
+        await db
+            .update( videos )
+            .set( {
+                likes: sql`${ videos.likes }
+                - 1`,
+                updatedAt: new Date(),
+            } )
+            .where( eq( videos.id, videoId ) );
+    } else {
+        await db.insert( videoLikes ).values( {
+            videoId,
+            userId,
+        } );
+
+        await db
+            .update( videos )
+            .set( {
+                likes: sql`${ videos.likes }
+                + 1`,
+                updatedAt: new Date(),
+            } )
+            .where( eq( videos.id, videoId ) );
+    }
+
+    revalidatePath( "/", `/video/${ videoId }` );
+};
 
 // Just get the videos by the logged in videos.
 export const getAllVideosByUser = withErrorHandling(

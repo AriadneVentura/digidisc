@@ -1,18 +1,19 @@
 'use client'
-import React, { useState } from 'react'
-import { cn } from "@/lib/utils";
+import React, { useState, useTransition } from 'react'
 import Image from "next/image";
+import { toggleLike } from "@/lib/actions/video";
 
 const VideoInfo = ( {
-                        createdAt,
                         description,
                         videoId,
-                        title,
-                        videoUrl,
-                        views
+                        id,
+                        views,
+                        initialLikes,
+                        hasUserLiked,
                     }: VideoInfoProps ) => {
-    const [ isLiking, setIsLiking ] = useState( false );
-    const hasLiked = false;
+    const [ likes, setLikes ] = useState( initialLikes );
+    const [ hasLiked, setHasLiked ] = useState( hasUserLiked );
+    const [ isPending, startTransition ] = useTransition();
 
     const metaDatas = [
         {
@@ -22,8 +23,27 @@ const VideoInfo = ( {
     ];
 
     const handleLike = () => {
-        setIsLiking( !isLiking );
-    }
+        startTransition( async () => {
+            try {
+                await toggleLike( id );
+                console.log( "here", hasLiked, hasUserLiked );
+
+                // Optimistic update so the server can run in the background but the UI updates instantly.
+                if ( hasLiked ) {
+                    setLikes( ( prev ) => prev - 1 );
+                } else {
+                    setLikes( ( prev ) => prev + 1 );
+                }
+
+                setHasLiked( ( prev ) => !prev );
+            } catch ( err ) {
+                console.log( "hi" )
+                console.error( err );
+                setHasLiked( false );
+            }
+        } );
+    };
+
 
     return (
         <section className="video-information">
@@ -32,13 +52,7 @@ const VideoInfo = ( {
                     { metaDatas.map( ( { label, value }, index ) => (
                         <article key={ index }>
                             <h2>{ label }</h2>
-                            <p
-                                className={ cn( {
-                                    "text-pink-100 truncate": label === "Video url",
-                                } ) }
-                            >
-                                { value }
-                            </p>
+                            <p>{ value }</p>
                         </article>
                     ) ) }
                 </div>
@@ -48,14 +62,14 @@ const VideoInfo = ( {
                         <span>{ views }</span>
                     </div>
                     <div className="side-details">
-                        <button onClick={ handleLike }>
+                        <button onClick={ handleLike } disabled={ isPending }>
                             {/*ik you can dynamically change the source, but two images cause alt tags for behaviour*/ }
                             { hasLiked ? (
                                 <Image src="/assets/icons/heart_filled.svg" alt="liked" width={ 16 } height={ 16 }/>
                             ) : (
                                 <Image src="/assets/icons/heart.svg" alt="like" width={ 16 } height={ 16 }/>
                             ) }
-                            <span>1</span>
+                            <span>{ likes }</span>
                         </button>
                     </div>
                 </aside>

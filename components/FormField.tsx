@@ -17,6 +17,7 @@ const FormField = ( {
                 value={ value }
                 onChange={ onChange }
                 placeholder={ placeholder }
+                maxLength={ 200 }
             />
         ) : as === "select" ? (
             <select id={ id } name={ id } value={ value } onChange={ onChange }>
@@ -34,6 +35,7 @@ const FormField = ( {
                 value={ value }
                 onChange={ onChange }
                 placeholder={ placeholder }
+                maxLength={ 70 }
             />
         ) }
     </div>

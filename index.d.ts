@@ -78,9 +78,10 @@ declare interface VideoCardProps {
     username: string;
     createdOn: Date;
     views: number;
-    visibility: string;
-    // visibility: Visibility;
+    // visibility: string;
+    visibility: Visibility;
     duration: number | null;
+    likes: number;
 }
 
 declare interface VideoDetailHeaderProps {
@@ -101,12 +102,12 @@ declare interface VideoPlayerProps {
 }
 
 declare interface VideoInfoProps {
-    transcript?: string;
-    title: string;
-    createdAt: Date;
     description: string;
     videoId: string;
-    videoUrl: string;
+    views: number;
+    initialLikes: number;
+    hasUserLiked: boolean;
+    id: string;
 }
 
 declare interface ImageWithFallbackProps extends Omit<ImageProps, "src"> {

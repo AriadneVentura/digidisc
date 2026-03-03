@@ -14,7 +14,8 @@ const VideoCard = ( {
                         createdOn,
                         views,
                         visibility,
-                        duration
+                        duration,
+                        likes,
                     }: VideoCardProps ) => {
     const [ copied, setCopied ] = useState( false );
 
@@ -42,6 +43,9 @@ const VideoCard = ( {
                         </figcaption>
                     </figure>
                     <aside>
+                        <Image src="/assets/icons/heart_black.svg" alt="likes" width={ 11 } height={ 11 }/>
+                        <span>{ likes }</span>
+                        <div/>
                         <Image src="/assets/icons/eye.svg" alt="views" width={ 16 } height={ 16 }/>
                         <span>{ views }</span>
                     </aside>

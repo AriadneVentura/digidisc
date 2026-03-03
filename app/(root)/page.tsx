@@ -22,7 +22,8 @@ const Page = async ( { searchParams }: SearchParams ) => {
                             key={ video.id }
                             { ...video }
                             userImg={ user?.image || "" }
-                            username={ user?.name || "Guest" }/>
+                            username={ user?.name || "Guest" }
+                        />
                     ) ) }
 
                 </section>

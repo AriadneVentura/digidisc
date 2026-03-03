@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 export const user = pgTable( "user", {
     id: text( "id" ).primaryKey(),
@@ -108,7 +108,19 @@ export const videos = pgTable( "videos", {
         .notNull()
         .references( () => user.id, { onDelete: "cascade" } ),
     views: integer( "views" ).notNull().default( 0 ),
+    likes: integer( "likes" ).notNull().default( 0 ),
     duration: integer( "duration" ),
     createdAt: timestamp( "created_at" ).notNull().defaultNow(),
     updatedAt: timestamp( "updated_at" ).notNull().defaultNow(),
 } );
+
+export const videoLikes = pgTable( "video_likes", {
+        id: uuid( "id" ).primaryKey().defaultRandom().unique(),
+        userId: text( "user_id" ).notNull().references( () => user.id, { onDelete: "cascade" } ),
+        videoId: uuid( "video_id" ).notNull().references( () => videos.id, { onDelete: "cascade" } ),
+        createdAt: timestamp( "created_at" ).notNull().defaultNow(),
+    }, ( table ) => [
+        // A user can only like a video once
+        uniqueIndex( "user_video_unique" ).on( table.userId, table.videoId ),
+    ]
+);
