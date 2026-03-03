@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 import { fixedWindow } from "arcjet";
 import { request } from "@arcjet/next";
 import aj from "@/lib/arcjet";
-import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, asc, eq, ilike, or, sql } from "drizzle-orm";
 
 // Call constants to form API endpoints.
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
@@ -382,7 +382,7 @@ export const getAllVideosByUser = withErrorHandling(
         const userVideos = await buildVideoWithUserQuery()
             .where( and( ...conditions ) )
             .orderBy(
-                sortFilter ? getOrderByClause( sortFilter ) : desc( videos.createdAt )
+                sortFilter ? getOrderByClause( sortFilter ) : asc( videos.likes )
             );
 
         return { user: userInfo, videos: userVideos, count: userVideos.length };

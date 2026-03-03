@@ -11,17 +11,16 @@ export const BUNNY = {
     STORAGE_BASE_URL: "https://syd.storage.bunnycdn.com/digi-disc",
     CDN_URL: "https://digi-disc.b-cdn.net",
     EMBED_URL: "https://iframe.mediadelivery.net/embed",
-    // So videos are transcribed
+    // So videos are transcribed - i dont want to do this but for maybe one day
     TRANSCRIPT_URL: "https://vz-98453fdd-a25.b-cdn.net",
 };
-
-export const emojis = [ "😂", "😍", "👍" ];
 
 export const filterOptions = [
     "Most Viewed",
     "Most Recent",
+    "Most Liked",
     "Oldest First",
-    "Least Viewed",
+    "Least Viewed"
 ];
 
 export const visibilities: Visibility[] = [ "public", "private" ];
