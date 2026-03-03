@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import { getAllVideos } from "@/lib/actions/video";
 import EmptyState from "@/components/EmptyState";
 import VideoCard from "@/components/VideoCard";
+import Pagination from "@/components/Pagination";
 
 const Page = async ( { searchParams }: SearchParams ) => {
     const { query, filter, page } = await searchParams;
@@ -30,6 +31,15 @@ const Page = async ( { searchParams }: SearchParams ) => {
             ) : <EmptyState icon="/assets/icons/video.svg" title="Empty Disc"
                             description="Adjust your search Diva"/>
             }
+
+            { pagination?.totalPages > 1 && (
+                <Pagination
+                    currentPage={ pagination.currentPage }
+                    totalPages={ pagination.totalPages }
+                    queryString={ query }
+                    filterString={ filter }
+                />
+            ) }
         </main>
     )
 }

@@ -4,14 +4,14 @@
 import { apiFetch, doesTitleMatch, getEnv, getOrderByClause, withErrorHandling } from "@/lib/utils";
 import { headers } from "next/dist/server/request/headers";
 import { auth } from "@/lib/auth";
-import { BUNNY } from "@/constants";
+import { BUNNY, PAGE_SIZE } from "@/constants";
 import { db } from "@/src";
 import { user, videoLikes, videos } from "@/src/db/schema";
 import { revalidatePath } from "next/cache";
 import { fixedWindow } from "arcjet";
 import { request } from "@arcjet/next";
 import aj from "@/lib/arcjet";
-import { and, asc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 
 // Call constants to form API endpoints.
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
@@ -135,7 +135,7 @@ export const getAllVideos = withErrorHandling( async (
         searchQuery: string = '',
         sortFilter?: string,
         pageNumber: number = 1,
-        pageSize: number = 8,
+        pageSize: number = PAGE_SIZE,
     ) => {
         const session = await auth.api.getSession( { headers: await headers() } )
         const currentUserId = session?.user.id;
@@ -168,7 +168,7 @@ export const getAllVideos = withErrorHandling( async (
                     ? getOrderByClause( sortFilter )
                     // my ide is formatting this as weird and dont look at me cause ceebs finding the specific rule
                     // that fixes it <3 if you find it lmk.
-                    : sql`${ videos.createdAt }
+                    : sql`${ videos.likes }
                         DESC`
             )
             .limit( pageSize )
@@ -266,8 +266,7 @@ export const incrementViewCount = withErrorHandling(
     }
 );
 
-export const hasUserLikedClip = async ( videoId: string ) => {
-    console.log( "yi" );
+export const hasUserLikedClip = withErrorHandling( async ( videoId: string ) => {
     const userId = await getSessionUserId();
     if ( !userId ) throw new Error( "Unauthorized" );
 
@@ -292,12 +291,13 @@ export const hasUserLikedClip = async ( videoId: string ) => {
             .where( eq( videos.id, videoId ) )
             .limit( 1 )
     )
-};
+} );
 
-export const toggleLike = async ( videoId: string ) => {
-    console.log( "y2" );
+export const toggleLike = withErrorHandling( async ( videoId: string ) => {
     const userId = await getSessionUserId();
     if ( !userId ) throw new Error( "Unauthorized" );
+
+    await validateWithArcjet( videoId );
 
     const existing = await db
         .select()
@@ -344,15 +344,17 @@ export const toggleLike = async ( videoId: string ) => {
             .where( eq( videos.id, videoId ) );
     }
 
-    revalidatePath( "/", `/video/${ videoId }` );
-};
+    revalidatePaths( [ "/", `/video/${ videoId }` ] );
+} );
 
 // Just get the videos by the logged in videos.
 export const getAllVideosByUser = withErrorHandling(
     async (
         userIdParameter: string,
         searchQuery: string = "",
-        sortFilter?: string
+        sortFilter?: string,
+        pageNumber: number = 1,
+        pageSize: number = PAGE_SIZE,
     ) => {
         const currentUserId = (
             await auth.api.getSession( { headers: await headers() } )
@@ -379,12 +381,32 @@ export const getAllVideosByUser = withErrorHandling(
             searchQuery.trim() && ilike( videos.title, `%${ searchQuery }%` ),
         ].filter( Boolean ) as any[];
 
+        // Count total for pagination
+        const [ { totalCount } ] = await db
+            .select( { totalCount: sql<number>`count(*)` } )
+            .from( videos )
+            .where( and( ...conditions ) );
+
+        const totalVideos = Number( totalCount || 0 );
+        const totalPages = Math.ceil( totalVideos / pageSize );
+
         const userVideos = await buildVideoWithUserQuery()
             .where( and( ...conditions ) )
             .orderBy(
-                sortFilter ? getOrderByClause( sortFilter ) : asc( videos.likes )
-            );
+                sortFilter ? getOrderByClause( sortFilter ) : desc( videos.likes )
+            )
+            .limit( pageSize )
+            .offset( (pageNumber - 1) * pageSize );
 
-        return { user: userInfo, videos: userVideos, count: userVideos.length };
+        return {
+            user: userInfo,
+            videos: userVideos,
+            pagination: {
+                currentPage: pageNumber,
+                totalPages,
+                totalVideos,
+                pageSize,
+            },
+        };
     }
 );

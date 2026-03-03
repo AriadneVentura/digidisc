@@ -15,6 +15,13 @@ type VideoFormValues = {
     visibility: "public" | "private";
 };
 
+declare interface PaginationProps {
+    currentPage?: number;
+    totalPages?: number;
+    queryString?: string;
+    filterString?: string;
+}
+
 declare interface FormFieldProps {
     id: string;
     label: string;

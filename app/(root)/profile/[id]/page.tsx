@@ -4,19 +4,17 @@ import VideoCard from "@/components/VideoCard";
 import { getAllVideosByUser } from "@/lib/actions/video";
 import { redirect } from "next/navigation";
 import EmptyState from "@/components/EmptyState";
+import Pagination from "@/components/Pagination";
 
 const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
     // Next.js exposes the ID through async params;
     const { id } = await params;
-    const { query, filter } = await searchParams;
+    const { query, filter, page } = await searchParams;
 
-    const { user, videos } = await getAllVideosByUser( id, query, filter );
+    const { user, videos, pagination } = await getAllVideosByUser( id, query, filter, Number( page ) || 1 );
 
     if ( !user ) redirect( "/404" );
 
-    // TODO search & pagination
-    // TODO deploy & readme
-    // TODO stretch: view counting, likes
     return (
         <div className="wrapper page">
             <Header subHeader={ user?.email } title={ `⋆. 𐙚˚࿔ ${ user?.name } ☆˚⋆` } userImg={ user?.image ?? "" }/>
@@ -37,6 +35,15 @@ const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
             ) : <EmptyState icon="/assets/icons/video.svg" title="Empty Disc atm"
                             description="Videos will show when you upload them Diva"/>
             }
+
+            { pagination?.totalPages > 1 && (
+                <Pagination
+                    currentPage={ pagination.currentPage }
+                    totalPages={ pagination.totalPages }
+                    queryString={ query }
+                    filterString={ filter }
+                />
+            ) }
         </div>
     )
 }

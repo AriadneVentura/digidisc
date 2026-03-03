@@ -26,7 +26,6 @@ const VideoInfo = ( {
         startTransition( async () => {
             try {
                 await toggleLike( id );
-                console.log( "here", hasLiked, hasUserLiked );
 
                 // Optimistic update so the server can run in the background but the UI updates instantly.
                 if ( hasLiked ) {
@@ -37,7 +36,6 @@ const VideoInfo = ( {
 
                 setHasLiked( ( prev ) => !prev );
             } catch ( err ) {
-                console.log( "hi" )
                 console.error( err );
                 setHasLiked( false );
             }
