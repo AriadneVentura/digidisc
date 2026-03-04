@@ -37,10 +37,11 @@ const VideoDetailHeader = ( {
         setCopied( true );
     }
 
+    console.log( thumbnailUrl );
     const handleDeleteVideo = async () => {
         try {
             setIsDeleting( true );
-            await deleteVideoById( id, thumbnailUrl );
+            await deleteVideoById( id, videoId, thumbnailUrl );
             // rewrite in case overlap
             await navigator.clipboard.writeText( "" );
             router.push( "/" );

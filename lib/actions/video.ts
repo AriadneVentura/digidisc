@@ -195,7 +195,7 @@ export const getVideoById = withErrorHandling( async ( videoId: string ) => {
 } )
 
 
-export const deleteVideoById = withErrorHandling( async ( videoId: string, thumbnailUrl: string ) => {
+export const deleteVideoById = withErrorHandling( async ( id: string, videoId: string, thumbnailUrl: string ) => {
         const userId = await getSessionUserId();
 
         if ( !userId ) {
@@ -219,7 +219,7 @@ export const deleteVideoById = withErrorHandling( async ( videoId: string, thumb
             .delete( videos )
             .where(
                 and(
-                    eq( videos.id, videoId ),
+                    eq( videos.id, id ),
                     eq( videos.userId, userId )
                 )
             )

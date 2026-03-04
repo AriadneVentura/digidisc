@@ -32,8 +32,8 @@ const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
                     ) ) }
 
                 </section>
-            ) : <EmptyState icon="/assets/icons/video.svg" title="Empty Disc atm"
-                            description="Videos will show when you upload them Diva"/>
+            ) : <EmptyState icon="/assets/icons/video.svg" title="Empty Disc"
+                            description="Upload some clips!"/>
             }
 
             { pagination?.totalPages > 1 && (

@@ -16,7 +16,8 @@ const Page = async ( { params }: Params ) => {
 
     if ( !video ) redirect( "/404" );
 
-    await incrementViewCount( video.id );
+    // Note: Sending in videoId here cause comparing by videoId in db. (videoId is bunnyId and Id is db id)
+    await incrementViewCount( video.videoId );
 
     const [ data ] = await hasUserLikedClip( video.id );
 
