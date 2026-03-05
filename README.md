@@ -1,12 +1,21 @@
 # 💿💻🌙 DigiDisc 💿💻🌙
 
-A clip sharing app for me and my friends, so after games are played the best clips can be uploaded and
-rewatched, liked, and most importantly, not forgotten :)
+A clip sharing app for me and my friends, so after games are played the best clips can be uploaded and rewatched, liked,
+and most importantly, not forgotten :)
 
-What's currently supported is uploading videos & thumbnails and screen recording! All attached to a user as well.
-Limits are set so that videos have a maximum of 60 seconds and a max size of 500MB.
+It’s a full-stack screen recording and video sharing platform built with Next.js and Bunny.net.
+Users can securely sign in with google authentication, upload videos and thumbnails (or generate a randomised
+thumbnail from their own video if they don’t want to upload one), and screen record directly within the platform.
+Every video is attached to a user, so ownership is clear and secure too.
 
-**Stretch goals TBD at an undecided time:**
+Users can set videos as public or private, share them via link, like each other’s videos (or their own hehe), and delete
+their own videos too. There’s a search bar to make finding content easy, with filtering options such as most liked,
+oldest, newest, and most viewed, allowing content to be ranked by popularity.
+
+DigiDisc uses route protection and middleware authentication to ensure only logged-in users can access content,
+along with Arcjet protection to guard against common web attacks and automated bot abuse.
+
+**Future goals:**
 
 - Upload
     - Video triming/selecting a good "portion" to upload
