@@ -85,12 +85,26 @@
 // };
 
 // Force Node.js runtime because Better Auth requires Node APIs
+// export const runtime = "nodejs";
+//
+// import { toNextJsHandler } from "better-auth/next-js";
+// import { auth } from "@/lib/auth";
+//
+// const handlers = toNextJsHandler( auth.handler );
+//
+// export const GET = handlers.GET;
+// export const POST = handlers.POST;
 export const runtime = "nodejs";
 
-import { toNextJsHandler } from "better-auth/next-js";
-import { auth } from "@/lib/auth";
+import { NextRequest } from "next/server";
 
-const handlers = toNextJsHandler( auth.handler );
+export async function GET( req: NextRequest ) {
+    return Response.json( {
+        message: "auth route reached",
+        path: req.nextUrl.pathname,
+    } );
+}
 
-export const GET = handlers.GET;
-export const POST = handlers.POST;
+export async function POST() {
+    return Response.json( { message: "POST reached" } );
+}
