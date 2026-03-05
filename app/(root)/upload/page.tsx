@@ -7,6 +7,7 @@ import { MAX_DURATION, MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from "@/constants";
 import { getThumbnailUploadUrl, getVideoUploadUrl, saveVideoDetails } from "@/lib/actions/video";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { generateRandomThumbnail } from "@/lib/utils";
 
 const uploadFileToBunny = (
     file: File,
@@ -94,6 +95,23 @@ const Page = () => {
         setFormData( ( prevState ) => ({ ...prevState, [name]: value }) );
     }
 
+    // Simulates a user clicking the upload selecting however with a randomised frame.
+    const handleRandomFrame = async () => {
+        if ( !video.file || !thumbnail.inputRef.current ) return;
+
+        const thumbnailFile = await generateRandomThumbnail( video.file );
+
+        if ( !thumbnailFile ) return;
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add( thumbnailFile );
+
+        thumbnail.inputRef.current.files = dataTransfer.files;
+
+        const event = new Event( "change", { bubbles: true } );
+        thumbnail.inputRef.current.dispatchEvent( event );
+    };
+
     const handleSubmit = async ( e: FormEvent ) => {
         // Dont want page to reload.
         e.preventDefault()
@@ -105,6 +123,7 @@ const Page = () => {
             }
             if ( !formData.title || !formData.description ) {
                 setError( "Please fill in all the details" )
+                return;
             }
 
             // Get upload url
@@ -205,6 +224,19 @@ const Page = () => {
                     type="image"
                 />
 
+                <div className="form-thumbnail-button">
+                    <button
+                        // Without this the form uploads because browser treats unspecified buttons
+                        // inside forms as a submit button.
+                        type="button"
+                        disabled={ !video.file }
+                        onClick={ handleRandomFrame }
+                    >
+                        <Image src="/assets/icons/dice.svg" alt="dice" height={ 35 } width={ 35 }/>
+                        Randomise my thumbnail!
+                    </button>
+                </div>
+
                 <FormField
                     id="visibility"
                     label="Visibility"
@@ -226,8 +258,17 @@ const Page = () => {
                         className="ml-3">If you upload anything mean i will remove it :)</span>
                 </div>
 
-                <button type="submit" disabled={ isSubmitting || !video.file || !thumbnail.file || !!video.error ||
-                    !!thumbnail.error } className="submit-button">
+                <button
+                    type="submit"
+                    disabled={
+                        isSubmitting ||
+                        !video.file ||
+                        !thumbnail.file ||
+                        !formData.title.trim() ||
+                        !formData.description.trim() ||
+                        !!video.error ||
+                        !!thumbnail.error }
+                    className="submit-button">
                     { isSubmitting ? "Uploading..." : "Upload clip ♡" }
                 </button>
 

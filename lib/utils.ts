@@ -359,3 +359,63 @@ export const doesTitleMatch = ( videos: any, searchQuery: string ) =>
         )`,
         `%${ searchQuery.replace( /[-. ]/g, "" ).toLowerCase() }%`
     );
+
+// Generates an image file from a video file.
+export const generateRandomThumbnail = async (
+    file: File
+): Promise<File | null> => {
+    return new Promise( ( resolve ) => {
+        const videoEl = document.createElement( "video" );
+
+        // Load the video file
+        videoEl.src = URL.createObjectURL( file );
+
+        // Mute and avoid from going full screen on mobile.
+        videoEl.muted = true;
+        videoEl.playsInline = true;
+
+        // wait for metadata and pick a random timestamp.
+        videoEl.addEventListener( "loadedmetadata", () => {
+            const duration = videoEl.duration;
+
+            // avoid first & last 10%
+            videoEl.currentTime = Math.random() * (duration * 0.8) + duration * 0.1;
+        } );
+
+        videoEl.addEventListener( "seeked", () => {
+            // Canvas is how video becomes an image
+            const canvas = document.createElement( "canvas" );
+            canvas.width = videoEl.videoWidth;
+            canvas.height = videoEl.videoHeight;
+
+            // Canvas needs drawing context to render
+            const ctx = canvas.getContext( "2d" );
+            if ( !ctx ) return resolve( null );
+
+            // copies current frame of the video into the canvas
+            ctx.drawImage( videoEl, 0, 0 );
+
+            // converts canvas pixels into image file.
+            canvas.toBlob( ( blob ) => {
+                    if ( !blob ) return resolve( null );
+
+                    const thumbnailFile = new File(
+                        [ blob ],
+                        "thumbnail.jpg",
+                        {
+                            type: "image/jpeg",
+                            lastModified: Date.now(),
+                        }
+                    );
+
+                    // cleanup
+                    URL.revokeObjectURL( videoEl.src );
+                    resolve( thumbnailFile );
+                },
+                "image/jpeg",
+                // compress slightly
+                0.9
+            );
+        } );
+    } );
+};
