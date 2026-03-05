@@ -21,10 +21,10 @@ export default createMiddleware( validate, async ( request: NextRequest ) => {
         return NextResponse.redirect( new URL( "/sign-in", request.url ) );
     }
 
-    // If logged in but trying to get to sign in then return to home page.
-    if ( isLoggedIn && isAuthPage ) {
-        return NextResponse.redirect( new URL( "/", request.url ) );
-    }
+    // // If logged in but trying to get to sign in then return to home page.
+    // if ( isLoggedIn && isAuthPage ) {
+    //     return NextResponse.redirect( new URL( "/", request.url ) );
+    // }
 
     return NextResponse.next();
 } );
