@@ -1,7 +1,6 @@
 import { NextRequest } from "next/dist/server/web/spec-extension/request";
 import { NextResponse } from "next/dist/server/web/spec-extension/response";
 import { auth } from "@/lib/auth";
-import { headers } from "next/dist/server/request/headers";
 import { detectBot, shield } from "arcjet";
 import aj from "@/lib/arcjet";
 import { createMiddleware } from "@arcjet/next";
@@ -10,7 +9,7 @@ import { createMiddleware } from "@arcjet/next";
 export async function middleware( request: NextRequest, response: NextResponse ) {
     const session = await auth.api.getSession( {
         // Check if the user has a session by looking at cookies in headers
-        headers: await headers(),
+        headers: request.headers,
     } );
 
     if ( !session ) {
