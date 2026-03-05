@@ -2,7 +2,7 @@
 "use server";
 
 import { apiFetch, doesTitleMatch, getEnv, getOrderByClause, withErrorHandling } from "@/lib/utils";
-import { headers } from "next/dist/server/request/headers";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { BUNNY, PAGE_SIZE } from "@/constants";
 import { db } from "@/src";

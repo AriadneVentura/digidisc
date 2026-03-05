@@ -14,17 +14,21 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const [ searchQuery, setSearchQuery ] = useState( searchParams.get( "query" ) || "" );
-    const [ selectedFilter, setSelectedFilter ] = useState( searchParams.get( "filter" ) || "Most Liked" );
+    // Pull the actual values from searchParams to use stable dependencies
+    const queryParam = searchParams.get( "query" );
+    const filterParam = searchParams.get( "filter" );
+
+    const [ searchQuery, setSearchQuery ] = useState( queryParam || "" );
+    const [ selectedFilter, setSelectedFilter ] = useState( filterParam || "Most Liked" );
 
     useEffect( () => {
-        setSearchQuery( searchParams.get( "query" ) || "" );
-        setSelectedFilter( searchParams.get( "filter" ) || "Most Liked" );
-    }, [ searchParams ] );
+        setSearchQuery( queryParam || "" );
+        setSelectedFilter( filterParam || "Most Liked" );
+    }, [ queryParam, filterParam ] );
 
     useEffect( () => {
         const debounceTimer = setTimeout( () => {
-            if ( searchQuery !== searchParams.get( "query" ) ) {
+            if ( searchQuery !== queryParam ) {
                 const url = updateURLParams(
                     searchParams,
                     { query: searchQuery || null },
@@ -34,7 +38,8 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
             }
         }, 500 );
         return () => clearTimeout( debounceTimer );
-    }, [ searchQuery, searchParams, pathname, router ] );
+        // NTS: Putting searchParams in here causes infinite / GET req
+    }, [ searchQuery, queryParam, pathname, router ] );
 
     const handleFilterChange = ( filter: string ) => {
         setSelectedFilter( filter );
