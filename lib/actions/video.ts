@@ -46,15 +46,14 @@ const buildVideoWithUserQuery = () => {
 }
 
 // Validator function to rate limit server actions.
-const validateWithArcjet = async ( fingerprint: string ) => {
-    // A fingerprint allows us to connect us to who is the actor of the request
+const validateActionWithArcjet = async ( fingerprint: string ) => {
     const rateLimit = aj.withRule(
         fixedWindow( {
             mode: "LIVE",
-            // Time window
             window: "1m",
-            // Max requests per time window
-            max: 1,
+            // max 20 actions per minute per user (20 likes per min etc)
+            max: 10,
+            // Allows us to know who the actor is
             characteristics: [ "fingerprint" ]
         } )
     )
@@ -62,14 +61,39 @@ const validateWithArcjet = async ( fingerprint: string ) => {
     const req = await request();
 
     const decision = await rateLimit.protect( req, { fingerprint } );
+
     if ( decision.isDenied() ) {
-        throw new Error( "Rate limit exceeded" )
+        throw new Error( "Rate limit exceeded" );
+    }
+}
+
+// Validator function to rate limit server upload actions.
+const validateUploadWithArcjet = async ( fingerprint: string ) => {
+    const rateLimit = aj.withRule(
+        fixedWindow( {
+            mode: "LIVE",
+            window: "10m",
+            // max 5 uploads per 10 minutes per user
+            max: 5,
+            characteristics: [ "fingerprint" ]
+        } )
+    )
+
+    const req = await request();
+
+    const decision = await rateLimit.protect( req, { fingerprint } );
+
+    if ( decision.isDenied() ) {
+        throw new Error( "Upload rate limit exceeded" );
     }
 }
 
 // Server actions
 export const getVideoUploadUrl = withErrorHandling( async () => {
-    await getSessionUserId();
+    const userId = await getSessionUserId();
+
+    // Protect upload generation
+    await validateUploadWithArcjet( userId );
 
     const videoResponse = await apiFetch<BunnyVideoResponse>(
         `${ VIDEO_STREAM_BASE_URL }/${ BUNNY_LIBRARY_ID }/videos`, {
@@ -103,7 +127,7 @@ export const getThumbnailUploadUrl = withErrorHandling( async ( videoId: string 
 export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDetails ) => {
     const userId = await getSessionUserId();
     // Rate limit
-    await validateWithArcjet( userId );
+    await validateUploadWithArcjet( userId );
 
     // Use video details to update the descriptions and title of video.
     await apiFetch(
@@ -202,6 +226,8 @@ export const deleteVideoById = withErrorHandling( async ( id: string, videoId: s
             throw new Error( "Unauthorised nerd" );
         }
 
+        await validateActionWithArcjet( id );
+
         // Delete data from bunny
         await apiFetch(
             `${ VIDEO_STREAM_BASE_URL }/${ BUNNY_LIBRARY_ID }/videos/${ videoId }`,
@@ -239,7 +265,7 @@ export const updateVideoVisibility = withErrorHandling( async (
         videoId: string,
         visibility: Visibility
     ) => {
-        await validateWithArcjet( videoId );
+        await validateActionWithArcjet( videoId );
         await db
             .update( videos )
             .set( { visibility, updatedAt: new Date() } )
@@ -297,7 +323,7 @@ export const toggleLike = withErrorHandling( async ( videoId: string ) => {
     const userId = await getSessionUserId();
     if ( !userId ) throw new Error( "Unauthorized" );
 
-    await validateWithArcjet( videoId );
+    await validateActionWithArcjet( videoId );
 
     const existing = await db
         .select()

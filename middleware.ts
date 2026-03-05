@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import aj, { createMiddleware } from "./lib/arcjet";
-import { detectBot, shield } from "@arcjet/next";
 
-// Shield protects against the most common attacks from the OWASP top 10, before any page is called.
-const validate = aj
-    .withRule( shield( { mode: "LIVE" } ) )
-    .withRule( detectBot( { mode: "LIVE", allow: [ "CATEGORY:SEARCH_ENGINE", "G00G1E_CRAWLER" ] } ) );
+// NTS: 1.1MB middleware :( vercel doesnt allow
+// // Shield protects against the most common attacks from the OWASP top 10, before any page is called.
+// const validate = aj
+//     .withRule( shield( { mode: "LIVE" } ) )
+//     .withRule( detectBot( { mode: "LIVE", allow: [ "CATEGORY:SEARCH_ENGINE", "G00G1E_CRAWLER" ] } ) );
 
 // Route protection for Next.js that runs on every request.
-export default createMiddleware( validate, async ( request: NextRequest ) => {
+export default function middleware( request: NextRequest ) {
     // Check if the user has a session by looking at cookies in headers
     const sessionCookie = request.cookies.get( "better-auth.session_token" );
     const { pathname } = request.nextUrl;
@@ -21,13 +20,13 @@ export default createMiddleware( validate, async ( request: NextRequest ) => {
         return NextResponse.redirect( new URL( "/sign-in", request.url ) );
     }
 
-    // // If logged in but trying to get to sign in then return to home page.
-    // if ( isLoggedIn && isAuthPage ) {
-    //     return NextResponse.redirect( new URL( "/", request.url ) );
-    // }
+    // If logged in but trying to get to sign in then return to home page.
+    if ( isLoggedIn && isAuthPage ) {
+        return NextResponse.redirect( new URL( "/", request.url ) );
+    }
 
     return NextResponse.next();
-} );
+}
 
 // This ensures that the middleware is not applied for the below.
 export const config = {
