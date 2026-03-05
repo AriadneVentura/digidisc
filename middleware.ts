@@ -15,16 +15,25 @@ const validate = aj
 export default createMiddleware( validate, async ( request: NextRequest ) => {
     // Check if the user has a session by looking at cookies in headers
     const sessionCookie = request.cookies.get( "better-auth.session_token" );
+    const { pathname } = request.nextUrl;
 
-    if ( !sessionCookie ) {
+    const isLoggedIn = !!sessionCookie;
+    const isAuthPage = pathname === "/sign-in";
+
+    // Redirect user to sign in if not logged in.
+    if ( !isLoggedIn && !isAuthPage ) {
         return NextResponse.redirect( new URL( "/sign-in", request.url ) );
     }
 
-    // Continue normally if logged in.
+    // If logged in but trying to get to sign in then return to home page.
+    if ( isLoggedIn && isAuthPage ) {
+        return NextResponse.redirect( new URL( "/", request.url ) );
+    }
+
     return NextResponse.next();
 } );
 
 // This ensures that the middleware is not applied for the below.
 export const config = {
-    matcher: [ "/((?!api|_next/static|_next/image|favicon.ico|sign-in|assets).*)" ],
+    matcher: [ "/((?!api|_next/static|_next/image|favicon.ico|assets).*)" ],
 };
