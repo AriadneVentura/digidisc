@@ -1,3 +1,8 @@
+// Force this API route to run in the Node.js runtime.
+// Better Auth relies on Node APIs (cookies, crypto, DB drivers) that are not
+// available in the Edge runtime used by Next.js by default in some cases.
+export const runtime = "nodejs";
+
 import { toNextJsHandler } from "better-auth/next-js";
 import { auth } from "@/lib/auth";
 import { ArcjetDecision, slidingWindow, validateEmail } from "arcjet";
