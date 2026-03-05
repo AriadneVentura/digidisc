@@ -99,7 +99,7 @@ export const runtime = "nodejs";
 import { toNextJsHandler } from "better-auth/next-js";
 import { auth } from "@/lib/auth";
 
-const handlers = toNextJsHandler( auth );
+const handlers = toNextJsHandler( auth.handler );
 
 export async function GET( req: Request ) {
     console.log( "Auth GET hit:", new URL( req.url ).pathname );
