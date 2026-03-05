@@ -96,17 +96,15 @@
 // export const POST = handlers.POST;
 export const runtime = "nodejs";
 
-import { toNextJsHandler } from "better-auth/next-js";
-import { auth } from "@/lib/auth";
+import { NextRequest } from "next/server";
 
-const handlers = toNextJsHandler( auth.handler );
-
-export async function GET( req: Request ) {
-    console.log( "Auth GET hit:", new URL( req.url ).pathname );
-    return handlers.GET( req );
+export async function GET( req: NextRequest ) {
+    return Response.json( {
+        message: "auth route reached",
+        path: req.nextUrl.pathname,
+    } );
 }
 
-export async function POST( req: Request ) {
-    console.log( "Auth POST hit:", new URL( req.url ).pathname );
-    return handlers.POST( req );
+export async function POST() {
+    return Response.json( { message: "POST reached" } );
 }
