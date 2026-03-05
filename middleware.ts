@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import aj, { createMiddleware, detectBot, shield } from "./lib/arcjet";
+import aj, { createMiddleware } from "./lib/arcjet";
+import { detectBot, shield } from "@arcjet/next";
 
 // Shield protects against the most common attacks from the OWASP top 10, before any page is called.
-const validate =
-    // Dont block in dev mode
-    process.env.NODE_ENV === "development"
-        ? aj
-        : aj.withRule( shield( { mode: "LIVE" } ) )
-            .withRule( detectBot( { mode: "LIVE", allow: [ "CATEGORY:SEARCH_ENGINE", "G00G1E_CRAWLER" ] } ) );
+const validate = aj
+    .withRule( shield( { mode: "LIVE" } ) )
+    .withRule( detectBot( { mode: "LIVE", allow: [ "CATEGORY:SEARCH_ENGINE", "G00G1E_CRAWLER" ] } ) );
 
 // Route protection for Next.js that runs on every request.
 export default createMiddleware( validate, async ( request: NextRequest ) => {
