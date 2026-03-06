@@ -1,6 +1,3 @@
-// // Force this API route to run in the Node.js runtime.
-// // Better Auth relies on Node APIs (cookies, crypto, DB drivers) that are not
-// // available in the Edge runtime used by Next.js by default in some cases.
 import { toNextJsHandler } from "better-auth/next-js";
 import { auth } from "@/lib/auth";
 import { ArcjetDecision, slidingWindow, validateEmail } from "arcjet";
@@ -8,7 +5,6 @@ import aj from "@/lib/arcjet";
 import { NextRequest } from "next/server";
 import ip from "@arcjet/ip";
 
-export const runtime = "nodejs";
 
 // Email validation
 const emailValidation = aj.withRule(
@@ -83,28 +79,3 @@ export const POST = async ( req: NextRequest ) => {
 
     return authHandlers.POST( req );
 };
-
-// Force Node.js runtime because Better Auth requires Node APIs
-// export const runtime = "nodejs";
-//
-// import { toNextJsHandler } from "better-auth/next-js";
-// import { auth } from "@/lib/auth";
-//
-// const handlers = toNextJsHandler( auth.handler );
-//
-// export const GET = handlers.GET;
-// export const POST = handlers.POST;
-// export const runtime = "nodejs";
-//
-// import { NextRequest } from "next/server";
-//
-// export async function GET( req: NextRequest ) {
-//     return Response.json( {
-//         message: "auth route reached",
-//         path: req.nextUrl.pathname,
-//     } );
-// }
-//
-// export async function POST() {
-//     return Response.json( { message: "POST reached" } );
-// }

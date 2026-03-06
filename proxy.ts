@@ -1,4 +1,6 @@
+import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "./lib/auth";
 
 // NTS: 1.1MB middleware :( vercel doesnt allow
 // // Shield protects against the most common attacks from the OWASP top 10, before any page is called.
@@ -7,12 +9,14 @@ import { NextRequest, NextResponse } from "next/server";
 //     .withRule( detectBot( { mode: "LIVE", allow: [ "CATEGORY:SEARCH_ENGINE", "G00G1E_CRAWLER" ] } ) );
 
 // Route protection for Next.js that runs on every request.
-export default function middleware( request: NextRequest ) {
+export default async function proxy( request: NextRequest ) {
     // Check if the user has a session by looking at cookies in headers
-    const sessionCookie = request.cookies.get( "better-auth.session_token" );
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })    
     const { pathname } = request.nextUrl;
 
-    const isLoggedIn = !!sessionCookie;
+    const isLoggedIn = !!session;
     const isAuthPage = pathname === "/sign-in";
 
     // Redirect user to sign in if not logged in.
