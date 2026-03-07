@@ -15,6 +15,8 @@ oldest, newest, and most viewed, allowing content to be ranked by popularity.
 DigiDisc uses route protection and middleware authentication to ensure only logged-in users can access content,
 along with Arcjet protection to guard against common web attacks and automated bot abuse.
 
+Hosted: https://digidisc.tv
+
 **Future goals:**
 
 - Upload
