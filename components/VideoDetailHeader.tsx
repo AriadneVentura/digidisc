@@ -37,7 +37,6 @@ const VideoDetailHeader = ( {
         setCopied( true );
     }
 
-    console.log( thumbnailUrl );
     const handleDeleteVideo = async () => {
         try {
             setIsDeleting( true );
