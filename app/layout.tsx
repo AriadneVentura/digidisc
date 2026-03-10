@@ -9,10 +9,21 @@ const geistKarla = Karla( {
 } );
 
 export const metadata: Metadata = {
+    metadataBase: new URL( "https://digidisc.tv" ),
+
     title: "DigiDisc",
     description: "View & upload clips n giggle",
     icons: {
         icon: "/assets/icons/cd.svg",
+    },
+    openGraph: {
+        title: "DigiDisc",
+        description: "View & upload clips n giggle",
+        images: [ "/og.png" ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        images: [ "/og.png" ],
     },
 };
 

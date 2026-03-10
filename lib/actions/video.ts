@@ -277,6 +277,20 @@ export const updateVideoVisibility = withErrorHandling( async (
     }
 );
 
+export const generateClipImage = withErrorHandling( async ( videoId: string ) => {
+    const result = await db
+        .select( {
+            title: videos.title,
+            thumbnail: videos.thumbnailUrl,
+            author: user.name,
+        } )
+        .from( videos )
+        .innerJoin( user, eq( videos.userId, user.id ) )
+        .where( eq( videos.id, videoId ) )
+
+    return result[0]
+} )
+
 export const incrementViewCount = withErrorHandling(
     async ( videoId: string ) => {
         await db
