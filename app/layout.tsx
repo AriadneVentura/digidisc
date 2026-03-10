@@ -10,7 +10,7 @@ const geistKarla = Karla( {
 
 export const metadata: Metadata = {
     title: "DigiDisc",
-    description: "Share your digital reality",
+    description: "View & upload clips n giggle",
     icons: {
         icon: "/assets/icons/cd.svg",
     },

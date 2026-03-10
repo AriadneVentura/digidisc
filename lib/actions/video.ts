@@ -252,7 +252,7 @@ export const deleteVideoById = withErrorHandling( async ( id: string, videoId: s
             .returning( { id: videos.id } );
 
         if ( result.length === 0 ) {
-            throw new Error( "Video not found or not authorised to delete" );
+            throw new Error( "Clip not found or not authorised to delete" );
         }
 
         // Redirect

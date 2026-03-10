@@ -92,7 +92,7 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
 
             <section className="search-filter">
                 <div className="search">
-                    <input type="text" placeholder="Search for videos, tags, folders..." value={ searchQuery }
+                    <input type="text" placeholder="Search for clips, tags, folders..." value={ searchQuery }
                            onChange={ ( e ) => setSearchQuery( e.target.value ) }
                     />
                     <Image src="/assets/icons/search.svg" alt="search" width={ 16 } height={ 16 }

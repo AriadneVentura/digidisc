@@ -53,14 +53,14 @@ export const useFileInput = ( maxSize: number, maxDuration?: number ) => {
                     const videoLength = Math.round( video.duration );
                     // isFinite checks if video has an end.
                     if ( !isFinite( videoLength ) || videoLength <= 0 ) {
-                        setError( "Invalid video" );
+                        setError( "Invalid clip" );
                         resetFile();
                         return;
                     }
 
                     // max 60s atm
                     if ( maxDuration && videoLength > maxDuration ) {
-                        setError( `Video must be under ${ maxDuration } seconds :(` );
+                        setError( `Clip must be under ${ maxDuration } seconds :(` );
                         resetFile();
                         return;
                     }
