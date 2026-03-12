@@ -18,15 +18,17 @@ along with Arcjet protection to guard against common web attacks and automated b
 Hosted: https://digidisc.tv
 
 **Future goals:**
-
+- Video
+    - Edit title/description
+    - tags
 - Upload
     - Video triming/selecting a good "portion" to upload
     - Selecting a frame from the video for a thumbnail
-
 - Screen recording:
     - Selecting camera option
     - Selecting microphone
-
+- Other
+    - Dark mode
 ---
 
 ## 📼🐛🎮 Tools 📼🐛🎮
