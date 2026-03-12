@@ -140,20 +140,19 @@ const Page = () => {
             // Upload video to video streaming and storage platform
             await uploadFileToBunny( video.file, videoUploadUrl, videoAccessKey );
 
+            // ensure thumbnail has an extension - needed for open graph preview links
+            const extension = thumbnail.file.type.split( "/" )[1] || "jpg";
 
             // Upload the thumbnail to DB
             const {
                 cdnUrl: thumbnailCdnUrl,
                 uploadUrl: thumbnailUploadUrl,
                 accessKey: thumbnailAccessKey
-            } = await getThumbnailUploadUrl( videoId );
+            } = await getThumbnailUploadUrl( videoId, extension );
             if ( !thumbnailUploadUrl || !thumbnailAccessKey || !thumbnailCdnUrl ) {
                 console.error( "Failed to get thumbnail upload credentials" );
                 throw new Error( "Failed to get video thumbnail upload credentials" );
             }
-
-            // ensure thumbnail has an extension - needed for open graph preview links
-            const extension = thumbnail.file.type.split( "/" )[1] || "jpg";
 
             const fixedThumbnailFile = new File(
                 [ thumbnail.file ],
