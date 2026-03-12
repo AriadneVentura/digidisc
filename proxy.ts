@@ -11,13 +11,18 @@ import { auth } from "./lib/auth";
 // Route protection for Next.js that runs on every request.
 export default async function proxy( request: NextRequest ) {
     // Check if the user has a session by looking at cookies in headers
-    const session = await auth.api.getSession({
+    const session = await auth.api.getSession( {
         headers: await headers()
-    })    
+    } )
     const { pathname } = request.nextUrl;
 
     const isLoggedIn = !!session;
     const isAuthPage = pathname === "/sign-in";
+
+    // Not logged-in users can watch a video - because I want opengraph to see the video itself.
+    if ( pathname.includes( "/video/" ) ) {
+        return NextResponse.next()
+    }
 
     // Redirect user to sign in if not logged in.
     if ( !isLoggedIn && !isAuthPage ) {

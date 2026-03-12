@@ -39,7 +39,6 @@ const VideoDetailHeader = ( {
 
     const handleDeleteVideo = async () => {
         try {
-            console.log( id, videoId, thumbnailUrl )
             setIsDeleting( true );
             await deleteVideoById( id, videoId, thumbnailUrl );
             // rewrite in case overlap

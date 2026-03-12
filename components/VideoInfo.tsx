@@ -2,6 +2,7 @@
 import React, { useState, useTransition } from 'react'
 import Image from "next/image";
 import { toggleLike } from "@/lib/actions/video";
+import { authClient } from "@/lib/auth-client";
 
 const VideoInfo = ( {
                         description,
@@ -15,7 +16,11 @@ const VideoInfo = ( {
     const [ hasLiked, setHasLiked ] = useState( hasUserLiked );
     const [ isPending, startTransition ] = useTransition();
 
-    const metaDatas = [
+    // Only enable the liked button if the user is logged in
+    const { data: session } = authClient.useSession();
+    const userId = session?.user.id;
+
+    const metaData = [
         {
             label: "Video description",
             value: description,
@@ -47,7 +52,7 @@ const VideoInfo = ( {
         <section className="video-information">
             <aside>
                 <div className="metadata">
-                    { metaDatas.map( ( { label, value }, index ) => (
+                    { metaData.map( ( { label, value }, index ) => (
                         <article key={ index }>
                             <h2>{ label }</h2>
                             <p>{ value }</p>
@@ -60,7 +65,7 @@ const VideoInfo = ( {
                         <span>{ views }</span>
                     </div>
                     <div className="side-details">
-                        <button onClick={ handleLike } disabled={ isPending }>
+                        <button onClick={ handleLike } disabled={ isPending || !userId }>
                             {/*ik you can dynamically change the source, but two images cause alt tags for behaviour*/ }
                             { hasLiked ? (
                                 <Image src="/assets/icons/heart_filled.svg" alt="liked" width={ 16 } height={ 16 }/>
