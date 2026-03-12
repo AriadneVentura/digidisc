@@ -25,16 +25,22 @@ export async function generateMetadata( { params }: Params ): Promise<Metadata> 
         openGraph: {
             title: result.author,
             description: result.title,
+            url: `https://digidisc.tv/video/${ videoId }`,
+            siteName: "DigiDisc",
             images: [
                 {
                     url: result.thumbnail,
                     width: 1200,
                     height: 630,
-                }
-            ]
+                },
+            ],
+            locale: "en_AU",
+            type: "website",
         },
         twitter: {
             card: "summary_large_image",
+            title: result.author,
+            description: result.title,
             images: [ result.thumbnail ]
         }
     }
