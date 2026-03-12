@@ -1,49 +1,52 @@
 import React from 'react'
-import { getVideoById, hasUserLikedClip, incrementViewCount } from "@/lib/actions/video";
+import { generateClipImage, getVideoById, hasUserLikedClip, incrementViewCount } from "@/lib/actions/video";
 import { redirect } from "next/navigation";
 import VideoPlayer from "@/components/VideoPlayer";
 import VideoDetailHeader from "@/components/VideoDetailHeader";
 import VideoInfo from "@/components/VideoInfo";
+import { Metadata } from "next";
 
 // search params = url?page=2&filter=asc
 // params = url/:id (so we want params)
-// export async function generateMetadata( { params }: Params ): Promise<Metadata> {
-//     const { videoId } = await params;
-//
-//     const result = await generateClipImage( videoId );
-//
-//     if ( !result ) {
-//         return {
-//             title: "DigiDisc"
-//         }
-//     }
-//
-//     return {
-//         title: result.author,
-//         description: result.title,
-//         openGraph: {
-//             title: result.author,
-//             description: result.title,
-//             url: `https://digidisc.tv/video/${ videoId }`,
-//             siteName: "DigiDisc",
-//             images: [
-//                 {
-//                     url: result.thumbnail,
-//                     width: 1200,
-//                     height: 630,
-//                 },
-//             ],
-//             locale: "en_AU",
-//             type: "website",
-//         },
-//         twitter: {
-//             card: "summary_large_image",
-//             title: result.author,
-//             description: result.title,
-//             images: [ result.thumbnail ]
-//         }
-//     }
-// }
+export async function generateMetadata( { params }: Params ): Promise<Metadata> {
+    const { videoId } = await params;
+
+    const result = await generateClipImage( videoId );
+
+    console.log( "metadata result", result );
+
+    if ( !result ) {
+        return {
+            title: "DigiDisc"
+        }
+    }
+
+    return {
+        title: result.author,
+        description: result.title,
+        openGraph: {
+            title: result.author,
+            description: result.title,
+            url: `https://digidisc.tv/video/${ videoId }`,
+            siteName: "DigiDisc",
+            images: [
+                {
+                    url: result.thumbnail,
+                    width: 1200,
+                    height: 630,
+                },
+            ],
+            locale: "en_AU",
+            type: "website",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: result.author,
+            description: result.title,
+            images: [ result.thumbnail ]
+        }
+    }
+}
 
 const Page = async ( { params }: Params ) => {
     // videoId bc the page is called [videoId] in the tree
