@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { daysAgo } from "@/lib/utils";
 import { ICONS, visibilities } from "@/constants";
-import { updateVideoVisibility } from "@/lib/actions/video";
+import { deleteVideoById, updateVideoVisibility } from "@/lib/actions/video";
 import { authClient } from "@/lib/auth-client";
 import DropdownList from "@/components/DropdownList";
 
