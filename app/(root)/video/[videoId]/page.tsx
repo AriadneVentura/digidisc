@@ -7,6 +7,8 @@ import VideoInfo from "@/components/VideoInfo";
 import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
 
 // search params = url?page=2&filter=asc
 // params = url/:id (so we want params)
