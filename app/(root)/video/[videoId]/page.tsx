@@ -6,6 +6,9 @@ import VideoDetailHeader from "@/components/VideoDetailHeader";
 import VideoInfo from "@/components/VideoInfo";
 import { Metadata } from "next";
 
+// Open graph
+export const revalidate = 0
+
 // search params = url?page=2&filter=asc
 // params = url/:id (so we want params)
 export async function generateMetadata( { params }: Params ): Promise<Metadata> {
