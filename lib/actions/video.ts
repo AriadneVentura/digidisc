@@ -286,7 +286,7 @@ export const generateClipImage = withErrorHandling( async ( videoId: string ) =>
         } )
         .from( videos )
         .innerJoin( user, eq( videos.userId, user.id ) )
-        .where( eq( videos.videoId, videoId ) )
+        .where( eq( videos.id, videoId ) )
 
     return result[0]
 } )

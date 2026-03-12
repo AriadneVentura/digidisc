@@ -13,8 +13,6 @@ export async function generateMetadata( { params }: Params ): Promise<Metadata> 
 
     const result = await generateClipImage( videoId );
 
-    console.log( "metadata result", result );
-
     if ( !result ) {
         return {
             title: "DigiDisc"
