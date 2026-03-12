@@ -112,10 +112,11 @@ export const getVideoUploadUrl = withErrorHandling( async () => {
 
 } );
 
-export const getThumbnailUploadUrl = withErrorHandling( async ( videoId: string ) => {
-    const fileName = `${ Date.now() }-${ videoId }-thumbnail`;
+export const getThumbnailUploadUrl = withErrorHandling( async ( videoId: string, extension: string ) => {
+    const fileName = `${ Date.now() }-${ videoId }-thumbnail.${ extension }`;
     const uploadUrl = `${ THUMBNAIL_STORAGE_BASE_URL }/thumbnails/${ fileName }`;
     const cdnUrl = `${ THUMBNAIL_CDN_URL }/thumbnails/${ fileName }`;
+    console.log( "getTHumbnailUplaodUrl", uploadUrl, cdnUrl );
 
     return {
         uploadUrl,

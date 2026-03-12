@@ -16,16 +16,19 @@ const Page = async ( { searchParams }: SearchParams ) => {
 
             { videos?.length > 0 ? (
                 <section className="video-grid">
-                    { videos.map( ( { video, user } ) => (
-                        <VideoCard
-                            createdOn={ video.createdAt }
-                            thumbnail={ video.thumbnailUrl }
-                            key={ video.id }
-                            { ...video }
-                            userImg={ user?.image || "" }
-                            username={ user?.name || "Guest" }
-                        />
-                    ) ) }
+                    { videos.map( ( { video, user } ) => {
+                        console.log( video.thumbnailUrl )
+                        return (
+                            <VideoCard
+                                createdOn={ video.createdAt }
+                                thumbnail={ video.thumbnailUrl }
+                                key={ video.id }
+                                { ...video }
+                                userImg={ user?.image || "" }
+                                username={ user?.name || "Guest" }
+                            />
+                        )
+                    } ) }
 
                 </section>
             ) : <EmptyState icon="/assets/icons/video.svg" title="Empty Disc"
