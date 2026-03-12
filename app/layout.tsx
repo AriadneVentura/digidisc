@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     },
     openGraph: {
         title: "DigiDisc",
-        description: "View & upload clips n giggle",
+        description: "View, upload & share gaming clips n giggle",
         images: [ "/assets/images/og.png" ],
     },
     twitter: {

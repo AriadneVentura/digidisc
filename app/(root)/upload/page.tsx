@@ -154,14 +154,8 @@ const Page = () => {
                 throw new Error( "Failed to get video thumbnail upload credentials" );
             }
 
-            const fixedThumbnailFile = new File(
-                [ thumbnail.file ],
-                `${ videoId }-thumbnail.${ extension }`,
-                { type: thumbnail.file.type }
-            );
-
             await uploadFileToBunny(
-                fixedThumbnailFile,
+                thumbnail.file,
                 thumbnailUploadUrl,
                 thumbnailAccessKey
             );
@@ -169,7 +163,7 @@ const Page = () => {
             // Create metadata and store in database
             await saveVideoDetails( {
                 videoId,
-                thumbnailUrl: `${ thumbnailCdnUrl }.${ extension }`,
+                thumbnailUrl: thumbnailCdnUrl,
                 ...formData,
                 duration: videoDuration
             } );
