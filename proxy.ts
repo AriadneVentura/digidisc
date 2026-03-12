@@ -26,7 +26,7 @@ export default async function proxy( request: NextRequest ) {
     }
 
     // Redirect user to sign in if attempting to upload.
-    if ( !isLoggedIn && !isUpload ) {
+    if ( !isLoggedIn && isUpload ) {
         return NextResponse.redirect( new URL( "/sign-in", request.url ) );
     }
 
