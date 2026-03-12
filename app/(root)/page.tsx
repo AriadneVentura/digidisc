@@ -17,7 +17,6 @@ const Page = async ( { searchParams }: SearchParams ) => {
             { videos?.length > 0 ? (
                 <section className="video-grid">
                     { videos.map( ( { video, user } ) => {
-                        console.log( video.thumbnailUrl )
                         return (
                             <VideoCard
                                 createdOn={ video.createdAt }

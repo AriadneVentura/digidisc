@@ -40,12 +40,12 @@ const VideoDetailHeader = ( {
     const handleDeleteVideo = async () => {
         try {
             console.log( id, videoId, thumbnailUrl )
-            // setIsDeleting( true );
-            // await deleteVideoById( id, videoId, thumbnailUrl );
-            // // rewrite in case overlap
-            // await navigator.clipboard.writeText( "" );
-            // router.push( "/" );
-            // setIsOpen( false );
+            setIsDeleting( true );
+            await deleteVideoById( id, videoId, thumbnailUrl );
+            // rewrite in case overlap
+            await navigator.clipboard.writeText( "" );
+            router.push( "/" );
+            setIsOpen( false );
         } catch ( error ) {
             console.error( "Error deleting video:", error );
         } finally {
