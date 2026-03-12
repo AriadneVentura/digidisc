@@ -15,11 +15,15 @@ export async function generateMetadata( { params }: Params ): Promise<Metadata> 
 
     const result = await generateClipImage( videoId );
 
+    console.log( "metadata", result );
+
     if ( !result ) {
         return {
             title: "DigiDisc"
         }
     }
+
+    console.log( "im here!" );
 
     return {
         title: result.author,
