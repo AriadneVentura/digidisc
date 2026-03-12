@@ -24,7 +24,7 @@ const Navbar = () => {
                     <h1>DigiDisc</h1>
                 </Link>
                 <p className="font-light text-xs">digital space for clips :)</p>
-                { user && (
+                { user ? (
                     <figure>
                         <button onClick={ () => router.push( `/profile/${ user?.id }` ) }>
                             <Image src={ user.image || "" } alt="user" width={ 32 } height={ 32 }
@@ -45,6 +45,15 @@ const Navbar = () => {
                             <Image src="/assets/icons/logout.svg" alt="logout" width={ 32 } height={ 32 }/>
                         </button>
                     </figure>
+                ) : (
+                    <figure>
+                        <button onClick={ () => redirect( "/sign-in" ) }
+                                className="cursor-pointer primary-btn"
+                        >
+                            Sign In
+                        </button>
+                    </figure>
+
                 )
                 }
             </nav>

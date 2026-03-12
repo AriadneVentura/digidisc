@@ -505,7 +505,10 @@
             }
 
             button {
-                @apply flex flex-row text-xs text-gray-100 font-normal gap-2 items-center;
+                @apply flex flex-row text-xs text-gray-100 font-normal gap-2 items-center
+                disabled:opacity-50
+                disabled:cursor-not-allowed
+                disabled:grayscale;
             }
         }
     }
