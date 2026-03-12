@@ -2,12 +2,15 @@
 import React, { useRef, useState } from 'react'
 import Image from "next/image";
 import { ICONS } from "@/constants";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useScreenRecording } from "@/lib/hooks/useScreenRecording";
+import { authClient } from "@/lib/auth-client";
 
 const RecordScreen = () => {
     const [ isOpen, setIsOpen ] = useState( false );
     const videoRef = useRef<HTMLVideoElement>( null );
+    const { data: session } = authClient.useSession();
+    const user = session?.user;
 
     const router = useRouter();
     const {
@@ -66,9 +69,17 @@ const RecordScreen = () => {
         closeModal();
     }
 
+    const handleRecordClick = () => {
+        if ( user ) {
+            setIsOpen( true );
+        } else {
+            redirect( "/sign-in" )
+        }
+    }
+
     return (
         <div className="record">
-            <button className="primary-btn" onClick={ () => setIsOpen( true ) }>
+            <button className="primary-btn" onClick={ handleRecordClick }>
                 <Image src={ ICONS.record } width={ 16 } height={ 16 } alt="record"/>
                 <span>Record a vid</span>
             </button>

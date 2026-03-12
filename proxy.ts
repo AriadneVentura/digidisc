@@ -17,6 +17,7 @@ export default async function proxy( request: NextRequest ) {
     const { pathname } = request.nextUrl;
 
     const isLoggedIn = !!session;
+    const isUpload = pathname === "/upload";
     const isAuthPage = pathname === "/sign-in";
 
     // Not logged-in users can watch a video - because I want opengraph to see the video itself.
@@ -24,8 +25,8 @@ export default async function proxy( request: NextRequest ) {
         return NextResponse.next()
     }
 
-    // Redirect user to sign in if not logged in.
-    if ( !isLoggedIn && !isAuthPage ) {
+    // Redirect user to sign in if attempting to upload.
+    if ( !isLoggedIn && !isUpload ) {
         return NextResponse.redirect( new URL( "/sign-in", request.url ) );
     }
 
