@@ -6,8 +6,7 @@ import VideoDetailHeader from "@/components/VideoDetailHeader";
 import VideoInfo from "@/components/VideoInfo";
 import { Metadata } from "next";
 
-// Open graph
-export const revalidate = 0
+export const dynamic = "force-dynamic";
 
 // search params = url?page=2&filter=asc
 // params = url/:id (so we want params)
