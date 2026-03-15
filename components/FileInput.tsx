@@ -31,6 +31,7 @@ const FileInput = ( {
                     alt="Upload Icon"
                     width={ 24 }
                     height={ 24 }
+                    className="filter-dark"
                 />
                 <p>click to upload your { id }!</p>
             </figure>
@@ -47,6 +48,7 @@ const FileInput = ( {
                         alt="Close Icon"
                         width={ 16 }
                         height={ 16 }
+                        className="filter-dark"
                     />
                 </button>
                 <p>{ file?.name }</p>

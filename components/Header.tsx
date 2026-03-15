@@ -54,10 +54,12 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
     const renderFilterTrigger = () => (
         <div className="filter-trigger">
             <figure>
-                <Image src="/assets/icons/hamburger.svg" alt="hamburger" width={ 14 } height={ 14 }/>
+                <Image src="/assets/icons/hamburger.svg" alt="hamburger" className="filter-dark" width={ 14 }
+                       height={ 14 }/>
                 <span>{ selectedFilter }</span>
             </figure>
-            <Image src="/assets/icons/arrow-down.svg" alt="arrow-down" width={ 20 } height={ 20 }/>
+            <Image src="/assets/icons/arrow-down.svg" alt="arrow-down" className="filter-dark" width={ 20 }
+                   height={ 20 }/>
         </div>
     );
 
@@ -83,7 +85,8 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
 
                 <aside>
                     <Link href="/upload">
-                        <Image src="/assets/icons/upload.svg" width={ 16 } alt="upload" height={ 16 }/>
+                        <Image src="/assets/icons/upload.svg" width={ 16 } alt="upload" height={ 16 }
+                               className="filter-dark"/>
                         <span>Upload a clip</span>
                     </Link>
                     <RecordScreen/>

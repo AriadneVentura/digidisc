@@ -43,10 +43,12 @@ const VideoCard = ( {
                         </figcaption>
                     </figure>
                     <aside>
-                        <Image src="/assets/icons/heart_black.svg" alt="likes" width={ 11 } height={ 11 }/>
+                        <Image src="/assets/icons/heart_black.svg" className="filter-dark" alt="likes" width={ 11 }
+                               height={ 11 }/>
                         <span>{ likes }</span>
                         <div/>
-                        <Image src="/assets/icons/eye.svg" alt="views" width={ 16 } height={ 16 }/>
+                        <Image src="/assets/icons/eye.svg" className="filter-dark" alt="views" width={ 16 }
+                               height={ 16 }/>
                         <span>{ views }</span>
                     </aside>
                 </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Karla } from "next/font/google";
 import "./globals.css";
 import { satoshi } from "../fonts/font";
+import { Providers } from "@/components/ThemeProvider";
 
 const geistKarla = Karla( {
     variable: "--font-geist-karla",
@@ -37,7 +38,7 @@ export default function Layout( {
         <body
             className={ `${ geistKarla.variable } ${ satoshi.variable } font-karla antialiased` }
         >
-        { children }
+        <Providers>{ children }</Providers>
         </body>
         </html>
     );

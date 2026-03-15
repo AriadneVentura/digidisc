@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { useTheme } from "next-themes";
 
 const user = {};
 
@@ -16,6 +17,9 @@ const Navbar = () => {
     const { data: session } = authClient.useSession();
     const user = session?.user;
 
+    // For light/dark mode.
+    const { theme, setTheme } = useTheme();
+
     return (
         <header className="navbar">
             <nav>
@@ -23,39 +27,45 @@ const Navbar = () => {
                     <Image src="/assets/icons/cd.svg" alt="Logo" width={ 32 } height={ 32 }/>
                     <h1>DigiDisc</h1>
                 </Link>
-                <p className="font-light text-xs">digital space for clips :)</p>
-                { user ? (
-                    <figure>
-                        <button onClick={ () => router.push( `/profile/${ user?.id }` ) }>
-                            <Image src={ user.image || "" } alt="user" width={ 32 } height={ 32 }
-                                   className="rounded-full aspect-square"/>
-                        </button>
-                        <button
-                            onClick={ async () => {
-                                return await authClient.signOut( {
-                                    fetchOptions: {
-                                        onSuccess: () => {
-                                            redirect( "/sign-in" );
+                <p className="font-light dark:font-dark text-xs">digital space for clips :)</p>
+                <figure>
+                    <button onClick={ () => setTheme( theme === "dark" ? "light" : "dark" ) }>
+                        <Image src={ "assets/icons/day-and-night.svg" } alt="switgh light/dark"
+                               width={ 32 }
+                               height={ 32 }
+                               className="filter-dark"
+                        />
+                    </button>
+                    { user ? (
+                        <>
+                            <button onClick={ () => router.push( `/profile/${ user?.id }` ) }>
+                                <Image src={ user.image || "" } alt="user" width={ 32 } height={ 32 }
+                                       className="rounded-full aspect-square"/>
+                            </button>
+                            <button
+                                onClick={ async () => {
+                                    return await authClient.signOut( {
+                                        fetchOptions: {
+                                            onSuccess: () => {
+                                                redirect( "/sign-in" );
+                                            },
                                         },
-                                    },
-                                } );
-                            } }
-                            className="cursor-pointer"
-                        >
-                            <Image src="/assets/icons/logout.svg" alt="logout" width={ 32 } height={ 32 }/>
-                        </button>
-                    </figure>
-                ) : (
-                    <figure>
+                                    } );
+                                } }
+                                className="cursor-pointer"
+                            >
+                                <Image src="/assets/icons/logout.svg" alt="logout" width={ 32 } height={ 32 }/>
+                            </button>
+                        </>
+                    ) : (
                         <button onClick={ () => redirect( "/sign-in" ) }
                                 className="cursor-pointer primary-btn"
                         >
                             Sign In
                         </button>
-                    </figure>
-
-                )
-                }
+                    )
+                    }
+                </figure>
             </nav>
 
         </header>

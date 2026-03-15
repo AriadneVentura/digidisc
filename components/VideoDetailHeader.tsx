@@ -83,7 +83,7 @@ const VideoDetailHeader = ( {
                             alt="Views"
                             width={ 16 }
                             height={ 16 }
-                            className="mr-2"
+                            className="mr-2 filter-dark"
                         />
                     ) :
                     (
@@ -92,7 +92,7 @@ const VideoDetailHeader = ( {
                             alt="Views"
                             width={ 16 }
                             height={ 16 }
-                            className="mr-2"
+                            className="mr-2 filter-dark"
                         />
                     )
                 }
@@ -103,6 +103,7 @@ const VideoDetailHeader = ( {
                 alt="Arrow Down"
                 width={ 16 }
                 height={ 16 }
+                className="filter-dark"
             />
         </div>
     );
@@ -125,8 +126,13 @@ const VideoDetailHeader = ( {
 
             <aside className="cta">
                 <button onClick={ handleCopyLink }>
-                    <Image src={ copied ? "/assets/images/check.png" : "/assets/icons/chain.svg" } alt="copy link"
-                           width={ 24 } height={ 24 }/>
+                    { copied ? (
+                        <Image src="/assets/images/check.png" alt="copy link"
+                               width={ 24 } height={ 24 }/>
+                    ) : (
+                        <Image src="/assets/icons/chain.svg" alt="copy link" className="filter-dark"
+                               width={ 24 } height={ 24 }/>
+                    ) }
                 </button>
 
                 { isOwner && (
@@ -163,7 +169,8 @@ const VideoDetailHeader = ( {
                             <figure>
                                 <h3>You super sure?</h3>
                                 <button onClick={ () => setIsOpen( false ) }>
-                                    <Image src={ ICONS.close } alt="close" height={ 20 } width={ 20 }/>
+                                    <Image src={ ICONS.close } className="filter-dark" alt="close" height={ 20 }
+                                           width={ 20 }/>
                                 </button>
                             </figure>
                             <button onClick={ handleDeleteVideo } className="primary-btn">

@@ -80,7 +80,7 @@ const RecordScreen = () => {
     return (
         <div className="record">
             <button className="primary-btn" onClick={ handleRecordClick }>
-                <Image src={ ICONS.record } width={ 16 } height={ 16 } alt="record"/>
+                <Image src={ ICONS.record } width={ 16 } height={ 16 } alt="record" className="filter-light"/>
                 <span>Record a vid</span>
             </button>
 
@@ -91,7 +91,8 @@ const RecordScreen = () => {
                         <figure>
                             <h3>Screen Recording</h3>
                             <button onClick={ closeModal }>
-                                <Image src={ ICONS.close } alt="close" height={ 20 } width={ 20 }/>
+                                <Image src={ ICONS.close } alt="close" className="filter-dark" height={ 20 }
+                                       width={ 20 }/>
                             </button>
                         </figure>
 
@@ -116,7 +117,8 @@ const RecordScreen = () => {
                         <div className="record-box">
                             { !isRecording && !recordedVideoUrl && (
                                 <button onClick={ handleStart } className="record-start">
-                                    <Image src={ ICONS.record } alt="record" width={ 16 } height={ 16 }/>
+                                    <Image src={ ICONS.record } alt="record" className="filter-light" width={ 16 }
+                                           height={ 16 }/>
                                     Record
                                 </button>
                             ) }

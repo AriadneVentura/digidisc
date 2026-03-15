@@ -61,16 +61,19 @@ const VideoInfo = ( {
                 </div>
                 <aside>
                     <div className="side-details">
-                        <Image src="/assets/icons/eye.svg" alt="views" width={ 16 } height={ 16 }/>
+                        <Image src="/assets/icons/eye.svg" alt="views" className="filter-dark" width={ 16 }
+                               height={ 16 }/>
                         <span>{ views }</span>
                     </div>
                     <div className="side-details">
                         <button onClick={ handleLike } disabled={ isPending || !userId }>
                             {/*ik you can dynamically change the source, but two images cause alt tags for behaviour*/ }
                             { hasLiked ? (
-                                <Image src="/assets/icons/heart_filled.svg" alt="liked" width={ 16 } height={ 16 }/>
+                                <Image src="/assets/icons/heart_filled.svg" alt="liked" className="filter-dark"
+                                       width={ 16 } height={ 16 }/>
                             ) : (
-                                <Image src="/assets/icons/heart.svg" alt="like" width={ 16 } height={ 16 }/>
+                                <Image src="/assets/icons/heart.svg" alt="like" className="filter-dark" width={ 16 }
+                                       height={ 16 }/>
                             ) }
                             <span>{ likes }</span>
                         </button>

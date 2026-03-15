@@ -29,7 +29,7 @@ const DropdownList = ( {
                         <li
                             key={ option }
                             className={ cn( "list-item", {
-                                "bg-pink-100 text-white": selectedOption === option,
+                                "bg-pink-100 text-white dark:bg-pink-150 dark:text-dark-100": selectedOption === option,
                             } ) }
                             onClick={ () => handleOptionClick( option ) }
                         >
@@ -40,6 +40,7 @@ const DropdownList = ( {
                                     alt="check"
                                     width={ 16 }
                                     height={ 16 }
+                                    className="filter-dark"
                                 />
                             ) }
                         </li>

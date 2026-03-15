@@ -253,9 +253,9 @@ const Page = () => {
 
                 <div
                     role="alert"
-                    className="flex rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900"
+                    className="flex rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900 dark:bg-blue-150 dark:text-blue-200"
                 >
-                    <Image src="/assets/icons/info.svg" width={ 20 } height={ 20 } alt="hi"/>
+                    <Image src="/assets/icons/info.svg" width={ 20 } height={ 20 } alt="hi" className="filter-dark"/>
                     <span
                         className="ml-3">If you upload anything mean i will remove it :)</span>
                 </div>
