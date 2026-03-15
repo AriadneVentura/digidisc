@@ -131,10 +131,13 @@ const RecordScreen = () => {
                             { recordedVideoUrl && (
                                 <>
                                     <button onClick={ recordAgain } className="record-again">
-                                        Record Again
+                                        Record again
                                     </button>
                                     <button onClick={ goToUpload } className="record-upload">
-                                        <Image src={ ICONS.upload } alt="upload" width={ 16 } height={ 16 }
+                                        <Image src={ ICONS.upload }
+                                               alt="upload"
+                                               width={ 16 }
+                                               height={ 16 }
                                                className="filter-dark"/>
                                         Continue to upload
                                     </button>

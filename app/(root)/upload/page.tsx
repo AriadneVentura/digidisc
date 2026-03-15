@@ -183,7 +183,7 @@ const Page = () => {
             { video.error && <div className="error-field">{ video.error }</div> }
             { thumbnail.error && <div className="error-field">{ thumbnail.error }</div> }
 
-            <form className="rounded-20 shadow-10 gap-6 w-full flex flex-col px-5 py-7.5"
+            <form className="rounded-20 shadow-10 dark:shadow-40 gap-6 w-full flex flex-col px-5 py-7.5"
                   onSubmit={ handleSubmit }>
                 <FormField
                     id="title"

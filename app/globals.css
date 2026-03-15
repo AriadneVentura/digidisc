@@ -137,7 +137,7 @@
     }
 
     .filter-dark {
-        /* this turns black icons into white icons */
+        /* this turns icons into the reverse of their colour */
         @apply dark:filter-[invert(100%)_sepia(100%)_saturate(0%)_hue-rotate(111deg)_brightness(103%)_contrast(102%)];
     }
 
@@ -445,7 +445,7 @@
                     }
 
                     .record-again {
-                        @apply py-2.5 px-6 bg-dark-100 text-white rounded-4xl font-medium;
+                        @apply py-2.5 px-6 bg-black text-white rounded-4xl font-medium;
                     }
 
                     .record-upload {
