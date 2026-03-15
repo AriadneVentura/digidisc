@@ -134,7 +134,8 @@ const RecordScreen = () => {
                                         Record Again
                                     </button>
                                     <button onClick={ goToUpload } className="record-upload">
-                                        <Image src={ ICONS.upload } alt="upload" width={ 16 } height={ 16 }/>
+                                        <Image src={ ICONS.upload } alt="upload" width={ 16 } height={ 16 }
+                                               className="filter-dark"/>
                                         Continue to upload
                                     </button>
                                 </>

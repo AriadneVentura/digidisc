@@ -60,12 +60,22 @@ const VideoCard = ( {
                 } ) }</h2>
             </article>
             <button onClick={ handleCopy } className="copy-btn">
-                <Image
-                    src={ copied ? "/assets/images/check.png" : "/assets/icons/chain.svg" }
-                    alt="Copy Link"
-                    width={ 18 }
-                    height={ 18 }
-                />
+                { copied ? (
+                    <Image
+                        src="/assets/images/check.png"
+                        alt="Copy Link"
+                        width={ 18 }
+                        height={ 18 }
+                    />
+                ) : (
+                    <Image
+                        src="/assets/icons/chain.svg"
+                        alt="Copy Link"
+                        width={ 18 }
+                        height={ 18 }
+                        className="filter-dark"
+                    />
+                ) }
             </button>
             { duration && (
                 <div className="duration">

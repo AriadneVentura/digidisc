@@ -30,7 +30,7 @@ const Navbar = () => {
                 <p className="font-light dark:font-dark text-xs">digital space for clips :)</p>
                 <figure>
                     <button onClick={ () => setTheme( theme === "dark" ? "light" : "dark" ) }>
-                        <Image src={ "assets/icons/day-and-night.svg" } alt="switgh light/dark"
+                        <Image src={ "assets/icons/day-and-night.svg" } alt="switch light/dark"
                                width={ 32 }
                                height={ 32 }
                                className="filter-dark"

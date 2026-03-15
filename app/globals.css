@@ -259,7 +259,7 @@
     /* === components === */
     /* dropdown */
     .dropdown {
-        @apply absolute bg-white dark:bg-gray-350 shadow-lg rounded-lg flex flex-col gap-2 w-full z-10 top-12;
+        @apply absolute bg-white dark:bg-gray-350 shadow-lg dark:shadow-40 rounded-lg flex flex-col gap-2 w-full z-10 top-12;
 
         .list-item {
             @apply px-3 py-2.5 text-sm font-medium -tracking-[0.8px] relative text-dark-100 cursor-pointer hover:bg-pink-100 dark:hover:bg-pink-150 dark:text-pink-10 hover:text-white dark:hover:text-dark-100 transition-colors duration-200 ease-in-out rounded-md;
@@ -395,7 +395,7 @@
             }
 
             .dialog-content {
-                @apply relative bg-white dark:bg-gray-350 rounded-20 p-6 shadow-lg w-full max-w-lg z-10;
+                @apply relative bg-white dark:bg-gray-350 rounded-20 p-6 shadow-lg dark:shadow-40 w-full max-w-lg z-10;
 
                 figure {
                     @apply flex justify-between items-center mb-4;
@@ -445,7 +445,7 @@
                     }
 
                     .record-again {
-                        @apply py-2.5 px-6 bg-blue-100 text-white rounded-4xl font-medium;
+                        @apply py-2.5 px-6 bg-dark-100 text-white rounded-4xl font-medium;
                     }
 
                     .record-upload {
