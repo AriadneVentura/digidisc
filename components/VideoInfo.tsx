@@ -69,7 +69,7 @@ const VideoInfo = ( {
                         <button onClick={ handleLike } disabled={ isPending || !userId }>
                             {/*ik you can dynamically change the source, but two images cause alt tags for behaviour*/ }
                             { hasLiked ? (
-                                <Image src="/assets/icons/heart_filled.svg" alt="liked" className="filter-dark"
+                                <Image src="/assets/icons/heart_filled.svg" alt="liked"
                                        width={ 16 } height={ 16 }/>
                             ) : (
                                 <Image src="/assets/icons/heart.svg" alt="like" className="filter-dark" width={ 16 }

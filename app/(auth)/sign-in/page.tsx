@@ -29,7 +29,7 @@ const Page = () => {
                         </p>
 
                         <article>
-                            <Image src="/assets/images/dummy.jpg" height={ 64 } width={ 64 } alt="jessica"
+                            <Image src="/assets/images/dummy.jpg" height={ 64 } width={ 64 } alt="creator"
                                    className="rounded-full"/>
 
                             <div>

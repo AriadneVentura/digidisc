@@ -53,6 +53,18 @@
             #fff 42%,
             rgba(0, 0, 0, 0) 42%
     );
+    --background-image-radial-100-dark: radial-gradient(
+            79.36% 59.94% at 101.94% -1.83%,
+            #3b3b40 0%,
+            #222123 6%,
+            rgba(0, 0, 0, 0) 42%
+    ),
+    radial-gradient(
+            60.29% 53.62% at 0% 100%,
+            #313134 0%,
+            #222123 42%,
+            rgba(0, 0, 0, 0) 52%
+    );
 }
 
 @layer base {
@@ -113,7 +125,7 @@
     }
 
     .overlay {
-        @apply bg-radial-100 w-full h-full absolute top-0 -z-10;
+        @apply bg-radial-100 dark:bg-radial-100-dark w-full h-full absolute top-0 -z-10;
     }
 
     .video-grid {
@@ -129,17 +141,12 @@
         @apply dark:filter-[invert(100%)_sepia(100%)_saturate(0%)_hue-rotate(111deg)_brightness(103%)_contrast(102%)];
     }
 
-    .filter-light {
-        /* this turns white icons into black icons */
-        @apply dark:filter-[invert(0%)_sepia(0%)_saturate(12%)_hue-rotate(257deg)_brightness(100%)_contrast(104%)];
-    }
-
     /* sign in page */
     .sign-in {
         @apply w-full min-h-screen flex flex-col-reverse lg:flex-row justify-evenly overflow-hidden max-lg:gap-10;
 
         .testimonial {
-            @apply bg-light-100 lg:w-1/2 flex flex-col justify-between lg:h-screen w-full py-10 px-6 lg:pl-10 gap-6;
+            @apply bg-light-100 dark:bg-gray-350 lg:w-1/2 flex flex-col justify-between lg:h-screen w-full py-10 px-6 lg:pl-10 gap-6;
 
             a {
                 @apply flex items-center gap-2.5;
@@ -595,7 +602,7 @@
         }
 
         .copy-btn {
-            @apply absolute top-3 right-3 shadow-md hover:shadow-lg transition duration-200 bg-white rounded-full size-6 flex items-center justify-center;
+            @apply absolute top-3 right-3 shadow-md hover:shadow-lg transition duration-200 bg-white dark:bg-gray-350 rounded-full size-6 flex items-center justify-center;
         }
 
         .duration {

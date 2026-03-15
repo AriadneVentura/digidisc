@@ -54,7 +54,8 @@ const Navbar = () => {
                                 } }
                                 className="cursor-pointer"
                             >
-                                <Image src="/assets/icons/logout.svg" alt="logout" width={ 32 } height={ 32 }/>
+                                <Image src="/assets/icons/logout.svg" alt="logout" className="filter-dark" width={ 32 }
+                                       height={ 32 }/>
                             </button>
                         </>
                     ) : (

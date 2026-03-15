@@ -45,6 +45,7 @@ const Pagination = ( {
                     alt="Previous"
                     width={ 16 }
                     height={ 16 }
+                    className="filter-dark"
                 />
                 Previous
             </button>
@@ -58,7 +59,7 @@ const Pagination = ( {
                             key={ `page-${ page }` }
                             onClick={ () => navigateToPage( page as number ) }
                             className={ cn( {
-                                "bg-pink-100 text-white": currentPage === page,
+                                "bg-pink-100 text-white dark:bg-pink-150 dark:text-dark-100": currentPage === page,
                             } ) }
                         >
                             { page }
@@ -81,6 +82,7 @@ const Pagination = ( {
                     alt="next"
                     width={ 16 }
                     height={ 16 }
+                    className="filter-dark"
                 />
             </button>
         </section>
