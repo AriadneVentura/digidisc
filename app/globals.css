@@ -56,14 +56,14 @@
     --background-image-radial-100-dark: radial-gradient(
             79.36% 59.94% at 101.94% -1.83%,
             #3b3b40 0%,
-            #222123 6%,
-            rgba(0, 0, 0, 0) 42%
+            #222123 32%,
+            rgba(0, 0, 0, 0) 2%
     ),
     radial-gradient(
             60.29% 53.62% at 0% 100%,
             #313134 0%,
             #222123 42%,
-            rgba(0, 0, 0, 0) 52%
+            rgba(0, 0, 0, 0) 2%
     );
 }
 
@@ -143,10 +143,10 @@
 
     /* sign in page */
     .sign-in {
-        @apply w-full min-h-screen flex flex-col-reverse lg:flex-row justify-evenly overflow-hidden max-lg:gap-10;
+        @apply w-full min-h-screen flex flex-col-reverse lg:flex-row justify-evenly overflow-hidden max-lg:gap-10 ;
 
         .testimonial {
-            @apply bg-light-100 dark:bg-gray-350 lg:w-1/2 flex flex-col justify-between lg:h-screen w-full py-10 px-6 lg:pl-10 gap-6;
+            @apply bg-light-100 dark:bg-gray-150 lg:w-1/2 flex flex-col justify-between lg:h-screen w-full py-10 px-6 lg:pl-10 gap-6;
 
             a {
                 @apply flex items-center gap-2.5;
@@ -197,7 +197,7 @@
             @apply flex items-center justify-center lg:w-1/2 w-full lg:h-screen px-10 py-10;
 
             section {
-                @apply rounded-20 bg-white dark:bg-gray-150 shadow-10 dark:shadow-40 max-w-xl w-full flex flex-col px-5 py-7.5 gap-8;
+                @apply rounded-20 bg-white dark:bg-gray-350 shadow-10 dark:shadow-40 max-w-xl w-full flex flex-col px-5 py-7.5 gap-8;
 
                 a {
                     @apply flex items-center gap-2.5 justify-center;
@@ -216,7 +216,7 @@
                 }
 
                 button {
-                    @apply w-full flex justify-center items-center gap-2.5 bg-white dark:bg-gray-150 border border-gray-25 dark:border-gray-10 rounded-4xl py-4 text-base text-dark-100 dark:text-pink-10 font-semibold cursor-pointer -tracking-[0.8px];
+                    @apply w-full flex justify-center items-center gap-2.5 bg-white dark:bg-gray-350 border border-gray-25 dark:border-gray-10 rounded-4xl py-4 text-base text-dark-100 dark:text-pink-10 font-semibold cursor-pointer -tracking-[0.8px];
                 }
             }
         }
@@ -450,10 +450,6 @@
 
                     .record-upload {
                         @apply py-2.5 px-6 bg-pink-100 text-white dark:bg-pink-150 dark:text-dark-100 rounded-4xl font-medium flex items-center gap-2;
-
-                        img {
-                            @apply brightness-0 invert;
-                        }
                     }
                 }
             }

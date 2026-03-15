@@ -138,7 +138,8 @@ const RecordScreen = () => {
                                                alt="upload"
                                                width={ 16 }
                                                height={ 16 }
-                                               className="filter-dark"/>
+                                               className="filter-dark"
+                                        />
                                         Continue to upload
                                     </button>
                                 </>
