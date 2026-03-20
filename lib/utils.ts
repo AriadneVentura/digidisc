@@ -114,15 +114,15 @@ export const getOrderByClause = ( filter?: string ) => {
         case "Least Viewed":
             return sql`${ videos.views }
             ASC`
-        case "Most Recent":
-            return sql`${ videos.createdAt }
-            DESC`;
         case "Oldest First":
             return sql`${ videos.createdAt }
             ASC`;
         case "Most Liked":
-        default:
             return sql`${ videos.likes }
+            DESC`;
+        case "Most Recent":
+        default:
+            return sql`${ videos.createdAt }
             DESC`;
     }
 };

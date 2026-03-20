@@ -192,7 +192,7 @@ export const getAllVideos = withErrorHandling( async (
                     ? getOrderByClause( sortFilter )
                     // my ide is formatting this as weird and dont look at me cause ceebs finding the specific rule
                     // that fixes it <3 if you find it lmk.
-                    : sql`${ videos.likes }
+                    : sql`${ videos.createdAt }
                         DESC`
             )
             .limit( pageSize )
@@ -433,7 +433,7 @@ export const getAllVideosByUser = withErrorHandling(
         const userVideos = await buildVideoWithUserQuery()
             .where( and( ...conditions ) )
             .orderBy(
-                sortFilter ? getOrderByClause( sortFilter ) : desc( videos.likes )
+                sortFilter ? getOrderByClause( sortFilter ) : desc( videos.createdAt )
             )
             .limit( pageSize )
             .offset( (pageNumber - 1) * pageSize );
