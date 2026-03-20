@@ -27,7 +27,7 @@ const Navbar = () => {
                     <Image src="/assets/icons/cd.svg" alt="Logo" width={ 32 } height={ 32 }/>
                     <h1>DigiDisc</h1>
                 </Link>
-                <p className="font-light dark:font-dark text-xs">digital space for clips :)</p>
+                <p className="font-light dark:font-dark text-xs max-sm:hidden">digital space for clips :)</p>
                 <figure>
                     <button onClick={ () => setTheme( theme === "dark" ? "light" : "dark" ) }>
                         <Image src={ "assets/icons/day-and-night.svg" } alt="switch light/dark"
