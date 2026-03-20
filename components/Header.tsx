@@ -19,11 +19,11 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
     const filterParam = searchParams.get( "filter" );
 
     const [ searchQuery, setSearchQuery ] = useState( queryParam || "" );
-    const [ selectedFilter, setSelectedFilter ] = useState( filterParam || "Most Liked" );
+    const [ selectedFilter, setSelectedFilter ] = useState( filterParam || "Most Recent" );
 
     useEffect( () => {
         setSearchQuery( queryParam || "" );
-        setSelectedFilter( filterParam || "Most Liked" );
+        setSelectedFilter( filterParam || "Most Recent" );
     }, [ queryParam, filterParam ] );
 
     useEffect( () => {
