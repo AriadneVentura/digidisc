@@ -85,10 +85,10 @@ declare interface VideoCardProps {
     username: string;
     createdOn: Date;
     views: number;
-    // visibility: string;
     visibility: Visibility;
     duration: number | null;
     likes: number;
+    ownerId?: string;
 }
 
 declare interface VideoDetailHeaderProps {

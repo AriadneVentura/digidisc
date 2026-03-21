@@ -25,6 +25,7 @@ const Page = async ( { searchParams }: SearchParams ) => {
                                 { ...video }
                                 userImg={ user?.image || "" }
                                 username={ user?.name || "Guest" }
+                                ownerId={ video.userId }
                             />
                         )
                     } ) }

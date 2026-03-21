@@ -4,6 +4,7 @@
 import React, { useState } from 'react'
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const VideoCard = ( {
                         id,
@@ -16,8 +17,10 @@ const VideoCard = ( {
                         visibility,
                         duration,
                         likes,
+                        ownerId,
                     }: VideoCardProps ) => {
     const [ copied, setCopied ] = useState( false );
+    const router = useRouter();
 
     const handleCopy = ( e: React.MouseEvent ) => {
         e.stopPropagation();
@@ -35,8 +38,16 @@ const VideoCard = ( {
             <article>
                 <div>
                     <figure>
-                        <Image src={ userImg } alt="avatar" width={ 34 } height={ 34 }
-                               className="rounded-full aspect-square"/>
+                        {/*On the main page, allow people to click user profiles*/ }
+                        { ownerId ? (
+                            <button onClick={ () => router.push( `/profile/${ ownerId }` ) }>
+                                <Image src={ userImg } alt="avatar" width={ 34 } height={ 34 }
+                                       className="rounded-full aspect-square"/>
+                            </button>
+                        ) : (
+                            <Image src={ userImg } alt="avatar" width={ 34 } height={ 34 }
+                                   className="rounded-full aspect-square"/>
+                        ) }
                         <figcaption>
                             <h3>{ username }</h3>
                             <p>{ visibility }</p>
