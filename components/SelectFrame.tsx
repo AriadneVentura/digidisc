@@ -367,6 +367,7 @@ const SelectFrameModal = ( { file, onClose, onFrameSelection }: SelectFrameModal
                             </button>
                             <button
                                 onClick={ confirmFrame }
+                                disabled={ !capturedFrame }
                                 className="px-5 py-2 text-sm font-medium bg-pink-100 dark:bg-pink-150 hover:bg-pink-350 disabled:bg-pink-100/50 dark:disabled:bg-pink-150/50 disabled:cursor-not-allowed text-white rounded-xl transition-colors shadow"
                             >
                                 Use Frame

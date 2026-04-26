@@ -4,8 +4,9 @@ A clip sharing app for me and my friends, so after games are played the best cli
 and most importantly, not forgotten :)
 
 It’s a full stack screen recording and video sharing platform built with Next.js and Bunny.net.
-Users can securely sign in with google authentication, upload videos and thumbnails (or generate a randomised
+Users can securely sign in with google authentication, upload videos and thumbnails (select or generate a randomised
 thumbnail from their own video if they don’t want to upload one), and screen record directly within the platform.
+Also they can trim the videos they uploaded as well :D.
 Every video is attached to a user, so ownership is clear and secure too.
 
 Users can set videos as public or private, share them via link, like each other’s videos (or their own hehe), and delete
@@ -18,17 +19,17 @@ along with Arcjet protection to guard against common web attacks and automated b
 Hosted: https://digidisc.tv
 
 **Future goals:**
+
 - Video
     - Edit title/description
     - tags
-- Upload
-    - Video triming/selecting a good "portion" to upload
-    - Selecting a frame from the video for a thumbnail
 - Screen recording:
     - Selecting camera option
     - Selecting microphone
 - Other
-    - Dark mode
+    - Automatically checking if video is processed
+    - Role based groups
+
 ---
 
 ## 📼🐛🎮 Tools 📼🐛🎮
