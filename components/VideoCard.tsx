@@ -50,7 +50,11 @@ const VideoCard = ( {
                         ) }
                         <figcaption>
                             <h3>{ username }</h3>
-                            <p>{ visibility }</p>
+                            <p>{ visibility } ○ { createdOn.toLocaleDateString( 'en-us', {
+                                year: 'numeric',
+                                month: "short",
+                                day: "numeric",
+                            } ) } </p>
                         </figcaption>
                     </figure>
                     <aside>
@@ -64,11 +68,7 @@ const VideoCard = ( {
                     </aside>
                 </div>
 
-                <h2>{ title } - { createdOn.toLocaleDateString( 'en-us', {
-                    year: 'numeric',
-                    month: "short",
-                    day: "numeric",
-                } ) }</h2>
+                <h2>{ title }</h2>
             </article>
             <button onClick={ handleCopy } className="copy-btn">
                 { copied ? (
