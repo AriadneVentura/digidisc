@@ -401,7 +401,7 @@ export const generateRandomThumbnail = async (
 
                     const thumbnailFile = new File(
                         [ blob ],
-                        "thumbnail.jpg",
+                        "randomised_thumbnail.jpg",
                         {
                             type: "image/jpeg",
                             lastModified: Date.now(),

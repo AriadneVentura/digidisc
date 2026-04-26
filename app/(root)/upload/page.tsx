@@ -3,11 +3,13 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import FormField from "@/components/FormField";
 import FileInput from "@/components/FileInput";
 import { useFileInput } from "@/lib/hooks/useFileInput";
-import { MAX_DURATION, MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from "@/constants";
+import { MAX_DURATION, MAX_THUMBNAIL_SIZE, MAX_UPLOAD_DURATION, MAX_VIDEO_SIZE } from "@/constants";
 import { getThumbnailUploadUrl, getVideoUploadUrl, saveVideoDetails } from "@/lib/actions/video";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { generateRandomThumbnail } from "@/lib/utils";
+import VideoTrimModal from "@/components/VideoTrimModal";
+import SelectFrameModal from "@/components/SelectFrame";
 
 const uploadFileToBunny = (
     file: File,
@@ -32,6 +34,8 @@ const Page = () => {
     const [ isSubmitting, setIsSubmitting ] = useState( false );
     const [ error, setError ] = useState( "" );
     const [ videoDuration, setVideoDuration ] = useState( 0 );
+    const [ showVideoSelect, setShowVideoSelect ] = useState( false );
+    const [ showFrameSelect, setShowFrameSelect ] = useState( false );
 
     const [ formData, setFormData ] = useState( {
         title: "",
@@ -39,7 +43,7 @@ const Page = () => {
         visibility: "public"
     } );
 
-    const video = useFileInput( MAX_VIDEO_SIZE, MAX_DURATION );
+    const video = useFileInput( MAX_VIDEO_SIZE, MAX_DURATION, MAX_UPLOAD_DURATION );
     const thumbnail = useFileInput( MAX_THUMBNAIL_SIZE );
 
     useEffect( () => {
@@ -96,10 +100,11 @@ const Page = () => {
     }
 
     // Simulates a user clicking the upload selecting however with a randomised frame.
-    const handleRandomFrame = async () => {
+    const handlePopulateFrame = async ( file?: File ) => {
         if ( !video.file || !thumbnail.inputRef.current ) return;
 
-        const thumbnailFile = await generateRandomThumbnail( video.file );
+        // If there was a file sent in, use it, otherwise the randomise button has been clicked.
+        const thumbnailFile = !file ? await generateRandomThumbnail( video.file ) : file;
 
         if ( !thumbnailFile ) return;
 
@@ -110,6 +115,27 @@ const Page = () => {
 
         const event = new Event( "change", { bubbles: true } );
         thumbnail.inputRef.current.dispatchEvent( event );
+    };
+
+    const handlePopulateVideo = ( file: File ) => {
+        if ( video.inputRef.current ) {
+            // Create a new instance of data transfer and add file into it (this is done browser side
+            // normally for drag and drop cases but since im injecting it this is how its needed)
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add( file );
+            video.inputRef.current.files = dataTransfer.files;
+
+            // Simulate a user triggering file input change.
+            const event = new Event( "change", { bubbles: true } );
+            video.inputRef.current.dispatchEvent( event );
+
+            // Call fileHandler manually and pretend a user selected the file.
+            video.handleFileChange( {
+                target: { files: dataTransfer.files }
+            } as ChangeEvent<HTMLInputElement> )
+
+            setVideoDuration( video.duration );
+        }
     };
 
     const handleSubmit = async ( e: FormEvent ) => {
@@ -182,6 +208,7 @@ const Page = () => {
             { error && <div className="error-field">{ error }</div> }
             { video.error && <div className="error-field">{ video.error }</div> }
             { thumbnail.error && <div className="error-field">{ thumbnail.error }</div> }
+            { video.trimWarning && <div className="warning-field">{ video.trimWarning }</div> }
 
             <form className="rounded-20 shadow-10 dark:shadow-40 gap-6 w-full flex flex-col px-5 py-7.5"
                   onSubmit={ handleSubmit }>
@@ -214,6 +241,19 @@ const Page = () => {
                     type="video"
                 />
 
+                <div className="form-button">
+                    <button
+                        // Without this the form uploads because browser treats unspecified buttons
+                        // inside forms as a submit button.
+                        type="button"
+                        disabled={ !video.file }
+                        onClick={ () => setShowVideoSelect( true ) }
+                    >
+                        <Image src="/assets/icons/scissors.svg" alt="dice" height={ 30 } width={ 30 }/>
+                        Trim clip!
+                    </button>
+                </div>
+
                 <FileInput
                     id="thumbnail"
                     label="Thumbnail"
@@ -226,16 +266,24 @@ const Page = () => {
                     type="image"
                 />
 
-                <div className="form-thumbnail-button">
+                <div className="form-button">
                     <button
                         // Without this the form uploads because browser treats unspecified buttons
                         // inside forms as a submit button.
                         type="button"
                         disabled={ !video.file }
-                        onClick={ handleRandomFrame }
+                        onClick={ () => setShowFrameSelect( true ) }
+                    >
+                        <Image src="/assets/icons/polaroid.svg" alt="dice" height={ 35 } width={ 35 }/>
+                        Select Frame
+                    </button>
+                    <button
+                        type="button"
+                        disabled={ !video.file }
+                        onClick={ () => handlePopulateFrame() }
                     >
                         <Image src="/assets/icons/dice.svg" alt="dice" height={ 35 } width={ 35 }/>
-                        Randomise my thumbnail!
+                        Randomise
                     </button>
                 </div>
 
@@ -265,16 +313,36 @@ const Page = () => {
                     disabled={
                         isSubmitting ||
                         !video.file ||
+                        video.duration > MAX_UPLOAD_DURATION ||
                         !thumbnail.file ||
                         !formData.title.trim() ||
                         !formData.description.trim() ||
                         !!video.error ||
                         !!thumbnail.error }
+                    title={ video.duration > MAX_UPLOAD_DURATION ? "Clip must be under a min <3 trim it!" : "" }
                     className="submit-button">
                     { isSubmitting ? "Uploading..." : "Upload clip ♡" }
                 </button>
-
             </form>
+
+            { showVideoSelect && (
+                <VideoTrimModal
+                    file={ video.file! }
+                    onClose={ () => setShowVideoSelect( false ) }
+                    onTrimComplete={ ( trimmedFile ) => handlePopulateVideo( trimmedFile ) }
+                />
+            ) }
+
+            { showFrameSelect && (
+                <SelectFrameModal
+                    file={ video.file! }
+                    onClose={ () => setShowFrameSelect( false ) }
+                    onFrameSelection={ ( frameBlob ) => {
+                        const file = new File( [ frameBlob ], "selected_thumbnail.jpg", { type: "image/jpeg" } );
+                        handlePopulateFrame( file );
+                    } }
+                />
+            ) }
         </div>
     )
 }

@@ -11,6 +11,8 @@
   "dependencies": {
     "@arcjet/inspect": "^1.0.0-beta.6",
     "@arcjet/next": "^1.0.0-beta.6",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@neondatabase/serverless": "^1.0.2",
     "@xata.io/client": "^0.0.0-next.v93343b9646f57a1e5c51c35eccf0767c2bb80baa",
     "better-auth": "^1.2.7",

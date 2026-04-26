@@ -4,13 +4,16 @@ import { ChangeEvent, useRef, useState } from "react";
  *  Custom hook that keeps track of what the file is doing.
  * @param maxSize The maxsize accepted for the file upload.
  * @param maxDuration The max duration for the clip.
+ * @param maxAcceptedDuration The max duration upload permits.
  */
-export const useFileInput = ( maxSize: number, maxDuration?: number ) => {
+export const useFileInput = ( maxSize?: number, maxDuration?: number, maxAcceptedDuration?: number ) => {
     const [ file, setFile ] = useState<File | null>( null );
     const [ previewUrl, setPreviewUrl ] = useState( "" );
     const [ duration, setDuration ] = useState( 0 );
     const inputRef = useRef<HTMLInputElement>( null );
     const [ error, setError ] = useState<string | null>( null );
+    const [ trimWarning, setTrimWarning ] = useState<string | null>( null );
+
 
     // Deals with file upload logic, called when file is uploaded (duh)
     const handleFileChange = ( e: ChangeEvent<HTMLInputElement> ) => {
@@ -18,8 +21,8 @@ export const useFileInput = ( maxSize: number, maxDuration?: number ) => {
         if ( e.target.files?.[0] ) {
 
             const selectedFile = e.target.files[0];
-            if ( selectedFile.size > maxSize ) {
-                setError( `File is too large :( max size is 500 MB.` );
+            if ( maxSize && selectedFile.size > maxSize ) {
+                setError( `Clip is too bulbous :( max is 500MB. Try lowering the resolution or give it a haircut!` );
 
                 // Reset the input so user can re-select
                 if ( inputRef.current ) {
@@ -60,9 +63,17 @@ export const useFileInput = ( maxSize: number, maxDuration?: number ) => {
 
                     // max 60s atm
                     if ( maxDuration && videoLength > maxDuration ) {
-                        setError( `Clip must be under ${ maxDuration } seconds :(` );
+                        setError( `Clip must be ${ maxDuration } seconds or under in length to upload :(` );
                         resetFile();
                         return;
+                    }
+
+
+                    // max 30s for upload atm : )
+                    if ( maxAcceptedDuration && videoLength >= maxAcceptedDuration ) {
+                        setTrimWarning( `Fyi clip must be max ${ maxDuration } seconds to post it, trim it! :)` );
+                    } else {
+                        setTrimWarning( null );
                     }
 
                     setError( null );
@@ -94,5 +105,5 @@ export const useFileInput = ( maxSize: number, maxDuration?: number ) => {
         }
     }
 
-    return { file, previewUrl, duration, inputRef, handleFileChange, resetFile, error };
+    return { file, previewUrl, duration, inputRef, handleFileChange, resetFile, error, trimWarning };
 }

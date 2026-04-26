@@ -60,7 +60,6 @@ const RecordScreen = () => {
                 name: "screen-recording.webm",
                 type: recordedBlob.type,
                 size: recordedBlob.size,
-                // TODO this ist working properly for record...
                 duration: recordingDuration || 0,
             } )
         )

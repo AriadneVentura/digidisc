@@ -4,6 +4,7 @@ export const MAX_VIDEO_SIZE = 500 * 1024 * 1024;
 export const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024;
 // 60s video clips allowed
 export const MAX_DURATION = 60;
+export const MAX_UPLOAD_DURATION = 30;
 export const PAGE_SIZE = 8;
 
 export const BUNNY = {
