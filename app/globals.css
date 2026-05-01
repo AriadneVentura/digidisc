@@ -9,8 +9,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-    --font-karla: var(--font-geist-karla);
+    --font-star-crush: var(--font-star-crush);
     --font-satoshi: var(--font-satoshi);
+    --font-magasans: var(--font-magasans);
+    --font-minecraft: var(--font-minecraft);
+    --font-unifonexmono: var(--font-unifonexmono);
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 }
@@ -69,6 +72,17 @@
     );
 }
 
+/*// TODO why is pixels green tf*/
+
+@layer utilities {
+    button.cursor-pointer,
+    a.cursor-pointer,
+    .cursor-pointer,
+    .file-input figure {
+        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111512"), pointer !important;
+    }
+}
+
 @layer base {
     *,
     html,
@@ -76,7 +90,33 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: var(--font-geist-karla);
+        font-family: var(--font-satoshi);
+    }
+
+    html {
+        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111514"), auto;
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: auto;
+
+        /* KEY PART */
+        text-rendering: optimizeSpeed;
+
+        /* optional but helps */
+        image-rendering: pixelated;
+    }
+
+    a,
+    button,
+    [role="button"],
+    input[type="submit"] {
+        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111512"), pointer;
+    }
+
+    button:disabled,
+    button[disabled],
+    [role="button"]:disabled,
+    input[type="submit"]:disabled {
+        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111508"), not-allowed;
     }
 
     select {
@@ -96,10 +136,10 @@
         display: none;
     }
 
-    button {
-        @apply cursor-pointer;
-    }
-
+    /* I want to keep this incase i want to remove cursor in the future */
+    /*button { */
+    /*    @apply cursor-pointer;*/
+    /*}*/
     h1 {
         @apply -tracking-[2px];
     }
@@ -123,7 +163,9 @@
     }
 
     .page {
-        @apply flex flex-col min-h-screen pt-12.5 pb-20 gap-9;
+        @apply flex flex-col pt-12.5 pb-12.5 gap-9;
+        /*90 for header and footer*/
+        min-height: calc(100vh - 180px);
     }
 
     .overlay {
@@ -155,7 +197,7 @@
             }
 
             h1 {
-                @apply text-xl font-black text-blue-100 dark:text-pink-150 font-satoshi -tracking-[0.5px];
+                @apply text-3xl font-black text-dark-100 dark:text-pink-150 font-star-crush -tracking-[0.5px];
             }
 
             .description {
@@ -179,11 +221,11 @@
                             @apply flex flex-col items-center gap-1;
 
                             h2 {
-                                @apply text-base font-bold text-dark-100 dark:text-pink-10;
+                                @apply text-xl font-bold text-dark-100 dark:text-pink-10;
                             }
 
                             p {
-                                @apply text-gray-100 dark:text-gray-10 font-normal text-sm -tracking-[0.5px];
+                                @apply text-xl text-gray-100 dark:text-gray-10 font-normal -tracking-[0.5px];
                             }
                         }
                     }
@@ -191,7 +233,7 @@
             }
 
             p {
-                @apply text-sm font-medium text-gray-100 dark:text-gray-10;
+                @apply text-xl font-medium text-gray-100 dark:text-gray-10;
             }
         }
 
@@ -205,7 +247,7 @@
                     @apply flex items-center gap-2.5 justify-center;
 
                     h1 {
-                        @apply text-28 font-black text-blue-100 dark:text-pink-150  font-satoshi;
+                        @apply text-28 font-black text-dark-100 dark:text-pink-150  font-star-crush -tracking-[0.5px];
                     }
                 }
 
@@ -218,7 +260,8 @@
                 }
 
                 button {
-                    @apply w-full flex justify-center items-center gap-2.5 bg-white dark:bg-gray-350 border border-gray-25 dark:border-gray-10 rounded-4xl py-4 text-base text-dark-100 dark:text-pink-10 font-semibold cursor-pointer -tracking-[0.8px];
+                    /*this had cursor-pointer*/
+                    @apply w-full flex justify-center items-center gap-2.5 bg-white dark:bg-gray-350 border border-gray-25 dark:border-gray-10 rounded-4xl py-4 text-xl text-dark-100 dark:text-pink-10 font-semibold -tracking-[0.8px];
                 }
             }
         }
@@ -229,7 +272,7 @@
         @apply flex flex-col gap-7.5 pt-12.5 pb-20;
 
         h1 {
-            @apply text-3xl font-bold text-dark-100 dark:text-pink-10;
+            @apply text-3xl text-dark-100 dark:text-pink-10 font-star-crush tracking-wide;
         }
 
         .error-field {
@@ -240,15 +283,17 @@
             @apply border border-orange-500 dark:bg-orange-700/10 bg-orange-500/20 text-orange-700 dark:text-orange-500 p-4 rounded-md;
         }
 
+        /*this had cursor-pointer*/
+
         .submit-button {
-            @apply bg-pink-100 dark:bg-pink-150 text-white dark:text-dark-100 px-4 py-3 rounded-4xl cursor-pointer text-base font-semibold hover:bg-pink-200 dark:hover:bg-pink-350 dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+            @apply bg-pink-100 dark:bg-pink-150 text-white dark:text-dark-100 px-4 py-3 rounded-4xl text-base font-semibold hover:bg-pink-200 dark:hover:bg-pink-350 dark:hover:text-white transition-colors disabled:opacity-50;
         }
 
         .form-button {
             @apply flex justify-center gap-2 md:gap-4;
 
             button {
-                @apply py-2.5 px-5 flex items-center gap-2.5 text-sm font-semibold text-dark-100 dark:text-pink-10 border border-gray-20 dark:border-gray-10 rounded-4xl hover:bg-pink-200 dark:hover:bg-pink-350 disabled:opacity-50 disabled:cursor-not-allowed;
+                @apply py-2.5 px-5 flex items-center gap-2.5 text-lg font-semibold text-dark-100 dark:text-pink-10 border border-gray-20 dark:border-gray-10 rounded-4xl hover:bg-pink-200 dark:hover:bg-pink-350 disabled:opacity-50;
             }
         }
     }
@@ -263,17 +308,21 @@
     }
 
     /* === components === */
-    /* dropdown */
     .dropdown {
         @apply absolute bg-white dark:bg-gray-350 shadow-lg dark:shadow-40 rounded-lg flex flex-col gap-2 w-full z-10 top-12;
 
         .list-item {
-            @apply px-3 py-2.5 text-sm font-medium -tracking-[0.8px] relative text-dark-100 cursor-pointer hover:bg-pink-100 dark:hover:bg-pink-150 dark:text-pink-10 hover:text-white dark:hover:text-dark-100 transition-colors duration-200 ease-in-out rounded-md;
+            /*this had cursor-pointer*/
+            @apply px-3 py-2.5 text-sm font-medium -tracking-[0.8px] relative text-dark-100 hover:bg-pink-100 dark:hover:bg-pink-150 dark:text-pink-10 hover:text-white dark:hover:text-dark-100 transition-colors duration-200 ease-in-out rounded-md;
 
             img {
                 @apply absolute right-3 top-1/2 -translate-y-1/2;
             }
         }
+    }
+
+    .dropdown-up {
+        @apply bottom-full top-auto mb-2;
     }
 
     /* empty state */
@@ -306,7 +355,8 @@
         }
 
         figure {
-            @apply border border-gray-20 dark:border-gray-10 rounded-18 text-gray-100 dark:text-gray-10 py-1.5 px-3.5 flex justify-center items-center w-full h-40 gap-2.5 cursor-pointer;
+            /*this cant have custom cursor pointer atm cause its not a button n stuff*/
+            @apply border border-gray-20 dark:border-gray-10 rounded-18 text-gray-100 dark:text-gray-10 py-1.5 px-3.5 flex justify-center items-center w-full h-40 gap-2.5;
 
             p {
                 @apply text-dark-100 dark:text-pink-10 text-base font-medium;
@@ -325,7 +375,7 @@
             }
 
             button {
-                @apply absolute top-2 right-2 bg-gray-20 text-white p-2 rounded-full opacity-90 hover:opacity-100 cursor-pointer;
+                @apply absolute top-2 right-2 bg-gray-20 text-white p-2 rounded-full opacity-90 hover:opacity-100;
             }
 
             p {
@@ -360,13 +410,22 @@
                 @apply flex items-center gap-2.5;
 
                 h1 {
-                    @apply text-xl font-black text-blue-100 dark:text-pink-150 font-satoshi -tracking-[0.1px];
+                    @apply text-4xl text-dark-100 dark:text-pink-150 font-star-crush -tracking-[0.1px];
                 }
             }
 
             figure {
                 @apply flex items-center gap-2.5;
             }
+        }
+    }
+
+    /* footer */
+    .footer {
+        @apply h-[90px] border border-gray-20 dark:border-t-gray-10 flex flex-row justify-center items-center gap-3;
+
+        p {
+            @apply text-pink-150 font-bold ;
         }
     }
 
@@ -480,7 +539,7 @@
                     }
 
                     h1 {
-                        @apply text-3xl font-bold text-dark-100 dark:text-pink-10 capitalize;
+                        @apply text-3xl text-dark-100 dark:text-pink-10 capitalize font-star-crush tracking-wide;
                     }
                 }
             }
@@ -541,7 +600,7 @@
             button {
                 @apply flex flex-row text-xs text-gray-100 dark:text-gray-10 font-normal gap-2 items-center
                 disabled:opacity-50
-                disabled:cursor-not-allowed
+                    /*disabled:cursor-not-allowed*/
                 disabled:grayscale;
             }
         }
@@ -587,7 +646,7 @@
             }
 
             h2 {
-                @apply text-base text-dark-100 dark:text-pink-10 font-semibold truncate;
+                @apply text-base text-dark-100 dark:text-pink-10 truncate ;
             }
 
             footer {
@@ -682,7 +741,7 @@
             @apply flex flex-col gap-2.5;
 
             h1 {
-                @apply text-3xl font-bold text-dark-100 dark:text-pink-10;
+                @apply text-3xl font-star-crush tracking-wide text-dark-100 dark:text-pink-10;
             }
 
             figure {

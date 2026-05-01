@@ -257,6 +257,7 @@ declare interface DropdownListProps {
     selectedOption: string;
     onOptionSelect: ( option: string ) => void;
     triggerElement: ReactNode;
+    dropUp?: boolean;
 }
 
 declare interface EmptyStateProps {

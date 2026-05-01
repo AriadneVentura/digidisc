@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
-import { Karla } from "next/font/google";
 import "./globals.css";
-import { satoshi } from "../fonts/font";
+import { magasans, minecraft, satoshi, star_crush, unifontexmono } from "@/fonts/font";
 import { Providers } from "@/components/ThemeProvider";
-
-const geistKarla = Karla( {
-    variable: "--font-geist-karla",
-    subsets: [ "latin" ],
-} );
+import { FontProvider } from "@/components/FontProvider";
 
 export const metadata: Metadata = {
     metadataBase: new URL( "https://digidisc.tv" ),
@@ -36,9 +31,20 @@ export default function Layout( {
     return (
         <html lang="en">
         <body
-            className={ `${ geistKarla.variable } ${ satoshi.variable } font-karla antialiased` }
+            className={ `
+            ${ satoshi.variable }  
+            ${ star_crush.variable }  
+            ${ unifontexmono.variable } 
+            ${ magasans.variable } 
+            ${ minecraft.variable } 
+            `
+            }
         >
-        <Providers>{ children }</Providers>
+        <Providers>
+            <FontProvider>
+                { children }
+            </FontProvider>
+        </Providers>
         </body>
         </html>
     );

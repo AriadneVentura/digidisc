@@ -43,3 +43,4 @@ Hosted: https://digidisc.tv
 - Tailwind & TypeScript & React
 
 Cred to flat icon & JSM
+Cred to this for the custom cursors http://www.rw-designer.com/cursor-set/classic-1

@@ -9,6 +9,7 @@ const DropdownList = ( {
                            selectedOption,
                            onOptionSelect,
                            triggerElement,
+                           dropUp = false,
                        }: DropdownListProps ) => {
     const [ isOpen, setIsOpen ] = useState<boolean>( false );
 
@@ -24,7 +25,7 @@ const DropdownList = ( {
             </div>
 
             { isOpen && (
-                <ul className="dropdown">
+                <ul className={ cn( "dropdown", { "dropdown-up": dropUp } ) }>
                     { options.map( ( option ) => (
                         <li
                             key={ option }
