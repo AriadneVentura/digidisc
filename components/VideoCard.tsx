@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useGifs } from "@/components/GifProvider";
 
 const VideoCard = ( {
                         id,
@@ -18,9 +19,11 @@ const VideoCard = ( {
                         duration,
                         likes,
                         ownerId,
+                        gifUrl,
                     }: VideoCardProps ) => {
     const [ copied, setCopied ] = useState( false );
     const router = useRouter();
+    const { gifsEnabled } = useGifs()
 
     const handleCopy = ( e: React.MouseEvent ) => {
         e.stopPropagation();
@@ -68,7 +71,12 @@ const VideoCard = ( {
                     </aside>
                 </div>
 
-                <h2>{ title }</h2>
+                <div>
+                    <h2>{ title }</h2>
+                    { gifsEnabled && (
+                        <img src={ gifUrl } alt="preview" width={ 20 } height={ 20 }/>
+                    ) }
+                </div>
             </article>
             <button onClick={ handleCopy } className="copy-btn">
                 { copied ? (

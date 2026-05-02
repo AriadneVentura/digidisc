@@ -419,3 +419,15 @@ export const generateRandomThumbnail = async (
         } );
     } );
 };
+
+const TOTAL_GIFS = 541;
+
+export function getRandomGifs( count: number ): string[] {
+    const allGifs = Array.from(
+        { length: TOTAL_GIFS },
+        ( _, i ) => `/assets/all_gifs/${ i + 1 }.gif`
+    );
+
+    const shuffled = [ ...allGifs ].sort( () => Math.random() - 0.5 );
+    return shuffled.slice( 0, count );
+}

@@ -422,7 +422,7 @@
 
     /* footer */
     .footer {
-        @apply h-[90px] border border-gray-20 dark:border-t-gray-10 flex flex-row justify-center items-center gap-3;
+        @apply h-[90px] text-xs border border-gray-20 dark:border-t-gray-10 flex flex-row justify-center items-center gap-3;
 
         p {
             @apply text-pink-150 font-bold ;

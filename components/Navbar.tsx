@@ -8,6 +8,7 @@ import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useTheme } from "next-themes";
+import { useGifs } from "@/components/GifProvider";
 
 const user = {};
 
@@ -19,6 +20,7 @@ const Navbar = () => {
 
     // For light/dark mode.
     const { theme, setTheme } = useTheme();
+    const { gifsEnabled, toggleGifs } = useGifs();
 
     return (
         <header className="navbar">
@@ -27,8 +29,23 @@ const Navbar = () => {
                     <Image src="/assets/icons/cd.svg" alt="Logo" width={ 32 } height={ 32 }/>
                     <h1>DigiDisc</h1>
                 </Link>
-                <p className="font-light dark:font-dark text-xs max-sm:hidden">digital space for clips :)</p>
+                <div className="flex flex-row gap-2.5 max-sm:hidden">
+                    { gifsEnabled && (
+                        <img src="/assets/gifs/tv1.gif" alt="preview" width={ 20 } height={ 20 }/>
+                    ) }
+                    <p className="font-light dark:font-dark text-xs">digital space for clips</p>
+                    { gifsEnabled && (
+                        <img src="/assets/gifs/tv2.gif" alt="preview" width={ 20 } height={ 20 }/>
+                    ) }
+                </div>
                 <figure>
+                    <button onClick={ toggleGifs }>
+                        <Image src={ "assets/icons/magic-wand.svg" } alt="switch gifs"
+                               width={ 23 }
+                               height={ 23 }
+                               className="filter-dark"
+                        />
+                    </button>
                     <button onClick={ () => setTheme( theme === "dark" ? "light" : "dark" ) }>
                         <Image src={ "assets/icons/day-and-night.svg" } alt="switch light/dark"
                                width={ 32 }

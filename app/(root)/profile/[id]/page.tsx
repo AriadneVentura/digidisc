@@ -5,6 +5,7 @@ import { getAllVideosByUser } from "@/lib/actions/video";
 import { redirect } from "next/navigation";
 import EmptyState from "@/components/EmptyState";
 import Pagination from "@/components/Pagination";
+import { getRandomGifs } from "@/lib/utils";
 
 const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
     // Next.js exposes the ID through async params;
@@ -15,20 +16,24 @@ const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
 
     if ( !user ) redirect( "/404" );
 
+    const randomGifs = getRandomGifs( videos?.length ?? 0 );
+
     return (
         <div className="wrapper page">
             <Header subHeader={ user?.email } title={ `⋆. 𐙚˚࿔ ${ user?.name } ☆˚⋆` } userImg={ user?.image ?? "" }/>
 
             { videos?.length > 0 ? (
                 <section className="video-grid">
-                    { videos.map( ( { video, user } ) => (
+                    { videos.map( ( { video, user }, index ) => (
                         <VideoCard
                             createdOn={ video.createdAt }
                             thumbnail={ video.thumbnailUrl }
                             key={ video.id }
                             { ...video }
                             userImg={ user?.image || "" }
-                            username={ user?.name || "Guest" }/>
+                            username={ user?.name || "Guest" }
+                            gifUrl={ randomGifs[index] }
+                        />
                     ) ) }
 
                 </section>

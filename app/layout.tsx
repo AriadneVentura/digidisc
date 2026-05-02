@@ -3,6 +3,7 @@ import "./globals.css";
 import { magasans, minecraft, satoshi, star_crush, unifontexmono } from "@/fonts/font";
 import { Providers } from "@/components/ThemeProvider";
 import { FontProvider } from "@/components/FontProvider";
+import { GifProvider } from "@/components/GifProvider";
 
 export const metadata: Metadata = {
     metadataBase: new URL( "https://digidisc.tv" ),
@@ -29,21 +30,23 @@ export default function Layout( {
     children: React.ReactNode;
 }> ) {
     return (
-        <html lang="en">
+        <html>
         <body
             className={ `
-            ${ satoshi.variable }  
-            ${ star_crush.variable }  
-            ${ unifontexmono.variable } 
-            ${ magasans.variable } 
-            ${ minecraft.variable } 
-            `
+                ${ satoshi.variable }  
+                ${ star_crush.variable }  
+                ${ unifontexmono.variable } 
+                ${ magasans.variable } 
+                ${ minecraft.variable } 
+                `
             }
         >
         <Providers>
-            <FontProvider>
-                { children }
-            </FontProvider>
+            <GifProvider>
+                <FontProvider>
+                    { children }
+                </FontProvider>
+            </GifProvider>
         </Providers>
         </body>
         </html>

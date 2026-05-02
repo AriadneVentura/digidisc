@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { daysAgo } from "@/lib/utils";
+import { daysAgo, getRandomGifs } from "@/lib/utils";
 import { ICONS, visibilities } from "@/constants";
 import { deleteVideoById, updateVideoVisibility } from "@/lib/actions/video";
 import { authClient } from "@/lib/auth-client";
@@ -31,6 +31,7 @@ const VideoDetailHeader = ( {
     const userId = session?.user.id;
     const isOwner = userId === ownerId;
 
+    const randomGif = getRandomGifs( 1 )[0];
 
     const handleCopyLink = async () => {
         await navigator.clipboard.writeText( `${ window.location.origin }/video/${ videoId }` );
@@ -125,6 +126,8 @@ const VideoDetailHeader = ( {
             </aside>
 
             <aside className="cta">
+                <img src={ randomGif } alt="taste" width={ 24 } height={ 24 }/>
+
                 <button onClick={ handleCopyLink }>
                     { copied ? (
                         <Image src="/assets/images/check.png" alt="copy link"

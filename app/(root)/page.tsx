@@ -4,10 +4,14 @@ import { getAllVideos } from "@/lib/actions/video";
 import EmptyState from "@/components/EmptyState";
 import VideoCard from "@/components/VideoCard";
 import Pagination from "@/components/Pagination";
+import { getRandomGifs } from "@/lib/utils";
 
 const Page = async ( { searchParams }: SearchParams ) => {
     const { query, filter, page } = await searchParams;
     const { videos, pagination } = await getAllVideos( query, filter, Number( page ) || 1 );
+
+    // one per card
+    const randomGifs = getRandomGifs( videos?.length ?? 0 );
 
     return (
         // This applies a max-width to the entire window & column to allow top to bottom layout.
@@ -16,7 +20,7 @@ const Page = async ( { searchParams }: SearchParams ) => {
 
             { videos?.length > 0 ? (
                 <section className="video-grid">
-                    { videos.map( ( { video, user } ) => {
+                    { videos.map( ( { video, user }, index ) => {
                         return (
                             <VideoCard
                                 createdOn={ video.createdAt }
@@ -26,6 +30,7 @@ const Page = async ( { searchParams }: SearchParams ) => {
                                 userImg={ user?.image || "" }
                                 username={ user?.name || "Guest" }
                                 ownerId={ video.userId }
+                                gifUrl={ randomGifs[index] }
                             />
                         )
                     } ) }

@@ -8,6 +8,7 @@ import RecordScreen from "@/components/RecordScreen";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { updateURLParams } from "@/lib/utils";
 import { filterOptions } from "@/constants";
+import { useGifs } from "@/components/GifProvider";
 
 const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
     const router = useRouter();
@@ -20,6 +21,8 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
 
     const [ searchQuery, setSearchQuery ] = useState( queryParam || "" );
     const [ selectedFilter, setSelectedFilter ] = useState( filterParam || "Most Recent" );
+
+    const { gifsEnabled } = useGifs();
 
     useEffect( () => {
         setSearchQuery( queryParam || "" );
@@ -85,8 +88,12 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
 
                 <aside>
                     <Link href="/upload">
-                        <Image src="/assets/icons/upload.svg" width={ 16 } alt="upload" height={ 16 }
-                               className="filter-dark"/>
+                        { gifsEnabled ? (
+                            <img src="/assets/gifs/grey_disc.gif" alt="preview" width={ 20 } height={ 20 }/>
+                        ) : (
+                            <Image src="/assets/icons/upload.svg" width={ 16 } alt="upload" height={ 16 }
+                                   className="filter-dark"/>
+                        ) }
                         <span>Upload a clip</span>
                     </Link>
                     <RecordScreen/>

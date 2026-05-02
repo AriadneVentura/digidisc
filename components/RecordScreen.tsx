@@ -5,6 +5,7 @@ import { ICONS } from "@/constants";
 import { redirect, useRouter } from "next/navigation";
 import { useScreenRecording } from "@/lib/hooks/useScreenRecording";
 import { authClient } from "@/lib/auth-client";
+import { useGifs } from "@/components/GifProvider";
 
 const RecordScreen = () => {
     const [ isOpen, setIsOpen ] = useState( false );
@@ -76,10 +77,16 @@ const RecordScreen = () => {
         }
     }
 
+    const { gifsEnabled } = useGifs();
+
     return (
         <div className="record">
             <button className="primary-btn" onClick={ handleRecordClick }>
-                <Image src={ ICONS.record } width={ 16 } height={ 16 } alt="record" className="filter-dark"/>
+                { gifsEnabled ? (
+                    <img src="/assets/gifs/ds_pink.gif" alt="preview" width={ 20 } height={ 20 }/>
+                ) : (
+                    <Image src={ ICONS.record } width={ 16 } height={ 16 } alt="record" className="filter-dark"/>
+                ) }
                 <span>Record a vid</span>
             </button>
 

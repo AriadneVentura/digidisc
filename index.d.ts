@@ -89,6 +89,7 @@ declare interface VideoCardProps {
     duration: number | null;
     likes: number;
     ownerId?: string;
+    gifUrl?: string;
 }
 
 declare interface VideoDetailHeaderProps {
