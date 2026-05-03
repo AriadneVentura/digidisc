@@ -42,5 +42,6 @@ Hosted: https://digidisc.tv
 - Arcjet (A security layer for applications that provides bot protection, rate limiting, and abuse prevention)
 - Tailwind & TypeScript & React
 
-Cred to flat icon & JSM
-Cred to this for the custom cursors http://www.rw-designer.com/cursor-set/classic-1
+Cred to flat icon & JSM \
+Cred to this for the custom cursors http://www.rw-designer.com/cursor-set/classic-1 \
+Cred to this for the cute mini y2k gifs https://sadthemes.tumblr.com/smolpxl
