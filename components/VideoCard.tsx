@@ -36,8 +36,10 @@ const VideoCard = ( {
     };
 
     return (
-        <Link href={ `/video/${ id }` } className={ "video-card" }>
-            <Image src={ thumbnail } alt={ thumbnail } width={ 390 } height={ 160 } className="thumbnail"/>
+        <div className={ "video-card" }>
+            <Link href={ `/video/${ id }` }>
+                <Image src={ thumbnail } alt={ thumbnail } width={ 390 } height={ 160 } className="thumbnail"/>
+            </Link>
             <article>
                 <div>
                     <figure>
@@ -101,7 +103,7 @@ const VideoCard = ( {
                     { Math.ceil( duration ) } second(s)
                 </div>
             ) }
-        </Link>
+        </div>
     )
 }
 export default VideoCard
