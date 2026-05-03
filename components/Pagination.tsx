@@ -1,7 +1,23 @@
 "use client";
-import { cn, generatePagination, updateURLParams } from "@/lib/utils";
+import { cn, generateMobilePagination, generatePagination, updateURLParams } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+
+const useIsMaxSm = () => {
+    const [ isMaxSm, setIsMaxSm ] = useState( false );
+
+    useEffect( () => {
+        const mediaQuery = window.matchMedia( "(max-width: 639px)" );
+        setIsMaxSm( mediaQuery.matches );
+
+        const handler = ( e: MediaQueryListEvent ) => setIsMaxSm( e.matches );
+        mediaQuery.addEventListener( "change", handler );
+        return () => mediaQuery.removeEventListener( "change", handler );
+    }, [] );
+
+    return isMaxSm;
+};
 
 const Pagination = ( {
                          currentPage = 1,
@@ -9,7 +25,16 @@ const Pagination = ( {
                          queryString = "",
                          filterString = "",
                      }: PaginationProps ) => {
-    const pages = generatePagination( currentPage, totalPages );
+    const isMaxSm = useIsMaxSm();
+
+    const pages = useMemo(
+        () =>
+            isMaxSm
+                ? generateMobilePagination( currentPage, totalPages )
+                : generatePagination( currentPage, totalPages ),
+        [ isMaxSm, currentPage, totalPages ]
+    );
+
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -47,7 +72,7 @@ const Pagination = ( {
                     height={ 16 }
                     className="filter-dark"
                 />
-                Previous
+                <p className="max-sm:hidden">Previous</p>
             </button>
 
             <div>
@@ -76,7 +101,7 @@ const Pagination = ( {
                 disabled={ currentPage === totalPages }
                 aria-disabled={ currentPage === totalPages }
             >
-                Next
+                <p className="max-sm:hidden">Next</p>
                 <Image
                     src="/assets/icons/arrow-right.svg"
                     alt="next"

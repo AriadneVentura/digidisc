@@ -157,6 +157,32 @@ export const generatePagination = ( currentPage: number, totalPages: number ) =>
     ];
 };
 
+// Creates a list of page numbers to show in pagination for mobile.
+export const generateMobilePagination = ( currentPage: number, totalPages: number ) => {
+    if ( totalPages <= 5 ) {
+        return Array.from( { length: totalPages }, ( _, i ) => i + 1 );
+    }
+    if ( currentPage <= 3 ) {
+        return [ 1, 2, 3, "...", totalPages ];
+    }
+    if ( currentPage >= totalPages - 2 ) {
+        return [
+            1,
+            "...",
+            totalPages - 2,
+            totalPages - 1,
+            totalPages,
+        ];
+    }
+    return [
+        1,
+        "...",
+        currentPage,
+        "...",
+        totalPages,
+    ];
+};
+
 // Gets the screen stream and optional microphone stream for recording.
 export const getMediaStreams = async (
     withMic: boolean

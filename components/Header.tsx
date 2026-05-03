@@ -86,7 +86,7 @@ const Header = ( { subHeader, title, userImg }: SharedHeaderProps ) => {
 
                 </div>
 
-                <aside>
+                <aside className="max-sm:hidden">
                     <Link href="/upload">
                         { gifsEnabled ? (
                             <img src="/assets/gifs/grey_disc.gif" alt="preview" width={ 20 } height={ 20 }/>
