@@ -16,17 +16,17 @@ const FontContext = createContext<{
 } | null>( null )
 
 export function FontProvider( { children }: { children: React.ReactNode } ) {
-    const [ font, setFont ] = useState<FontKey>( 'satoshi' )
+    const [ font, setFont ] = useState<FontKey>( 'unifontexmono' )
 
     const changeFont = ( key: FontKey ) => {
         setFont( key )
         localStorage.setItem( 'font-preference', key )
-        document.body.style.setProperty( '--font-satoshi', fontOptions[key].variable ) // 👈 mutates the variable itself
+        document.body.style.setProperty( '--font-satoshi', fontOptions[key].variable )
     }
 
     useEffect( () => {
         const saved = localStorage.getItem( 'font-preference' ) as FontKey
-        const initial = saved && fontOptions[saved] ? saved : 'satoshi'
+        const initial = saved && fontOptions[saved] ? saved : 'unifontexmono'
         setFont( initial )
         document.body.style.setProperty( '--font-satoshi', fontOptions[initial].variable )
     }, [] )
