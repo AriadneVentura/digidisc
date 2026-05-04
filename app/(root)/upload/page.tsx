@@ -10,6 +10,7 @@ import Image from "next/image";
 import { generateRandomThumbnail } from "@/lib/utils";
 import VideoTrimModal from "@/components/VideoTrimModal";
 import SelectFrameModal from "@/components/SelectFrame";
+import ClearNavigationCursor from "@/components/ClearNavigationCursor";
 
 const uploadFileToBunny = (
     file: File,
@@ -203,6 +204,7 @@ const Page = () => {
 
     return (
         <div className="wrapper-md upload-page">
+            <ClearNavigationCursor/>
             <h1>Upload a clip ⋆｡‧˚ʚ🎥ɞ˚‧｡⋆</h1>
 
             { error && <div className="error-field">{ error }</div> }
