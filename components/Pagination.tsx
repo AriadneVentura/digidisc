@@ -24,6 +24,7 @@ const Pagination = ( {
                          totalPages = 10,
                          queryString = "",
                          filterString = "",
+                         basePath = "/",
                      }: PaginationProps ) => {
     const isMaxSm = useIsMaxSm();
 
@@ -46,7 +47,7 @@ const Pagination = ( {
                 query: queryString?.trim() || null,
                 filter: filterString || null,
             },
-            "/"
+            basePath
         );
     };
 

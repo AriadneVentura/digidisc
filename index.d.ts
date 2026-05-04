@@ -20,6 +20,7 @@ declare interface PaginationProps {
     totalPages?: number;
     queryString?: string;
     filterString?: string;
+    basePath?: string;
 }
 
 declare interface FormFieldProps {

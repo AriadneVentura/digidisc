@@ -49,6 +49,7 @@ const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
                     totalPages={ pagination.totalPages }
                     queryString={ query }
                     filterString={ filter }
+                    basePath={ `/profile/${ id }` }
                 />
             ) }
         </main>
