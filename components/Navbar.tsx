@@ -40,14 +40,14 @@ const Navbar = () => {
                 </div>
                 <figure>
                     <button onClick={ toggleGifs }>
-                        <Image src={ "assets/icons/magic-wand.svg" } alt="switch gifs"
+                        <Image src={ "/assets/icons/magic-wand.svg" } alt="switch gifs"
                                width={ 23 }
                                height={ 23 }
                                className="filter-dark"
                         />
                     </button>
                     <button onClick={ () => setTheme( theme === "dark" ? "light" : "dark" ) }>
-                        <Image src={ "assets/icons/day-and-night.svg" } alt="switch light/dark"
+                        <Image src={ "/assets/icons/day-and-night.svg" } alt="switch light/dark"
                                width={ 32 }
                                height={ 32 }
                                className="filter-dark"
