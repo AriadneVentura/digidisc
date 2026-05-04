@@ -37,7 +37,8 @@ const VideoCard = ( {
 
     return (
         <div className={ "video-card" }>
-            <Link href={ `/video/${ id }` }>
+            {/* Prefetch true allows next.js to prefetch on default on hover how cool. */ }
+            <Link href={ `/video/${ id }` } prefetch={ true }>
                 <Image src={ thumbnail } alt={ thumbnail } width={ 390 } height={ 160 } className="thumbnail"/>
             </Link>
             <article>
@@ -45,10 +46,10 @@ const VideoCard = ( {
                     <figure>
                         {/*On the main page, allow people to click user profiles*/ }
                         { ownerId ? (
-                            <button onClick={ () => router.push( `/profile/${ ownerId }` ) }>
+                            <Link href={ `/profile/${ ownerId }` } prefetch={ true }>
                                 <Image src={ userImg } alt="avatar" width={ 34 } height={ 34 }
                                        className="rounded-full aspect-square"/>
-                            </button>
+                            </Link>
                         ) : (
                             <Image src={ userImg } alt="avatar" width={ 34 } height={ 34 }
                                    className="rounded-full aspect-square"/>

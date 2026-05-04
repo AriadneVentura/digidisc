@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { daysAgo, getRandomGifs } from "@/lib/utils";
 import { ICONS, visibilities } from "@/constants";
@@ -114,10 +115,11 @@ const VideoDetailHeader = ( {
             <aside className="user-info">
                 <h1>{ title }</h1>
                 <figure>
-                    <button onClick={ () => router.push( `/profile/${ ownerId }` ) }>
-                        <Image src={ userImg || "" } alt="user" width={ 24 } height={ 24 } className="rounded-full"/>
+                    <Link href={ `/profile/${ ownerId }` } prefetch={ true }>
+                        <Image src={ userImg } alt="avatar" width={ 34 } height={ 34 }
+                               className="rounded-full"/>
                         <h2>{ username ?? "Guest" }</h2>
-                    </button>
+                    </Link>
                     <figcaption>
                         <span>»</span>
                         <p>{ daysAgo( createdAt ) }</p>

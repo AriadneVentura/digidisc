@@ -4,6 +4,7 @@ import { magasans, minecraft, satoshi, star_crush, unifontexmono } from "@/fonts
 import { Providers } from "@/components/ThemeProvider";
 import { FontProvider } from "@/components/FontProvider";
 import { GifProvider } from "@/components/GifProvider";
+import NavigationStart from "@/components/NavigationStart";
 
 export const metadata: Metadata = {
     metadataBase: new URL( "https://digidisc.tv" ),
@@ -30,7 +31,7 @@ export default function Layout( {
     children: React.ReactNode;
 }> ) {
     return (
-        <html>
+        <html suppressHydrationWarning>
         <body
             className={ `
                 ${ satoshi.variable }  
@@ -44,6 +45,7 @@ export default function Layout( {
         <Providers>
             <GifProvider>
                 <FontProvider>
+                    <NavigationStart/>
                     { children }
                 </FontProvider>
             </GifProvider>
