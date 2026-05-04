@@ -53,6 +53,7 @@ const Pagination = ( {
 
     const navigateToPage = ( pageNumber: number ) => {
         if ( pageNumber < 1 || pageNumber > totalPages ) return;
+        document.documentElement.classList.add( "navigating" );
         router.push( createPageUrl( pageNumber ) );
     };
 
