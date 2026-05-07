@@ -351,19 +351,7 @@ const Page = () => {
                         !!thumbnail.error }
                     title={ video.duration > MAX_UPLOAD_DURATION ? "Clip must be under a min <3 trim it!" : "" }
                     className="submit-button">
-                    { isSubmitting ? (
-                        <>
-                            <span
-                                className="absolute inset-0 bg-pink-300 dark:bg-pink-400 transition-all duration-300 ease-out"
-                                style={ { width: `${ uploadProgress }%` } }
-                            />
-                            <span className="relative z-10">
-                                Uploading... { uploadProgress }%
-                            </span>
-                        </>
-                    ) : (
-                        "Upload clip ♡"
-                    ) }
+                    { isSubmitting ? `Uploading... ${ uploadProgress }%` : "Upload clip ♡" }
                 </button>
             </form>
 
