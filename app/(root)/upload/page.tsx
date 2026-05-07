@@ -15,19 +15,37 @@ import ClearNavigationCursor from "@/components/ClearNavigationCursor";
 const uploadFileToBunny = (
     file: File,
     uploadUrl: string,
-    accessKey: string
-): Promise<void> =>
-    fetch( uploadUrl, {
-        method: "PUT",
-        headers: {
-            "Content-Type": file.type,
-            AccessKey: accessKey,
-        },
-        body: file,
-    } ).then( ( response ) => {
-        if ( !response.ok )
-            throw new Error( `Upload failed with status ${ response.status }` );
+    accessKey: string,
+    onProgress?: ( percent: number ) => void
+): Promise<void> => {
+    return new Promise( ( resolve, reject ) => {
+        // XMLHttpRequest tracks progress over fetch!!
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener( "progress", ( event ) => {
+            if ( event.lengthComputable && onProgress ) {
+                const percent = Math.round( (event.loaded / event.total) * 100 );
+                onProgress( percent );
+            }
+        } );
+
+        xhr.addEventListener( "load", () => {
+            if ( xhr.status >= 200 && xhr.status < 300 ) {
+                resolve();
+            } else {
+                reject( new Error( `Upload failed with status ${ xhr.status }` ) );
+            }
+        } );
+
+        xhr.addEventListener( "error", () => reject( new Error( "Upload failed" ) ) );
+        xhr.addEventListener( "abort", () => reject( new Error( "Upload aborted" ) ) );
+
+        xhr.open( "PUT", uploadUrl );
+        xhr.setRequestHeader( "AccessKey", accessKey );
+        xhr.setRequestHeader( "Content-Type", file.type );
+        xhr.send( file );
     } );
+};
 
 
 const Page = () => {
@@ -37,6 +55,7 @@ const Page = () => {
     const [ videoDuration, setVideoDuration ] = useState( 0 );
     const [ showVideoSelect, setShowVideoSelect ] = useState( false );
     const [ showFrameSelect, setShowFrameSelect ] = useState( false );
+    const [ uploadProgress, setUploadProgress ] = useState<number>( 0 );
 
     const [ formData, setFormData ] = useState( {
         title: "",
@@ -165,7 +184,10 @@ const Page = () => {
             }
 
             // Upload video to video streaming and storage platform
-            await uploadFileToBunny( video.file, videoUploadUrl, videoAccessKey );
+            await uploadFileToBunny( video.file, videoUploadUrl, videoAccessKey, ( percent ) => {
+                // Counts as 0–85% of total progress.
+                setUploadProgress( Math.round( percent * 0.85 ) );
+            } );
 
             // ensure thumbnail has an extension - needed for open graph preview links
             const extension = thumbnail.file.type.split( "/" )[1] || "jpg";
@@ -181,7 +203,11 @@ const Page = () => {
                 throw new Error( "Failed to get video thumbnail upload credentials" );
             }
 
-            await uploadFileToBunny( thumbnail.file, thumbnailUploadUrl, thumbnailAccessKey );
+            // Upload thumbnail too
+            await uploadFileToBunny( thumbnail.file, thumbnailUploadUrl, thumbnailAccessKey, ( percent ) => {
+                // Counts as 85–100% of total progress.
+                setUploadProgress( 85 + Math.round( percent * 0.15 ) );
+            } );
 
             // Create metadata and store in database
             await saveVideoDetails( {
@@ -199,6 +225,8 @@ const Page = () => {
 
         } finally {
             setIsSubmitting( false );
+            // Reset progress bar!
+            setUploadProgress( 0 );
         }
     }
 
@@ -323,7 +351,19 @@ const Page = () => {
                         !!thumbnail.error }
                     title={ video.duration > MAX_UPLOAD_DURATION ? "Clip must be under a min <3 trim it!" : "" }
                     className="submit-button">
-                    { isSubmitting ? "Uploading..." : "Upload clip ♡" }
+                    { isSubmitting ? (
+                        <>
+                            <span
+                                className="absolute inset-0 bg-pink-300 dark:bg-pink-400 transition-all duration-300 ease-out"
+                                style={ { width: `${ uploadProgress }%` } }
+                            />
+                            <span className="relative z-10">
+                                Uploading... { uploadProgress }%
+                            </span>
+                        </>
+                    ) : (
+                        "Upload clip ♡"
+                    ) }
                 </button>
             </form>
 
