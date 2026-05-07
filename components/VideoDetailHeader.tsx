@@ -8,6 +8,7 @@ import { ICONS, visibilities } from "@/constants";
 import { deleteVideoById, updateVideoVisibility } from "@/lib/actions/video";
 import { authClient } from "@/lib/auth-client";
 import DropdownList from "@/components/DropdownList";
+import { createPortal } from "react-dom";
 
 const VideoDetailHeader = ( {
                                 title,
@@ -166,7 +167,7 @@ const VideoDetailHeader = ( {
                 ) }
             </aside>
 
-            { isOpen && (
+            { isOpen && createPortal(
                 <div className="record">
                     <section className="dialog">
                         <div className="overlay-record" onClick={ () => setIsOpen( false ) }/>
@@ -183,7 +184,8 @@ const VideoDetailHeader = ( {
                             </button>
                         </div>
                     </section>
-                </div>
+                </div>,
+                document.body
             ) }
         </header>
     )
