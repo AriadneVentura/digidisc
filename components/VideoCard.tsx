@@ -4,7 +4,6 @@
 import React, { useState } from 'react'
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useGifs } from "@/components/GifProvider";
 
 const VideoCard = ( {
@@ -22,7 +21,7 @@ const VideoCard = ( {
                         gifUrl,
                     }: VideoCardProps ) => {
     const [ copied, setCopied ] = useState( false );
-    const router = useRouter();
+    const [ isNavigating, setIsNavigating ] = useState( false );
     const { gifsEnabled } = useGifs()
 
     const handleCopy = ( e: React.MouseEvent ) => {
@@ -38,8 +37,22 @@ const VideoCard = ( {
     return (
         <div className={ "video-card" }>
             {/* Prefetch true allows next.js to prefetch on default on hover how cool. */ }
-            <Link href={ `/video/${ id }` } prefetch={ true }>
-                <Image src={ thumbnail } alt={ thumbnail } width={ 390 } height={ 160 } className="thumbnail"/>
+            <Link href={ `/video/${ id }` } prefetch={ true } onClick={ () => setIsNavigating( true ) }>
+                <div className="relative">
+                    <Image
+                        src={ thumbnail }
+                        alt={ thumbnail }
+                        width={ 390 }
+                        height={ 160 }
+                        className={ `thumbnail transition-all duration-200 ${ isNavigating ? "brightness-50" : "" }` }
+                    />
+                    { isNavigating && (
+                        <div className="absolute inset-0 flex items-center justify-center h-[190px]">
+                            <div
+                                className="size-8 rounded-full border-2 border-white/30 border-t-pink-300 animate-spin"/>
+                        </div>
+                    ) }
+                </div>
             </Link>
             <article>
                 <div>
