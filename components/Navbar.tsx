@@ -9,7 +9,6 @@ import { redirect, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useTheme } from "next-themes";
 import { useGifs } from "@/components/GifProvider";
-import ClearNavigationCursor from "@/components/ClearNavigationCursor";
 
 const user = {};
 
@@ -25,7 +24,6 @@ const Navbar = () => {
 
     return (
         <header className="navbar">
-            <ClearNavigationCursor/>
             <nav>
                 <Link href="/">
                     <Image src="/assets/icons/cd.svg" alt="Logo" width={ 32 } height={ 32 }/>
