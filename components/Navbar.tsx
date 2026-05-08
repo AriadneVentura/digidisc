@@ -55,10 +55,10 @@ const Navbar = () => {
                     </button>
                     { user ? (
                         <>
-                            <button onClick={ () => router.push( `/profile/${ user?.id }` ) }>
+                            <Link href={ `/profile/${ user?.id }` } prefetch={ true }>
                                 <Image src={ user.image || "" } alt="user" width={ 32 } height={ 32 }
                                        className="rounded-full aspect-square"/>
-                            </button>
+                            </Link>
                             <button
                                 onClick={ async () => {
                                     return await authClient.signOut( {
