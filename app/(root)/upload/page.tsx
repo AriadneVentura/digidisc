@@ -279,7 +279,7 @@ const Page = () => {
                         disabled={ !video.file }
                         onClick={ () => setShowVideoSelect( true ) }
                     >
-                        <Image src="/assets/icons/scissors.svg" alt="dice" height={ 30 } width={ 30 }/>
+                        <Image src="/assets/icons/scissors.svg" alt="dice" height={ 25 } width={ 25 }/>
                         Trim clip!
                     </button>
                 </div>

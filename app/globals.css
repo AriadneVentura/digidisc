@@ -31,7 +31,7 @@
     --color-gray-100: #6c6685;
     --color-pink-10: #ffeef5;
     --color-pink-20: #5a435d;
-    --color-pink-100: #ff4393;
+    --color-pink-100: #ee539f;
     --color-pink-150: #da7dc8;
     --color-pink-350: #a8428b;
     --color-pink-450: #7b5883;
@@ -298,7 +298,7 @@
             @apply flex justify-center gap-2 md:gap-4;
 
             button {
-                @apply py-2.5 px-5 flex items-center gap-2.5 text-lg font-semibold text-dark-100 dark:text-pink-10 border border-gray-20 dark:border-gray-10 rounded-4xl hover:bg-pink-200 dark:hover:bg-pink-350 disabled:opacity-50;
+                @apply py-2.5 px-5 flex items-center gap-2.5 text-base  font-semibold  text-dark-100 dark:text-pink-10 border border-gray-20 dark:border-gray-10 rounded-4xl hover:bg-pink-200 dark:hover:bg-pink-350 disabled:opacity-50;
             }
         }
     }
