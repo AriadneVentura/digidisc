@@ -415,7 +415,7 @@
                 @apply flex items-center gap-2.5;
 
                 h1 {
-                    @apply text-4xl text-dark-100 dark:text-pink-150 font-star-crush -tracking-[0.1px];
+                    @apply text-4xl text-dark-100 dark:text-pink-150 font-star-crush -tracking-[0.1px] max-sm:text-3xl;
                 }
             }
 
