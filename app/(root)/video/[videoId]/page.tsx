@@ -6,6 +6,7 @@ import VideoDetailHeader from "@/components/VideoDetailHeader";
 import VideoInfo from "@/components/VideoInfo";
 import { Metadata } from "next";
 import ClearNavigationCursor from "@/components/ClearNavigationCursor";
+import GirlMargin from "@/components/GirlMargin";
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
@@ -67,6 +68,9 @@ const Page = async ( { params }: Params ) => {
     return (
         <main className="wrapper page">
             <ClearNavigationCursor/>
+
+            <GirlMargin/>
+
             <VideoDetailHeader { ...video } userImg={ user?.image } username={ user?.name } ownerId={ video.userId }/>
 
             <section className="video-details">

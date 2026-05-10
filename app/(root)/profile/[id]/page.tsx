@@ -7,6 +7,7 @@ import EmptyState from "@/components/EmptyState";
 import Pagination from "@/components/Pagination";
 import { getRandomGifs } from "@/lib/utils";
 import ClearNavigationCursor from "@/components/ClearNavigationCursor";
+import GirlMargin from "@/components/GirlMargin";
 
 const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
     // Next.js exposes the ID through async params;
@@ -22,6 +23,9 @@ const Page = async ( { params, searchParams }: ParamsWithSearch ) => {
     return (
         <main className="wrapper page">
             <ClearNavigationCursor/>
+            
+            <GirlMargin/>
+
             <Header subHeader={ user?.email } title={ `⋆. 𐙚˚࿔ ${ user?.name } ☆˚⋆` } userImg={ user?.image ?? "" }/>
 
             { videos?.length > 0 ? (
