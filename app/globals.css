@@ -72,8 +72,6 @@
     );
 }
 
-/*// TODO why is pixels green tf*/
-
 @layer utilities {
     button.cursor-pointer,
     a.cursor-pointer,
@@ -93,7 +91,7 @@
         font-family: var(--font-satoshi);
     }
 
-    html {
+    html, .cursor-disc {
         cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111514"), auto;
         -webkit-font-smoothing: none;
         -moz-osx-font-smoothing: auto;

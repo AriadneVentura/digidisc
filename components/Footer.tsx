@@ -3,7 +3,7 @@ import { FontPicker } from "@/components/FontPicker";
 
 const Footer = () => {
     return (
-        <footer className="footer">
+        <footer id="site-footer" className="footer">
             <div className="flex flex-row gap-2">
                 <p>
                     Developed by Ariadne

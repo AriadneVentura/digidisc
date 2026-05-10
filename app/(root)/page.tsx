@@ -6,6 +6,7 @@ import VideoCard from "@/components/VideoCard";
 import Pagination from "@/components/Pagination";
 import { getRandomGifs } from "@/lib/utils";
 import ClearNavigationCursor from "@/components/ClearNavigationCursor";
+import GirlMargin from "@/components/GirlMargin";
 
 const Page = async ( { searchParams }: SearchParams ) => {
     const { query, filter, page } = await searchParams;
@@ -18,6 +19,9 @@ const Page = async ( { searchParams }: SearchParams ) => {
         // This applies a max-width to the entire window & column to allow top to bottom layout.
         <main className="wrapper page">
             <ClearNavigationCursor/>
+
+            <GirlMargin/>
+
             <Header title={ "All clips ˚♪ ♡ 𝄞˚" } subHeader="Public Library"/>
 
             { videos?.length > 0 ? (
