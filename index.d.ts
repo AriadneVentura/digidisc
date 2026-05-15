@@ -117,6 +117,9 @@ declare interface VideoInfoProps {
     initialLikes: number;
     hasUserLiked: boolean;
     id: string;
+    game?: string | null;
+    gameImageUrl?: string | null;
+    gameSlug?: string | null
 }
 
 declare interface ImageWithFallbackProps extends Omit<ImageProps, "src"> {
@@ -134,6 +137,9 @@ declare interface VideoDetails {
     thumbnailUrl: string;
     visibility: Visibility;
     duration?: number | null;
+    game?: string | null;
+    gameSlug?: string | null;
+    gameImageUrl?: string | null;
 }
 
 declare interface BunnyVideoResponse {
@@ -252,6 +258,18 @@ declare interface SearchParams {
 declare interface ParamsWithSearch {
     params: Promise<Record<string, string>>;
     searchParams: Promise<Record<string, string | undefined>>;
+}
+
+declare interface SelectedGame {
+    name: string;
+    slug: string;
+    imageUrl: string | null;
+}
+
+declare interface GameSearchInputProps {
+    value: SelectedGame | null;
+    onChange: ( game: SelectedGame | null ) => void;
+    label?: string;
 }
 
 declare interface DropdownListProps {

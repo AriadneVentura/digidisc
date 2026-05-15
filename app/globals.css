@@ -607,6 +607,26 @@
                 disabled:grayscale;
             }
         }
+
+        .game-metadata {
+            @apply flex items-center gap-3;
+        }
+
+        .game-metadata-image {
+            @apply rounded-lg object-cover flex-shrink-0;
+        }
+
+        .game-metadata-info {
+            @apply flex flex-col gap-0.5;
+
+            h2 {
+                @apply text-sm font-medium text-gray-100 dark:text-gray-10;
+            }
+
+            p {
+                @apply text-base font-semibold text-dark-100 dark:text-pink-10;
+            }
+        }
     }
 
     /* video-card */
@@ -795,5 +815,73 @@
                 @apply text-sm font-semibold text-dark-100 dark:text-pink-10 capitalize;
             }
         }
+    }
+
+    /* game search */
+    .game-search-input-wrapper {
+        @apply relative;
+
+        input {
+            @apply w-full border-b border-b-gray-20 dark:border-b-gray-10 rounded-18 text-dark-100 dark:text-pink-10 pl-8 placeholder:text-gray-100 dark:placeholder:text-gray-10 py-2.5 px-4.5 pr-10 focus:outline-pink-100 placeholder:font-medium text-base font-semibold;
+        }
+
+        .search-image {
+            @apply absolute top-1/2 left-3 -translate-y-1/2;
+        }
+    }
+
+    .game-search-input-icons {
+        @apply absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2;
+    }
+
+    .game-search-spinner {
+        @apply w-4 h-4 animate-spin;
+    }
+
+    .game-search-spinner-track {
+        @apply stroke-dark-100 dark:stroke-pink-10;
+        fill: none;
+        opacity: 0.2;
+    }
+
+    .game-search-spinner-arc {
+        @apply stroke-pink-100 dark:stroke-pink-150;
+        fill: none;
+    }
+
+    .game-search-clear-btn {
+        @apply text-gray-100 dark:text-gray-10 hover:text-pink-100 dark:hover:text-pink-150 transition-colors;
+    }
+
+    .game-search-dropdown {
+        @apply absolute top-[calc(100%+8px)] left-0 right-0 z-50 overflow-hidden rounded-18 border border-gray-20 dark:border-gray-10 bg-white dark:bg-dark-100 shadow-xl;
+    }
+
+    .game-search-item-divider {
+        @apply border-t border-gray-20/50 dark:border-gray-10/20 first:border-t-0;
+    }
+
+    .game-search-item {
+        @apply w-full flex items-center justify-between gap-4 px-4.5 py-2.5 hover:bg-gray-20/40 dark:hover:bg-gray-10/10 transition-colors duration-150;
+    }
+
+    .game-search-item-title {
+        @apply text-base font-semibold text-dark-100 dark:text-pink-10 truncate text-left;
+    }
+
+    .game-search-item-year {
+        @apply text-sm font-medium text-gray-100 dark:text-gray-10;
+    }
+
+    .game-search-item-meta {
+        @apply flex items-center flex-shrink-0;
+    }
+
+    .game-search-item-image {
+        @apply rounded-lg object-cover w-16 h-9 flex-shrink-0;
+    }
+
+    .game-search-item-image-placeholder {
+        @apply w-16 h-9 rounded-lg bg-gray-20/50 dark:bg-gray-10/10 flex-shrink-0;
     }
 }

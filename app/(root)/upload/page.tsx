@@ -11,6 +11,7 @@ import { generateRandomThumbnail } from "@/lib/utils";
 import VideoTrimModal from "@/components/VideoTrimModal";
 import SelectFrameModal from "@/components/SelectFrame";
 import ClearNavigationCursor from "@/components/ClearNavigationCursor";
+import { GameSearchInput } from "@/components/GameSearchInput";
 
 const uploadFileToBunny = (
     file: File,
@@ -56,6 +57,7 @@ const Page = () => {
     const [ showVideoSelect, setShowVideoSelect ] = useState( false );
     const [ showFrameSelect, setShowFrameSelect ] = useState( false );
     const [ uploadProgress, setUploadProgress ] = useState<number>( 0 );
+    const [ selectedGame, setSelectedGame ] = useState<SelectedGame | null>( null );
 
     const [ formData, setFormData ] = useState( {
         title: "",
@@ -214,7 +216,10 @@ const Page = () => {
                 videoId,
                 thumbnailUrl: thumbnailCdnUrl,
                 ...formData,
-                duration: videoDuration
+                duration: videoDuration,
+                game: selectedGame?.name ?? null,
+                gameSlug: selectedGame?.slug ?? null,
+                gameImageUrl: selectedGame?.imageUrl ?? null,
             } );
 
             // Go to homepage after upload.
@@ -256,7 +261,13 @@ const Page = () => {
                     value={ formData.description }
                     onChange={ handleInputChange }
                     as="textarea"
-                    placeholder="Describe what this vid is about"
+                    placeholder="Describe what this clip is about"
+                />
+
+                <GameSearchInput
+                    label="Game"
+                    value={ selectedGame }
+                    onChange={ setSelectedGame }
                 />
 
                 <FileInput
