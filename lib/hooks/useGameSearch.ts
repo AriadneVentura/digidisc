@@ -11,7 +11,6 @@ export interface Game {
 export function useGameSearch( query: string ) {
     const [ results, setResults ] = useState<Game[]>( [] );
     const [ loading, setLoading ] = useState( false );
-
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>( null );
 
     useEffect( () => {
@@ -28,12 +27,7 @@ export function useGameSearch( query: string ) {
             setLoading( true );
 
             try {
-                const res = await fetch(
-                    `https://api.rawg.io/api/games?key=${ process.env.NEXT_PUBLIC_RAWG_API_KEY }&search=${ encodeURIComponent(
-                        query
-                    ) }&page_size=8`
-                );
-
+                const res = await fetch( `/api/games?query=${ encodeURIComponent( query ) }` );
                 const data = await res.json();
                 setResults( data.results ?? [] );
             } catch {
