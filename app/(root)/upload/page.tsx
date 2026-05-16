@@ -13,6 +13,7 @@ import SelectFrameModal from "@/components/SelectFrame";
 import ClearNavigationCursor from "@/components/ClearNavigationCursor";
 import { GameSearchInput } from "@/components/GameSearchInput";
 import TagInput from "@/components/TagInput";
+import GirlMargin from "@/components/GirlMargin";
 
 const uploadFileToBunny = (
     file: File,
@@ -241,6 +242,9 @@ const Page = () => {
     return (
         <div className="wrapper-md upload-page">
             <ClearNavigationCursor/>
+
+            <GirlMargin/>
+
             <h1>Upload a clip ⋆｡‧˚ʚ🎥ɞ˚‧｡⋆</h1>
 
             { error && <div className="error-field">{ error }</div> }
