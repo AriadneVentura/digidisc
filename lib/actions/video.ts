@@ -153,7 +153,15 @@ export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDe
     console.log( "inserting video with game:", videoDetails.game, videoDetails.gameSlug, videoDetails.gameImageUrl );
 
     await db.insert( videos ).values( {
-        ...videoDetails,
+        videoId: videoDetails.videoId,
+        title: videoDetails.title,
+        description: videoDetails.description,
+        thumbnailUrl: videoDetails.thumbnailUrl,
+        visibility: videoDetails.visibility,
+        duration: videoDetails.duration,
+        game: videoDetails.game,
+        gameSlug: videoDetails.gameSlug,
+        gameImageUrl: videoDetails.gameImageUrl,
         videoUrl: `${ BUNNY.EMBED_URL }/${ BUNNY_LIBRARY_ID }/${ videoDetails.videoId }`,
         userId,
         createdAt: new Date(),
