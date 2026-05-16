@@ -142,23 +142,22 @@ export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDe
         }
     )
 
-    await db.insert( videos ).values( {
+    // Get the database ID of the video once inserted.
+    const [ insertedVideo ] = await db.insert( videos ).values( {
         ...videoDetails,
         videoUrl: `${ BUNNY.EMBED_URL }/${ BUNNY_LIBRARY_ID }/${ videoDetails.videoId }`,
         userId,
         createdAt: new Date(),
         updatedAt: new Date()
-    } );
+    } ).returning( { id: videos.id } );
 
-    console.log( "tags received:", videoDetails.tags );
 
     // Save tags if any were provided
     if ( videoDetails.tags && videoDetails.tags.length > 0 ) {
         // Insert tag if it doesn't exist or return existing tag id if it does exist
         const tagRecords = await Promise.all(
             videoDetails.tags.map( ( tagName ) =>
-                db
-                    .insert( tags )
+                db.insert( tags )
                     .values( { name: tagName.toLowerCase().trim() } )
                     .onConflictDoUpdate( {
                         target: tags.name,
@@ -174,7 +173,8 @@ export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDe
         // Insert into video_tags join table
         await db.insert( videoTags ).values(
             tagRecords.map( ( [ tag ] ) => ({
-                videoId: videoDetails.videoId,
+                // db id!! not bunny ID
+                videoId: insertedVideo.id,
                 tagId: tag.id,
             }) )
         );
@@ -283,6 +283,8 @@ export const deleteVideoById = withErrorHandling( async ( id: string, videoId: s
         if ( result.length === 0 ) {
             throw new Error( "Clip not found or not authorised to delete" );
         }
+
+        // NTS dont need to delete video id from tags cause schema has onDelete "cascade" which handles this.
 
         // Redirect
         revalidatePaths( [ "/", `/video/${ videoId }` ] );
