@@ -117,7 +117,7 @@ const VideoDetailHeader = ( {
                 <h1>{ title }</h1>
                 <figure>
                     <Link href={ `/profile/${ ownerId }` } prefetch={ true }>
-                        <Image src={ userImg } alt="avatar" width={ 34 } height={ 34 }
+                        <Image src={ userImg! } alt="avatar" width={ 34 } height={ 34 }
                                className="rounded-full"/>
                         <h2>{ username ?? "Guest" }</h2>
                     </Link>

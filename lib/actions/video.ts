@@ -6,12 +6,12 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { BUNNY, PAGE_SIZE } from "@/constants";
 import { db } from "@/src";
-import { user, videoLikes, videos } from "@/src/db/schema";
+import { tags, user, videoLikes, videos, videoTags } from "@/src/db/schema";
 import { revalidatePath } from "next/cache";
 import { fixedWindow } from "arcjet";
 import { request } from "@arcjet/next";
 import aj from "@/lib/arcjet";
-import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, ne, or, sql } from "drizzle-orm";
 
 // Call constants to form API endpoints.
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
@@ -451,3 +451,130 @@ export const getAllVideosByUser = withErrorHandling(
         };
     }
 );
+
+
+/**
+ * Returns up to 4 suggested videos for a given video.
+ * Priority slots:
+ *  1. Same game (gameSlug)
+ *  2. Shares a tag
+ *  3. Same author (userId)
+ *  4. Random
+ *
+ * Each slot fills independently, duplicates are deduplicated, and the
+ * result always contains at most 4 entries.
+ */
+export const getSuggestedVideos = withErrorHandling(
+    async (
+        videoId: string,
+        gameSlug?: string | null,
+        userId?: string,
+        videoDbId?: string,
+    ) => {
+        const onlyPublic = eq( videos.visibility, "public" );
+
+        // Grows as each slot is filled — next query automatically excludes prior picks
+        const excludedIds: string[] = videoDbId ? [ videoDbId ] : [];
+
+        // Re-built before every query so exclusions are always current
+        const buildWhere = ( extra?: ReturnType<typeof eq> | ReturnType<typeof and> ) =>
+            and( onlyPublic, ...excludedIds.map( id => ne( videos.id, id ) ), extra );
+
+        const flatten = ( record: RawVideoWithUser, reason: string ) => ({
+            video: record.video,
+            user: record.user,
+            reason,
+        });
+
+        // 1. Same game
+        let sameGame: RawVideoWithUser | null = null;
+
+        if ( gameSlug ) {
+            const [ result ] = await buildVideoWithUserQuery()
+                .where( buildWhere( eq( videos.gameSlug, gameSlug ) ) )
+                .orderBy( sql`RANDOM
+                ()` )
+                .limit( 1 );
+
+            if ( result ) {
+                sameGame = result;
+                excludedIds.push( result.video.id );
+            }
+        }
+
+        // 2. Shared tag
+        let sharedTag: RawVideoWithUser | null = null;
+
+        if ( videoDbId ) {
+            const tagRows = await db
+                .select( { tagId: videoTags.tagId } )
+                .from( videoTags )
+                .where( eq( videoTags.videoId, videoDbId ) );
+
+            const tagIds = tagRows.map( r => r.tagId );
+
+            if ( tagIds.length > 0 ) {
+                const [ result ] = await buildVideoWithUserQuery()
+                    .innerJoin( videoTags, eq( videoTags.videoId, videos.id ) )
+                    .where( buildWhere( inArray( videoTags.tagId, tagIds ) ) )
+                    .orderBy( sql`RANDOM
+                    ()` )
+                    .limit( 1 );
+
+                if ( result ) {
+                    sharedTag = result;
+                    excludedIds.push( result.video.id );
+                }
+            }
+        }
+
+        // 3. Same author
+        let sameAuthor: RawVideoWithUser | null = null;
+
+        if ( userId ) {
+            const [ result ] = await buildVideoWithUserQuery()
+                .where( buildWhere( eq( videos.userId, userId ) ) )
+                .orderBy( sql`RANDOM
+                ()` )
+                .limit( 1 );
+
+            if ( result ) {
+                sameAuthor = result;
+                excludedIds.push( result.video.id );
+            }
+        }
+
+        // 4. Random
+        const [ randomVideo ] = await buildVideoWithUserQuery()
+            .where( buildWhere() )
+            .orderBy( sql`RANDOM
+            ()` )
+            .limit( 1 );
+
+        return [
+            sameGame ? flatten( sameGame, "Same Game" ) : null,
+            sharedTag ? flatten( sharedTag, "Similar Tag" ) : null,
+            sameAuthor ? flatten( sameAuthor, "Same Creator" ) : null,
+            randomVideo ? flatten( randomVideo, "Dice Roll" ) : null,
+        ].filter( Boolean ) as SuggestedVideo[];
+    }
+);
+
+type RawVideoWithUser = Awaited<ReturnType<typeof buildVideoWithUserQuery>>[number];
+
+export type SuggestedVideo = {
+    video: RawVideoWithUser["video"];
+    user: RawVideoWithUser["user"];
+    reason: string;
+};
+
+export const getVideoTags = withErrorHandling( async (
+    videoId: string ): Promise<string[]> => {
+    const rows = await db
+        .select( { name: tags.name } )
+        .from( videoTags )
+        .innerJoin( tags, eq( videoTags.tagId, tags.id ) )
+        .where( eq( videoTags.videoId, videoId ) );
+
+    return rows.map( ( row ) => row.name );
+} );

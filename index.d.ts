@@ -120,6 +120,12 @@ declare interface VideoInfoProps {
     game?: string | null;
     gameImageUrl?: string | null;
     gameSlug?: string | null
+    tags: string[];
+}
+
+declare interface TagInputProps {
+    value: string[];
+    onChange: ( tags: string[] ) => void;
 }
 
 declare interface ImageWithFallbackProps extends Omit<ImageProps, "src"> {
@@ -140,6 +146,7 @@ declare interface VideoDetails {
     game?: string | null;
     gameSlug?: string | null;
     gameImageUrl?: string | null;
+    tags?: string[];
 }
 
 declare interface BunnyVideoResponse {

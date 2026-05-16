@@ -1,3 +1,5 @@
+import VideoCardSkeleton from "@/components/VideoCardSkeleton";
+
 const Loading = () => (
     <main className="wrapper page">
         {/* VideoDetailHeader skeleton */ }
@@ -64,6 +66,12 @@ const Loading = () => (
                         </div>
                     ) ) }
                 </div>
+
+                <section className="video-grid">
+                    { Array.from( { length: 8 } ).map( ( _, i ) => (
+                        <VideoCardSkeleton key={ i }/>
+                    ) ) }
+                </section>
             </div>
         </section>
     </main>

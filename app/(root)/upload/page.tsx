@@ -12,6 +12,7 @@ import VideoTrimModal from "@/components/VideoTrimModal";
 import SelectFrameModal from "@/components/SelectFrame";
 import ClearNavigationCursor from "@/components/ClearNavigationCursor";
 import { GameSearchInput } from "@/components/GameSearchInput";
+import TagInput from "@/components/TagInput";
 
 const uploadFileToBunny = (
     file: File,
@@ -58,6 +59,7 @@ const Page = () => {
     const [ showFrameSelect, setShowFrameSelect ] = useState( false );
     const [ uploadProgress, setUploadProgress ] = useState<number>( 0 );
     const [ selectedGame, setSelectedGame ] = useState<SelectedGame | null>( null );
+    const [ selectedTags, setSelectedTags ] = useState<string[]>( [] );
 
     const [ formData, setFormData ] = useState( {
         title: "",
@@ -220,6 +222,7 @@ const Page = () => {
                 game: selectedGame?.name ?? null,
                 gameSlug: selectedGame?.slug ?? null,
                 gameImageUrl: selectedGame?.imageUrl ?? null,
+                tags: selectedTags
             } );
 
             // Go to homepage after upload.
@@ -230,7 +233,7 @@ const Page = () => {
 
         } finally {
             setIsSubmitting( false );
-            // Reset progress bar!
+            // Reset progress bar! 
             setUploadProgress( 0 );
         }
     }
@@ -268,6 +271,8 @@ const Page = () => {
                     value={ selectedGame }
                     onChange={ setSelectedGame }
                 />
+
+                <TagInput value={ selectedTags } onChange={ setSelectedTags }/>
 
                 <FileInput
                     id="video"

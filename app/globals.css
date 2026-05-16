@@ -76,7 +76,8 @@
     button.cursor-pointer,
     a.cursor-pointer,
     .cursor-pointer,
-    .file-input figure {
+    .file-input figure,
+    .suggested-toggle {
         cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111512"), pointer !important;
     }
 }
@@ -163,6 +164,10 @@
 
     .wrapper-lg {
         @apply max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8;
+    }
+
+    .wrapper-xl {
+        @apply max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8;
     }
 
     .page {
@@ -398,7 +403,7 @@
         input,
         select,
         textarea {
-            @apply border-b border-b-gray-20 dark:border-b-gray-10 rounded-18 text-dark-100 dark:text-pink-10 placeholder:text-gray-100 dark:placeholder:text-gray-10 py-2.5 px-4.5 focus:outline-pink-100 placeholder:font-medium text-base font-semibold;
+            @apply border-b border-b-gray-20 dark:border-b-gray-10 rounded-18 text-dark-100 dark:text-pink-10 placeholder:text-gray-100 dark:placeholder:text-gray-10 py-2.5 px-4.5 focus-within:outline focus-within:outline-pink-100 dark:focus-within:outline-pink-150 placeholder:font-medium text-base font-semibold;
         }
     }
 
@@ -591,7 +596,7 @@
 
     /* video-information */
     .video-information {
-        @apply flex flex-col rounded-2xl w-full border border-gray-20 dark:border-gray-10 p-4;
+        @apply flex flex-row gap-5 max-sm:flex-col-reverse;
 
         aside {
             @apply flex gap-7 justify-between;
@@ -602,22 +607,30 @@
 
             button {
                 @apply flex flex-row text-xs text-gray-100 dark:text-gray-10 font-normal gap-2 items-center
-                disabled:opacity-50
                     /*disabled:cursor-not-allowed*/
+                disabled:opacity-50
                 disabled:grayscale;
             }
         }
 
+        .clip-information {
+            @apply rounded-2xl w-full border border-gray-20 dark:border-gray-10 p-4 max-sm:p-3;
+        }
+
+        .game-information {
+            @apply rounded-2xl w-full border border-gray-20 dark:border-gray-10 p-4 max-w-fit  max-sm:p-3 ;
+        }
+
         .game-metadata {
-            @apply flex items-center gap-3;
+            @apply flex gap-10 justify-around items-start max-sm:items-center;
         }
 
         .game-metadata-image {
-            @apply rounded-lg object-cover flex-shrink-0;
+            @apply rounded-lg object-cover shrink-0;
         }
 
         .game-metadata-info {
-            @apply flex flex-col gap-0.5;
+            @apply flex flex-col gap-3;
 
             h2 {
                 @apply text-sm font-medium text-gray-100 dark:text-gray-10;
@@ -727,6 +740,22 @@
         }
     }
 
+    .info-metadata {
+        @apply flex flex-row justify-between gap-10 max-sm:gap-5;
+
+        article {
+            @apply flex flex-col gap-3;
+
+            h2 {
+                @apply text-sm font-medium text-gray-100 dark:text-gray-10;
+            }
+
+            p {
+                @apply text-lg font-semibold text-dark-100 dark:text-pink-10;
+            }
+        }
+    }
+
     .video-info {
         @apply flex flex-col gap-6 lg:max-w-[350px] xl:max-w-[410px] w-full;
 
@@ -822,66 +851,160 @@
         @apply relative;
 
         input {
-            @apply w-full border-b border-b-gray-20 dark:border-b-gray-10 rounded-18 text-dark-100 dark:text-pink-10 pl-8 placeholder:text-gray-100 dark:placeholder:text-gray-10 py-2.5 px-4.5 pr-10 focus:outline-pink-100 placeholder:font-medium text-base font-semibold;
+            @apply w-full border-b border-b-gray-20 dark:border-b-gray-10 rounded-18 text-dark-100 dark:text-pink-10 pl-8 placeholder:text-gray-100 dark:placeholder:text-gray-10 py-2.5 px-4.5 pr-10 focus-within:outline-pink-100 dark:focus-within:outline-pink-150 placeholder:font-medium text-base font-semibold;
         }
 
         .search-image {
             @apply absolute top-1/2 left-3 -translate-y-1/2;
         }
+
+        .game-search-input-icons {
+            @apply absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2;
+        }
+
+        .game-search-spinner {
+            @apply w-4 h-4 animate-spin;
+        }
+
+        .game-search-spinner-track {
+            @apply stroke-dark-100 dark:stroke-pink-10;
+            fill: none;
+            opacity: 0.2;
+        }
+
+        .game-search-spinner-arc {
+            @apply stroke-pink-100 dark:stroke-pink-150;
+            fill: none;
+        }
+
+        .game-search-clear-btn {
+            @apply text-gray-100 dark:text-gray-10 hover:text-pink-100 dark:hover:text-pink-150 transition-colors;
+        }
+
+        .game-search-dropdown {
+            @apply absolute top-[calc(100%+8px)] left-0 right-0 z-50 overflow-hidden rounded-18 border border-gray-20 dark:border-gray-10 bg-white dark:bg-dark-100 shadow-xl;
+        }
+
+        .game-search-item-divider {
+            @apply border-t border-gray-20/50 dark:border-gray-10/20 first:border-t-0;
+        }
+
+        .game-search-item {
+            @apply w-full flex items-center justify-between gap-4 px-4.5 py-2.5 hover:bg-gray-20/40 dark:hover:bg-gray-10/10 transition-colors duration-150;
+        }
+
+        .game-search-item-title {
+            @apply text-base font-semibold text-dark-100 dark:text-pink-10 truncate text-left;
+        }
+
+        .game-search-item-year {
+            @apply text-sm font-medium text-gray-100 dark:text-gray-10;
+        }
+
+        .game-search-item-meta {
+            @apply flex items-center flex-shrink-0;
+        }
+
+        .game-search-item-image {
+            @apply rounded-lg object-cover w-16 h-9 flex-shrink-0;
+        }
+
+        .game-search-item-image-placeholder {
+            @apply w-16 h-9 rounded-lg bg-gray-20/50 dark:bg-gray-10/10 flex-shrink-0;
+        }
     }
 
-    .game-search-input-icons {
-        @apply absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2;
+    /* Tags, this is global caused used in VideoInfo */
+    .tag-pill {
+        @apply inline-flex items-center gap-1 px-3 py-1 rounded-full border border-pink-100 dark:border-pink-150 text-pink-100 dark:text-pink-150 text-sm font-semibold;
     }
 
-    .game-search-spinner {
-        @apply w-4 h-4 animate-spin;
+    .tag-hash {
+        @apply font-bold opacity-70;
     }
 
-    .game-search-spinner-track {
-        @apply stroke-dark-100 dark:stroke-pink-10;
-        fill: none;
-        opacity: 0.2;
+    .tag-label {
+        @apply leading-none;
     }
 
-    .game-search-spinner-arc {
-        @apply stroke-pink-100 dark:stroke-pink-150;
-        fill: none;
+    .video-tags-wrapper {
+        @apply flex flex-wrap gap-2;
     }
 
-    .game-search-clear-btn {
-        @apply text-gray-100 dark:text-gray-10 hover:text-pink-100 dark:hover:text-pink-150 transition-colors;
+    /* Tags Input (upload page) */
+    .tag-input-wrapper {
+        @apply flex flex-col gap-2;
+
+        .tag-input-label {
+            @apply text-gray-100 dark:text-gray-10 text-base font-medium;
+        }
+
+        .tag-input-container {
+            @apply flex flex-wrap items-center gap-2 min-h-11 rounded-18 border-b border-b-gray-20 dark:border-b-gray-10 px-4.5 py-2.5 cursor-text focus-within:outline focus-within:outline-pink-100;
+        }
+
+        .tag-input-field {
+            @apply flex-1 min-w-24 bg-transparent border-none text-base font-semibold text-dark-100 dark:text-pink-10 placeholder:text-gray-100 dark:placeholder:text-gray-10 placeholder:font-medium;
+            outline: none;
+        }
+
+        .tag-remove {
+            @apply flex items-center justify-center w-4 h-4 rounded-full border-none bg-transparent text-pink-100 dark:text-pink-150 cursor-pointer opacity-50 hover:opacity-100 transition-opacity p-0 leading-none text-base;
+        }
+
+        .tag-meta {
+            @apply flex justify-between items-center;
+        }
+
+        .tag-hint {
+            @apply text-xs text-gray-100 dark:text-gray-10;
+        }
+
+        .tag-counter {
+            @apply text-xs font-semibold text-gray-100 dark:text-gray-10 transition-colors;
+        }
+
+        .tag-counter--full {
+            @apply text-pink-100 dark:text-pink-150;
+        }
+
+        .tag-error {
+            @apply text-xs text-red-500;
+        }
     }
 
-    .game-search-dropdown {
-        @apply absolute top-[calc(100%+8px)] left-0 right-0 z-50 overflow-hidden rounded-18 border border-gray-20 dark:border-gray-10 bg-white dark:bg-dark-100 shadow-xl;
+    @keyframes tag-in {
+        from {
+            opacity: 0;
+            transform: scale(0.75);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 
-    .game-search-item-divider {
-        @apply border-t border-gray-20/50 dark:border-gray-10/20 first:border-t-0;
-    }
+    .suggested-videos {
+        @apply w-full mt-8;
 
-    .game-search-item {
-        @apply w-full flex items-center justify-between gap-4 px-4.5 py-2.5 hover:bg-gray-20/40 dark:hover:bg-gray-10/10 transition-colors duration-150;
-    }
+        .suggested-toggle {
+            @apply flex items-center justify-between w-full py-3 bg-transparent border-b border-gray-200 dark:border-b-pink-200 cursor-pointer;
 
-    .game-search-item-title {
-        @apply text-base font-semibold text-dark-100 dark:text-pink-10 truncate text-left;
-    }
+            span {
+                @apply text-lg;
+            }
+        }
 
-    .game-search-item-year {
-        @apply text-sm font-medium text-gray-100 dark:text-gray-10;
-    }
+        .suggested-grid {
+            @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-4;
+        }
 
-    .game-search-item-meta {
-        @apply flex items-center flex-shrink-0;
-    }
+        .suggested-item {
+            @apply flex flex-col gap-1.5;
+        }
 
-    .game-search-item-image {
-        @apply rounded-lg object-cover w-16 h-9 flex-shrink-0;
-    }
-
-    .game-search-item-image-placeholder {
-        @apply w-16 h-9 rounded-lg bg-gray-20/50 dark:bg-gray-10/10 flex-shrink-0;
+        .suggested-reason {
+            @apply text-xs font-semibold uppercase tracking-widest opacity-50 pl-0.5;
+        }
     }
 }
