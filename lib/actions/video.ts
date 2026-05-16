@@ -150,7 +150,34 @@ export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDe
         updatedAt: new Date()
     } );
 
-    // Revalidate the homepage after insertion of new video.
+    // Save tags if any were provided
+    if ( videoDetails.tags && videoDetails.tags.length > 0 ) {
+        // Insert tag if it doesn't exist or return existing tag id if it does exist
+        const tagRecords = await Promise.all(
+            videoDetails.tags.map( ( tagName ) =>
+                db
+                    .insert( tags )
+                    .values( { name: tagName.toLowerCase().trim() } )
+                    .onConflictDoUpdate( {
+                        target: tags.name,
+                        // no-op update, just to return the id
+                        // required because onConflictDoUpdate in w drizzle
+                        // requires a set, to return the row.
+                        set: { name: tagName.toLowerCase().trim() }
+                    } )
+                    .returning( { id: tags.id } )
+            )
+        );
+
+        // Insert into video_tags join table
+        await db.insert( videoTags ).values(
+            tagRecords.map( ( [ tag ] ) => ({
+                videoId: videoDetails.videoId,
+                tagId: tag.id,
+            }) )
+        );
+    }
+
     revalidatePaths( [ '/' ] )
     return { videoId: videoDetails.videoId }
 } )
