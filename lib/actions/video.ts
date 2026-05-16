@@ -31,6 +31,25 @@ const getSessionUserId = async (): Promise<string> => {
     return session.user.id;
 }
 
+// get video IDs that match a search across title, game, and tags
+const getMatchingVideoIds = async ( searchQuery: string ): Promise<string[]> => {
+    const rows = await db
+        .selectDistinct( { id: videos.id } )
+        .from( videos )
+        .leftJoin( videoTags, eq( videoTags.videoId, videos.id ) )
+        .leftJoin( tags, eq( tags.id, videoTags.tagId ) )
+        .where(
+            or(
+                doesTitleMatch( videos, searchQuery ),
+                ilike( videos.game, `%${ searchQuery }%` ),
+                ilike( videos.gameSlug, `%${ searchQuery }%` ),
+                ilike( tags.name, `%${ searchQuery }%` ),
+            )
+        );
+
+    return rows.map( r => r.id );
+};
+
 const revalidatePaths = ( paths: string[] ) => {
     paths.forEach( ( path ) => revalidatePath( path ) )
 }
@@ -198,18 +217,29 @@ export const getAllVideos = withErrorHandling( async (
             eq( videos.userId, currentUserId! ),
         );
 
-        const whereCondition = searchQuery.trim()
-            ? and(
-                canSeeTheVideos,
-                doesTitleMatch( videos, searchQuery ),
-            )
-            : canSeeTheVideos
+        // Resolve matching IDs upfront if there's a search query
+        let searchCondition = undefined;
+        if ( searchQuery.trim() ) {
+            const matchingIds = await getMatchingVideoIds( searchQuery );
+            // No matches — return empty early
+            if ( matchingIds.length === 0 ) {
+                return {
+                    videos: [],
+                    pagination: { currentPage: pageNumber, totalPages: 0, totalVideos: 0, pageSize },
+                };
+            }
+            searchCondition = inArray( videos.id, matchingIds );
+        }
 
-        // Count total for pagination
+        const whereCondition = searchCondition
+            ? and( canSeeTheVideos, searchCondition )
+            : canSeeTheVideos;
+
         const [ { totalCount } ] = await db
             .select( { totalCount: sql<number>`count(*)` } )
             .from( videos )
             .where( whereCondition );
+
         const totalVideos = Number( totalCount || 0 );
         const totalPages = Math.ceil( totalVideos / pageSize );
 
@@ -229,12 +259,7 @@ export const getAllVideos = withErrorHandling( async (
 
         return {
             videos: videoRecords,
-            pagination: {
-                currentPage: pageNumber,
-                totalPages,
-                totalVideos,
-                pageSize,
-            },
+            pagination: { currentPage: pageNumber, totalPages, totalVideos, pageSize },
         };
     }
 );
@@ -434,36 +459,52 @@ export const getAllVideosByUser = withErrorHandling(
         const isOwner = userIdParameter === currentUserId;
 
         const [ userInfo ] = await db
-            .select( {
-                id: user.id,
-                name: user.name,
-                image: user.image,
-                email: user.email,
-            } )
+            .select( { id: user.id, name: user.name, image: user.image, email: user.email } )
             .from( user )
             .where( eq( user.id, userIdParameter ) );
         if ( !userInfo ) throw new Error( "User not found" );
 
-        const conditions = [
-            // Only return the videos that match the user
-            eq( videos.userId, userIdParameter ),
-            // Or if they are not the owner if its public
-            !isOwner && eq( videos.visibility, "public" ),
-            // ilike is case insensitive comparison
-            searchQuery.trim() && ilike( videos.title, `%${ searchQuery }%` ),
-        ].filter( Boolean ) as any[];
+        let searchCondition = undefined;
+        if ( searchQuery.trim() ) {
+            // User typed something — find all video IDs that match
+            // across title, game, gameSlug, and tags
+            const matchingIds = await getMatchingVideoIds( searchQuery );
 
-        // Count total for pagination
+            if ( matchingIds.length === 0 ) {
+                // Nothing matched at all — no point hitting the DB again,
+                // return empty results immediately
+                return {
+                    user: userInfo,
+                    videos: [],
+                    pagination: { currentPage: pageNumber, totalPages: 0, totalVideos: 0, pageSize },
+                };
+            }
+
+            // We have matches — build a condition that filters to only those IDs
+            // SQL equivalent: WHERE videos.id IN ('id1', 'id2', ...)
+            searchCondition = inArray( videos.id, matchingIds );
+        }
+
+        // If searchQuery was empty, searchCondition is still undefined here,
+        // so and() ignores it and returns all videos for that user
+        const whereCondition = and(
+            // only show videos for the user
+            eq( videos.userId, userIdParameter ),
+            // show public videos if someone else, if its themselves, show public & priv.
+            !isOwner ? eq( videos.visibility, "public" ) : undefined,
+            searchCondition, // either an inArray filter, or undefined (= no filter)
+        );
+
         const [ { totalCount } ] = await db
             .select( { totalCount: sql<number>`count(*)` } )
             .from( videos )
-            .where( and( ...conditions ) );
+            .where( whereCondition );
 
         const totalVideos = Number( totalCount || 0 );
         const totalPages = Math.ceil( totalVideos / pageSize );
 
         const userVideos = await buildVideoWithUserQuery()
-            .where( and( ...conditions ) )
+            .where( whereCondition )
             .orderBy(
                 sortFilter ? getOrderByClause( sortFilter ) : desc( videos.createdAt )
             )
@@ -473,16 +514,10 @@ export const getAllVideosByUser = withErrorHandling(
         return {
             user: userInfo,
             videos: userVideos,
-            pagination: {
-                currentPage: pageNumber,
-                totalPages,
-                totalVideos,
-                pageSize,
-            },
+            pagination: { currentPage: pageNumber, totalPages, totalVideos, pageSize },
         };
     }
 );
-
 
 /**
  * Returns up to 4 suggested videos for a given video.

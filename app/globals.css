@@ -77,7 +77,9 @@
     a.cursor-pointer,
     .cursor-pointer,
     .file-input figure,
-    .suggested-toggle {
+    .suggested-toggle,
+    .game-name-clickable,
+    .tag-pill-clickable {
         cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111512"), pointer !important;
     }
 }
@@ -973,6 +975,22 @@
         }
     }
 
+    .tag-pill-clickable {
+        @apply cursor-pointer transition-colors duration-150;
+
+        &:hover {
+            @apply bg-pink-100 dark:bg-pink-150 text-white dark:text-white border-transparent;
+        }
+
+        &:active {
+            @apply scale-95;
+        }
+    }
+
+    .game-name-clickable {
+        @apply transition-colors duration-150 hover:text-pink-100 dark:hover:text-pink-150 underline-offset-2 hover:underline;
+    }
+
     @keyframes tag-in {
         from {
             opacity: 0;
@@ -988,7 +1006,7 @@
         @apply w-full mt-8;
 
         .suggested-toggle {
-            @apply flex items-center justify-between w-full py-3 bg-transparent border-b border-gray-200 dark:border-b-pink-200 cursor-pointer;
+            @apply flex items-center justify-between w-full py-3 bg-transparent border-b border-gray-200 dark:border-b-pink-200;
 
             span {
                 @apply text-lg;

@@ -3,6 +3,8 @@ import React, { useState, useTransition } from 'react'
 import Image from "next/image";
 import { toggleLike } from "@/lib/actions/video";
 import { authClient } from "@/lib/auth-client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { updateURLParams } from "@/lib/utils";
 
 const VideoInfo = ( {
                         description,
@@ -21,6 +23,9 @@ const VideoInfo = ( {
     // Only enable the liked button if the user is logged in
     const { data: session } = authClient.useSession();
     const userId = session?.user.id;
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const handleLike = () => {
         startTransition( async () => {
@@ -42,6 +47,16 @@ const VideoInfo = ( {
         } );
     };
 
+    const handleTagClick = ( tagName: string ) => {
+        const url = updateURLParams( searchParams, { query: tagName }, "/" );
+        router.push( url );
+    };
+
+    const handleGameClick = ( gameName: string ) => {
+        const url = updateURLParams( searchParams, { query: gameName }, "/" );
+        router.push( url );
+    };
+
     return (
         <section className="video-information">
             { game && (
@@ -49,7 +64,12 @@ const VideoInfo = ( {
                     <article className="game-metadata">
                         <div className="game-metadata-info">
                             <h2>Game</h2>
-                            <p>{ game }</p>
+                            <p
+                                className="game-name-clickable"
+                                onClick={ () => handleGameClick( game ) }
+                            >
+                                { game }
+                            </p>
                         </div>
 
                         { gameImageUrl && (
@@ -77,7 +97,11 @@ const VideoInfo = ( {
                                 <h2>Tags</h2>
                                 <div className="video-tags-wrapper shrink-0">
                                     { tags.map( ( tag ) => (
-                                        <span key={ tag } className="tag-pill">
+                                        <span
+                                            key={ tag }
+                                            className="tag-pill tag-pill-clickable"
+                                            onClick={ () => handleTagClick( tag ) }
+                                        >
                                             <span className="tag-hash">#</span>
                                             <span className="tag-label">{ tag }</span>
                                         </span>
