@@ -112,6 +112,11 @@ export const videos = pgTable( "videos", {
     duration: integer( "duration" ),
     createdAt: timestamp( "created_at" ).notNull().defaultNow(),
     updatedAt: timestamp( "updated_at" ).notNull().defaultNow(),
+    // nullable not all clips need a game (clips already uploaded)
+    game: text( "game" ),
+    // If game title changes, backend stores the identifier.
+    gameSlug: text( "game_slug" ),
+    gameImageUrl: text( "game_image_url" ),
 } );
 
 export const videoLikes = pgTable( "video_likes", {
@@ -124,3 +129,15 @@ export const videoLikes = pgTable( "video_likes", {
         uniqueIndex( "user_video_unique" ).on( table.userId, table.videoId ),
     ]
 );
+
+export const tags = pgTable( "tags", {
+    id: uuid( "id" ).primaryKey().defaultRandom().unique(),
+    name: text( "name" ).notNull().unique(),
+} );
+
+export const videoTags = pgTable( "video_tags", {
+    videoId: uuid( "video_id" ).notNull().references( () => videos.id, { onDelete: "cascade" } ),
+    tagId: uuid( "tag_id" ).notNull().references( () => tags.id, { onDelete: "cascade" } ),
+}, ( table ) => [
+    uniqueIndex( "video_tag_unique" ).on( table.videoId, table.tagId ),
+] );
