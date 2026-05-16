@@ -150,6 +150,8 @@ export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDe
         updatedAt: new Date()
     } );
 
+    console.log( "tags received:", videoDetails.tags );
+
     // Save tags if any were provided
     if ( videoDetails.tags && videoDetails.tags.length > 0 ) {
         // Insert tag if it doesn't exist or return existing tag id if it does exist
