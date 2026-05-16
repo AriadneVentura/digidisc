@@ -69,6 +69,10 @@ const Page = () => {
     const thumbnail = useFileInput( MAX_THUMBNAIL_SIZE );
 
     useEffect( () => {
+        console.log( "selectedGame updated:", selectedGame );
+    }, [ selectedGame ] );
+
+    useEffect( () => {
         if ( video.duration !== null ) {
             setVideoDuration( video.duration );
         }
@@ -212,6 +216,7 @@ const Page = () => {
             } );
 
             // Create metadata and store in database
+            console.log( "upload page:", selectedGame?.name, selectedGame?.slug, selectedGame?.imageUrl );
             await saveVideoDetails( {
                 videoId,
                 thumbnailUrl: thumbnailCdnUrl,
@@ -265,7 +270,6 @@ const Page = () => {
                 />
 
                 <GameSearchInput
-                    label="Game"
                     value={ selectedGame }
                     onChange={ setSelectedGame }
                 />

@@ -142,6 +142,7 @@ export const saveVideoDetails = withErrorHandling( async ( videoDetails: VideoDe
         }
     )
 
+    console.log( "inserting video with game:", videoDetails.game, videoDetails.gameSlug, videoDetails.gameImageUrl );
     await db.insert( videos ).values( {
         ...videoDetails,
         videoUrl: `${ BUNNY.EMBED_URL }/${ BUNNY_LIBRARY_ID }/${ videoDetails.videoId }`,
@@ -301,14 +302,15 @@ export const incrementViewCount = withErrorHandling(
             } )
             .where( eq( videos.videoId, videoId ) );
 
-        revalidatePaths( [ "/", `/video/${ videoId }` ] );
         return {};
     }
 );
 
 export const hasUserLikedClip = withErrorHandling( async ( videoId: string ) => {
-    const userId = await getSessionUserId();
-    if ( !userId ) throw new Error( "Unauthorized" );
+    const session = await auth.api.getSession( { headers: await headers() } );
+    if ( !session ) return [ { hasLiked: false } ];
+
+    const userId = session.user.id;
 
     return (
         await db.select( {

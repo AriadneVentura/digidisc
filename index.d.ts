@@ -269,7 +269,6 @@ declare interface SelectedGame {
 declare interface GameSearchInputProps {
     value: SelectedGame | null;
     onChange: ( game: SelectedGame | null ) => void;
-    label?: string;
 }
 
 declare interface DropdownListProps {
