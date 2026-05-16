@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Game, useGameSearch } from "@/lib/hooks/useGameSearch";
 
-export const GameSearchInput = ( { value, onChange, label = "Game" }: GameSearchInputProps ) => {
+export const GameSearchInput = ( { value, onChange }: GameSearchInputProps ) => {
     const [ query, setQuery ] = useState( value?.name ?? "" );
     const [ open, setOpen ] = useState( false );
     const { results, loading } = useGameSearch( open ? query : "" );
