@@ -40,6 +40,7 @@ Hosted: https://digidisc.tv
 - Neon (A serverless PostgreSQL platform that provides scalable, cloud-hosted databases with autoscaling)
 - Bunny.net (A global video delivery and CDN platform for fast, secure streaming and storage of media)
 - Arcjet (A security layer for applications that provides bot protection, rate limiting, and abuse prevention)
+- RAWG (Largest open-source game database used to attach clip to a game!)
 - Tailwind & TypeScript & React
 
 Cred to flat icon & JSM \
