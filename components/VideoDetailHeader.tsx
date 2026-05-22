@@ -36,7 +36,7 @@ const VideoDetailHeader = ( {
     const randomGif = getRandomGifs( 1 )[0];
 
     const handleCopyLink = async () => {
-        await navigator.clipboard.writeText( `${ window.location.origin }/video/${ videoId }` );
+        await navigator.clipboard.writeText( `${ window.location.origin }/video/${ id }` );
         setCopied( true );
     }
 

@@ -636,7 +636,7 @@
         }
 
         .game-information {
-            @apply rounded-2xl w-full border border-gray-20 dark:border-gray-10 p-4 max-w-fit  max-sm:p-3 max-sm:max-w-full;
+            @apply rounded-2xl w-full border border-gray-20 dark:border-gray-10 p-4 max-w-fit  max-sm:p-3 max-sm:max-w-full h-fit;
         }
 
         .game-metadata {
