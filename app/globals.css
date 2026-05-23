@@ -80,7 +80,7 @@
     .suggested-toggle,
     .game-name-clickable,
     .tag-pill-clickable {
-        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111512"), pointer !important;
+        cursor: url("https://www.rw-designer.com/cursor-extern.php?id=111512"), pointer !important;
     }
 }
 
@@ -95,7 +95,7 @@
     }
 
     html, .cursor-disc {
-        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111514"), auto;
+        cursor: url("https://www.rw-designer.com/cursor-extern.php?id=111514"), auto;
         -webkit-font-smoothing: none;
         -moz-osx-font-smoothing: auto;
 
@@ -110,19 +110,19 @@
     button,
     [role="button"],
     input[type="submit"] {
-        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111512"), pointer;
+        cursor: url("https://www.rw-designer.com/cursor-extern.php?id=111512"), pointer;
     }
 
     button:disabled,
     button[disabled],
     [role="button"]:disabled,
     input[type="submit"]:disabled {
-        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111508"), not-allowed;
+        cursor: url("https://www.rw-designer.com/cursor-extern.php?id=111508"), not-allowed;
     }
 
     html.navigating,
     html.navigating * {
-        cursor: url("http://www.rw-designer.com/cursor-extern.php?id=111509"), wait !important;
+        cursor: url("https://www.rw-designer.com/cursor-extern.php?id=111509"), wait !important;
     }
 
     select {

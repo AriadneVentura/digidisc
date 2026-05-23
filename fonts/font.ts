@@ -12,23 +12,10 @@ export const satoshi = localFont( {
             weight: "400",
             style: "normal",
         },
-        {
-            path: "./Satoshi-Medium.woff2",
-            weight: "500",
-            style: "normal",
-        },
-        {
-            path: "./Satoshi-Bold.woff2",
-            weight: "700",
-            style: "normal",
-        },
-        {
-            path: "./Satoshi-Black.woff2",
-            weight: "900",
-            style: "normal",
-        },
     ],
     variable: "--font-satoshi",
+    preload: false,
+    display: 'swap',
 } );
 
 export const star_crush = localFont( {
@@ -39,6 +26,8 @@ export const star_crush = localFont( {
         },
     ],
     variable: "--font-star-crush",
+    preload: false,
+    display: 'swap',
 } );
 
 export const unifontexmono = localFont( {
@@ -49,6 +38,8 @@ export const unifontexmono = localFont( {
         },
     ],
     variable: "--font-unifonexmono",
+    preload: false,
+    display: 'swap',
 } );
 
 export const magasans = localFont( {
@@ -59,6 +50,8 @@ export const magasans = localFont( {
         },
     ],
     variable: "--font-magasans",
+    preload: false,
+    display: 'swap',
 } );
 
 export const minecraft = localFont( {
@@ -69,4 +62,6 @@ export const minecraft = localFont( {
         },
     ],
     variable: "--font-minecraft",
+    preload: false,
+    display: 'swap',
 } );

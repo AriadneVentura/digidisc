@@ -34,13 +34,17 @@ const VideoCard = ( {
         }, 3000 );
     };
 
+    // Bunny's CDN allows image resizing via query params, if the image comes back smaller, digi disc is faster.
+    // Also prevents LCP warning for large uploaded images.
+    const optimizedThumbnail = `${ thumbnail }?width=640&height=360&quality=80`;
+
     return (
         <div className={ "video-card" }>
             {/* Prefetch true allows next.js to prefetch on default on hover how cool. */ }
-            <Link href={ `/video/${ id }` } prefetch={ true } onClick={ () => setIsNavigating( true ) }>
+            <Link href={ `/video/${ id }` } onClick={ () => setIsNavigating( true ) }>
                 <div className="relative">
                     <Image
-                        src={ thumbnail }
+                        src={ optimizedThumbnail }
                         alt={ thumbnail }
                         width={ 390 }
                         height={ 160 }
