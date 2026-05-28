@@ -71,7 +71,7 @@ export const useFileInput = ( maxSize?: number, maxDuration?: number, maxAccepte
 
                     // max 30s for upload atm : )
                     if ( maxAcceptedDuration && videoLength >= maxAcceptedDuration ) {
-                        setTrimWarning( `Fyi clip must be max ${ maxDuration } seconds to post it, trim it! :)` );
+                        setTrimWarning( `Fyi clip must be max ${ maxAcceptedDuration } seconds to post it, trim it! :)` );
                     } else {
                         setTrimWarning( null );
                     }
