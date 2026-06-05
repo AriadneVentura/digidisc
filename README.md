@@ -21,14 +21,12 @@ Hosted: https://digidisc.tv
 **Future goals:**
 
 - Video
-    - Edit title/description
-    - tags
-- Screen recording:
-    - Selecting camera option
-    - Selecting microphone
+    - Edit title/description/tags
+    - comments
 - Other
-    - Automatically checking if video is processed
     - Role based groups
+    - Admin access
+    - Refactor form
 
 ---
 
