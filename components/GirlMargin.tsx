@@ -46,7 +46,7 @@ export default function GirlMargin() {
                 transition-[bottom] duration-300
             ${
                 footerVisible
-                    ? 'bottom-7'
+                    ? 'bottom-13'
                     : '-bottom-14.5'
             }
     ` }
