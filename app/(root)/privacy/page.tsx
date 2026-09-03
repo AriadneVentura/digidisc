@@ -61,7 +61,8 @@ const Page = () => {
                         It is developed and maintained by Ariadne. This policy explains
                         what information DigiDisc collects when you use it, why, how long it is
                         kept, and the third parties involved. If anything here is unclear you can
-                        reach out through <ExternalLink href="https://ariadnevk.me">ariadnevk.me</ExternalLink>.
+                        reach out through { " " }
+                        <ExternalLink href="mailto:ariadnevk21@gmail.com">arialovelace21@gmail.com</ExternalLink>.
                     </p>
                 </Section>
 
@@ -206,7 +207,8 @@ const Page = () => {
                         planning, brainstorming and writing small code components. This assistance happened while
                         building the site, AI is not part of the live service, does not run on
                         your data, and your clips, account details and activity are not sent to
-                        any AI system or used to train AI models. Ariadne is also a qualified software engineer
+                        any AI system or used to train AI models. No icons, font or art to Ariadne's knowledge were
+                        created with generative AI. Ariadne is also a qualified software engineer
                         with practical experience for fullstack development, and uses AI in a responsible way.
                     </p>
                 </Section>
@@ -239,14 +241,14 @@ const Page = () => {
                         visibility between public and private, delete individual clips, or delete
                         your account entirely. Depending on where you live, you may also have the
                         right to access, correct or export your data, reach out through{ " " }
-                        <ExternalLink href="https://ariadnevk.me">ariadnevk.me</ExternalLink> and
-                        I&apos;ll help.
+                        <ExternalLink href="mailto:ariadnevk21@gmail.com">arialovelace21@gmail.com</ExternalLink>
+                        { " " } and I&apos;ll help.
                     </p>
                 </Section>
 
                 <Section title="Children">
                     <p>
-                        DigiDisc is not intended for children under 13, and DigiDisc do not knowingly
+                        DigiDisc is not intended for children under 13, and DigiDisc does not knowingly
                         collect personal information from them.
                     </p>
                 </Section>

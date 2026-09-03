@@ -31,11 +31,12 @@
     --color-gray-100: #6c6685;
     --color-pink-10: #ffeef5;
     --color-pink-20: #5a435d;
-    --color-pink-100: #ee539f;
+    --color-pink-100: #f16eb8;
     --color-pink-150: #da7dc8;
     --color-pink-350: #a8428b;
     --color-pink-450: #7b5883;
     --color-pink-500: #5A2E4A;
+    --color-twitch: #9146FF;
     --color-blue-150: rgba(21, 21, 47, 0.25);
     --color-orange-100: #fe6247;
     --text-28: 1.75rem;
@@ -566,6 +567,72 @@
                 }
             }
         }
+
+        /* header tab row */
+
+        /*.header-tab {*/
+        /*    @apply flex items-center gap-2 px-4 py-3 text-sm font-semibold text-gray-100 dark:text-gray-10 -tracking-[0.8px] bg-transparent border-x-0 border-t-0 border-b-2 border-b-transparent -mb-px whitespace-nowrap transition-colors duration-200;*/
+        /*}*/
+
+        /*.header-tab:hover {*/
+        /*    @apply text-dark-100 dark:text-pink-10;*/
+        /*}*/
+
+        /*.header-tab--active {*/
+        /*    @apply text-dark-100 dark:text-pink-10 border-b-pink-100 dark:border-b-pink-150;*/
+        /*}*/
+
+        /*!* groups dropdown panel *!*/
+
+        /*.groups-dropdown {*/
+        /*    @apply absolute top-[calc(100%+4px)] left-0 z-50 min-w-[200px] overflow-hidden rounded-2xl border border-gray-20 dark:border-gray-10 bg-white dark:bg-gray-350 shadow-15 dark:shadow-40;*/
+        /*}*/
+
+        /*.groups-dropdown__label {*/
+        /*    @apply px-3.5 pt-2.5 pb-1 text-xs font-medium text-gray-100 dark:text-gray-10 -tracking-[0.5px];*/
+        /*}*/
+
+        /*.groups-dropdown__item {*/
+        /*    @apply flex items-center gap-2.5 w-full px-3.5 py-2.5 text-sm font-medium -tracking-[0.8px] text-dark-100 dark:text-pink-10 bg-transparent border-none transition-colors duration-150;*/
+        /*}*/
+
+        /*.groups-dropdown__item:hover {*/
+        /*    @apply bg-pink-10 dark:bg-pink-20;*/
+        /*}*/
+
+        /*.groups-dropdown__item--active {*/
+        /*    @apply text-pink-100 dark:text-pink-150;*/
+        /*}*/
+
+        /*.groups-dropdown__divider {*/
+        /*    @apply my-1 h-px bg-gray-20 dark:bg-gray-10;*/
+        /*}*/
+
+        /*!* join / create links inside dropdown *!*/
+
+        /*.groups-dropdown__action {*/
+        /*    @apply flex items-center gap-2.5 w-full px-3.5 py-2.5 text-sm font-medium -tracking-[0.8px] text-gray-100 dark:text-gray-10 transition-colors duration-150;*/
+        /*}*/
+
+        /*.groups-dropdown__action:hover {*/
+        /*    @apply bg-pink-10 dark:bg-pink-20 text-dark-100 dark:text-pink-10;*/
+        /*}*/
+
+        /*!* always-visible join button in the tab bar *!*/
+
+        /*.header-tab-join {*/
+        /*    @apply py-2 px-4 flex items-center gap-2 text-sm font-semibold text-dark-100 dark:text-pink-10 -tracking-[0.8px] border border-gray-20 dark:border-gray-10 rounded-4xl my-1.5 transition-colors duration-150;*/
+        /*}*/
+
+        /*.header-tab-join:hover {*/
+        /*    @apply border-pink-100 dark:border-pink-150 text-pink-100 dark:text-pink-150;*/
+        /*}*/
+
+        /*!* colour dot per group *!*/
+
+        /*.group-dot {*/
+        /*    @apply w-2 h-2 rounded-full shrink-0 inline-block;*/
+        /*}*/
 
         .search-filter {
             @apply flex flex-col md:flex-row md:items-center gap-5 justify-between;

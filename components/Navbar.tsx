@@ -26,7 +26,7 @@ const Navbar = () => {
         <header className="navbar">
             <nav>
                 <Link href="/">
-                    <Image src="/assets/icons/cd.svg" alt="Logo" width={ 32 } height={ 32 }/>
+                    <Image src="/assets/icons/pxldvd.svg" alt="Logo" width={ 35 } height={ 35 }/>
                     <h1>DigiDisc</h1>
                 </Link>
                 <div className="flex flex-row gap-2.5">

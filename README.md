@@ -21,7 +21,7 @@ Hosted: https://digidisc.tv
 **Future goals:**
 
 - Video
-    - Edit title/description/tags
+    - Edit title/description/tags/game category
     - comments
 - Other
     - Role based groups

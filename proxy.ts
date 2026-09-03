@@ -1,6 +1,6 @@
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "./lib/auth";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 // NTS: 1.1MB middleware :( vercel doesnt allow
 // // Shield protects against the most common attacks from the OWASP top 10, before any page is called.
@@ -21,7 +21,8 @@ export default async function proxy( request: NextRequest ) {
     const isAuthPage = pathname === "/sign-in";
 
     // Not logged-in users can watch a video - because I want opengraph to see the video itself.
-    if ( pathname.includes( "/video/" ) ) {
+    // They also should be able to see the privacy policy.
+    if ( pathname.includes( "/video/" ) || pathname.includes( "/privacy" ) ) {
         return NextResponse.next()
     }
 

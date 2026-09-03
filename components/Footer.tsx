@@ -26,19 +26,13 @@ const Footer = () => {
                     <p>
                         Developed by Ariadne
                     </p>
-                    <Link
-                        href="https://ariadnevk.me"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img src="/assets/gifs/hearts.gif" alt="preview" width={ 20 } height={ 20 }/>
-                    </Link>
+                    <img src="/assets/gifs/hearts.gif" alt="preview" width={ 20 } height={ 20 }/>
                     <p>© 2026</p>
                 </div>
                 <FontPicker/>
             </div>
 
-            <Link href="/privacy" className="text-pink-10 font-bold hover:underline">
+            <Link href="/privacy" className="text-dark-100 dark:text-pink-10 font-bold hover:underline">
                 Privacy Policy
             </Link>
         </footer>

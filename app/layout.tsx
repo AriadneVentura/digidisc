@@ -5,6 +5,7 @@ import { Providers } from "@/components/ThemeProvider";
 import { FontProvider } from "@/components/FontProvider";
 import { GifProvider } from "@/components/GifProvider";
 import NavigationStart from "@/components/NavigationStart";
+import React from "react";
 
 export const metadata: Metadata = {
     metadataBase: new URL( "https://digidisc.tv" ),
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     title: "DigiDisc",
     description: "View, upload & share gaming clips n giggle",
     icons: {
-        icon: "/assets/icons/cd.svg",
+        icon: "/assets/icons/pxldvd.svg",
     },
     openGraph: {
         title: "DigiDisc",

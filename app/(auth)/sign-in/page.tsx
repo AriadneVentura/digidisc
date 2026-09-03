@@ -13,30 +13,37 @@ const Page = () => {
         <main className="sign-in">
             <aside className="testimonial">
                 <Link href="/">
-                    <Image src="/assets/icons/cd.svg" height={ 32 } width={ 32 } alt="logo"/>
+                    <Image src="/assets/icons/pxldvd.svg" alt="Logo" width={ 32 } height={ 32 }/>
                     <h1>DigiDisc</h1>
                 </Link>
 
                 <div className="description">
                     <section>
-                        <figure>
-                            { Array.from( { length: 5 } ).map( ( _, i ) => (
-                                <Image src="/assets/icons/star.svg" height={ 20 } width={ 20 } alt="star" key={ i }/>
-                            ) ) }
-                        </figure>
                         <p>
-                            DigiDisc is a super duper awesome clip sharing site for gamers and nerds
+                            Hiii I also like to stream on{ " " }
+                            <Link href="https://twitch.tv/ariadnelovelace"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={ { color: "#9146FF" } }
+                                  className="!inline hover:underline">
+                                twitch
+                            </Link>{ " " }:)
                         </p>
 
                         <article>
-                            <Image src="/assets/images/dummy.jpg" height={ 64 } width={ 64 } alt="creator"
+                            <Image src="/assets/images/me.jpg" height={ 104 } width={ 104 } alt="creator"
                                    className="rounded-full"/>
 
                             <div>
-                                <h2>
-                                    Ariadne
-                                </h2>
-                                <p>Product Designer & Programmer</p>
+                                <Link href="https://twitch.tv/ariadnelovelace"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                >
+                                    <h2 className="text-pink-400 dark:text-pink-10 hover:underline">
+                                        AriadneLovelace
+                                    </h2>
+                                </Link>
+                                <p>Software Engineer & Twitch Streamer</p>
                             </div>
                         </article>
                     </section>
@@ -50,7 +57,7 @@ const Page = () => {
             <aside className="google-sign-in">
                 <section>
                     <Link href="/">
-                        <Image src="/assets/icons/cd.svg" height={ 40 } width={ 40 } alt="logo"/>
+                        <Image src="/assets/icons/pxldvd.svg" alt="Logo" width={ 35 } height={ 35 }/>
                         <h1>DigiDisc</h1>
                     </Link>
                     <p>Create and share your very first <span>DigiDisc Clip</span> now!</p>
@@ -58,6 +65,9 @@ const Page = () => {
                         <Image src="/assets/icons/google.svg" height={ 22 } width={ 22 } alt="google"/>
                         <span>Sign in with Google</span>
                     </button>
+                    <Link href="/privacy" className="text-gray-100 dark:text-pink-10 font-bold hover:underline">
+                        Privacy Policy
+                    </Link>
                 </section>
             </aside>
 
